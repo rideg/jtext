@@ -13,7 +13,9 @@ public class Main {
         curses.init();
 
         final AtomicReference<Point> point = new AtomicReference<>(new Point(0, 0));
-        final Descriptor green = new Descriptor(CharacterColor.GREEN, CharacterColor.BLACK, CharacterAttribute.BOLD);
+        final Descriptor green = new Descriptor(CharacterColor.GREEN, CharacterColor.BLACK,
+                                                CharacterAttribute.UNDERLINE,
+                                                CharacterAttribute.BOLD);
 
         Signal.handle(new Signal("WINCH"), s -> {
             int screenHeight = curses.getScreenHeight();

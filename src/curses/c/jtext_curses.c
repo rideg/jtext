@@ -57,14 +57,14 @@ JNIEXPORT jobject JNICALL Java_org_jtext_system_CursesImpl_getCh  (JNIEnv * env,
 
 int get_attribute(const char* name) {
 
-    if(strcmp(name, "NORMAL")) return A_NORMAL;
-    if(strcmp(name, "STANDOUT")) return A_STANDOUT;
-    if(strcmp(name, "UNDERLINE")) return A_UNDERLINE;
-    if(strcmp(name, "REVERSE")) return A_REVERSE;
-    if(strcmp(name, "BLINK")) return A_BLINK;
-    if(strcmp(name, "DIM")) return A_DIM;
-    if(strcmp(name, "BOLD")) return A_BOLD;
-    if(strcmp(name, "INVIS")) return A_INVIS;
+    if(strcmp(name, "NORMAL") == 0) return A_NORMAL;
+    if(strcmp(name, "STANDOUT") == 0) return A_STANDOUT;
+    if(strcmp(name, "UNDERLINE") == 0) return A_UNDERLINE;
+    if(strcmp(name, "REVERSE") == 0) return A_REVERSE;
+    if(strcmp(name, "BLINK") == 0) return A_BLINK;
+    if(strcmp(name, "DIM") == 0) return A_DIM;
+    if(strcmp(name, "BOLD") == 0) return A_BOLD;
+    if(strcmp(name, "INVIS") == 0) return A_INVIS;
 
     return 0;
 }
@@ -84,32 +84,36 @@ JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_printString (JNIEnv * en
     jclass desCls = (*env)->GetObjectClass(env, descriptor);
     jmethodID forColM = (*env)->GetMethodID(env, desCls, "getForegroundColor", "()Lorg/jtext/system/CharacterColor;");
     jmethodID backColM = (*env)->GetMethodID(env, desCls, "getBackgroundColor", "()Lorg/jtext/system/CharacterColor;");
-    jmethodID attribM = (*env)->GetMethodID(env, desCls, "getCharacterAttribute", "()Lorg/jtext/system/CharacterAttribute;");
+    jmethodID attribM = (*env)->GetMethodID(env, desCls, "getAttributes", "()[Lorg/jtext/system/CharacterAttribute;");
 
     jobject fg = (*env)->CallObjectMethod(env, descriptor, forColM);
     jobject bg = (*env)->CallObjectMethod(env, descriptor,  backColM);
-    jobject attr = (*env)->CallObjectMethod(env, descriptor,  attribM);
+
+    jobjectArray attributes = (*env)->CallObjectMethod(env, descriptor,  attribM);
+    jsize size = (*env)->GetArrayLength(env, attributes);
+    int attributeValue = 0;
+    for(int i=0; i < size; i++) {
+        jobject attribute = (*env)->GetObjectArrayElement(env, attributes, i);
+        jobject attributeName = (*env)->CallObjectMethod(env, attribute, nameM);
+        const char *name = (*env)->GetStringUTFChars(env, attributeName, NULL);
+        attributeValue |= get_attribute(name);
+        (*env)->ReleaseStringUTFChars(env, attributeName, name);
+    }
 
     jint fgId = (*env)->CallIntMethod(env, fg, ordinalM);
     jint bgId = (*env)->CallIntMethod(env, bg, ordinalM);
-//
-    jobject attrName = (*env)->CallObjectMethod(env, attr, nameM);
-    const char *  name = (*env)->GetStringUTFChars(env, attrName, NULL);
 
-
-    int attrValue = get_attribute(name);
     char pairId = color_pairs[fgId][bgId];
     const char * string = (*env)->GetStringUTFChars(env, text, NULL);
     jint x = (*env)->CallIntMethod(env, point, xMethod);
     jint y = (*env)->CallIntMethod(env, point, yMethod);
 
-
-    attron(attrValue | COLOR_PAIR(pairId));
+    attron(attributeValue | COLOR_PAIR(pairId));
 
     mvprintw(y, x, string);
+
     attrset(A_NORMAL);
 
-    (*env)->ReleaseStringUTFChars(env, attrName, name);
     (*env)->ReleaseStringUTFChars(env, text, string);
     refresh();
 }
