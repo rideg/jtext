@@ -71,6 +71,8 @@ JNIEXPORT jobject JNICALL Java_org_jtext_system_CursesImpl_getCh  (JNIEnv * env,
     jclass controlKeyClass = (*env)->FindClass(env, "org/jtext/system/ControlKey");
     jmethodID readKeyConstructor = (*env)->GetMethodID(env, readKeyClass, "<init>", "(Lorg/jtext/system/ControlKey;I)V");
 
+    while(!no_current_refresh);
+
     int ch = getch();
 
     jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, get_key(ch), "Lorg/jtext/system/ControlKey;");
