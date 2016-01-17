@@ -16,7 +16,7 @@ public class Main {
                 continue;
             }
             printScreenSize(curses, read);
-            if (read.key() == ControlKey.ESC) {
+            if (read.getValue() == 'q') {
                 break;
             }
         }

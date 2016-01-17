@@ -9,5 +9,5 @@ if [ ! -f "$JAVA" ]; then
   exit 1
 fi
 
-$JAVA -cp lib/* org.jtext.Main
+clear; $JAVA -cp lib/* org.jtext.Main
 
