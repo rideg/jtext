@@ -30,4 +30,5 @@ public interface Curses {
 
     void setCursorAttributes(CursorAttribute attribute);
 
+    void clearScreen();
 }

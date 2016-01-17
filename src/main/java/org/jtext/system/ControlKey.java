@@ -3,5 +3,5 @@ package org.jtext.system;
 public enum ControlKey {
 
     ESC,
-    OTHER
+    RESIZE, ERR, OTHER
 }

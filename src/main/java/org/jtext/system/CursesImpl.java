@@ -60,4 +60,7 @@ public class CursesImpl implements Curses {
 
     }
 
+    @Override
+    public native void clearScreen();
+
 }

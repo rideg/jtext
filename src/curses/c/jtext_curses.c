@@ -1,6 +1,7 @@
 #include "../headers/jtext_curses.h"
 #include <curses.h>
 #include <string.h>
+#include <signal.h>
 
 char color_pairs[8][8];
 
@@ -15,43 +16,71 @@ void init_color_pairs() {
     }
 }
 
+bool no_current_refresh = true;
+
+void handle_winch(int sig) {
+   if(no_current_refresh) {
+    no_current_refresh = false;
+    endwin();
+    refresh();
+    no_current_refresh = true;
+   }
+}
+
+void configure_signal_handling() {
+    struct sigaction sa;
+    memset(&sa, 0, sizeof(struct sigaction));
+    sa.sa_handler = handle_winch;
+    sigaction(SIGWINCH, &sa, NULL);
+}
+
 JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_init (JNIEnv * env, jobject obj) {
     initscr();
+    nodelay(stdscr, TRUE);
+    configure_signal_handling();
     start_color();
     init_color_pairs();
-    cbreak();
+    raw();
     keypad(stdscr, TRUE);
     noecho();
+    curs_set(FALSE);
 }
 
 JNIEXPORT jint JNICALL Java_org_jtext_system_CursesImpl_getScreenWidth  (JNIEnv * env, jobject obj) {
-  int row, col;
-  getmaxyx(stdscr,row,col);
-  return col;
+  return COLS;
 }
 
 JNIEXPORT jint JNICALL Java_org_jtext_system_CursesImpl_getScreenHeight  (JNIEnv * env, jobject obj) {
-    int row, col;
-    getmaxyx(stdscr,row,col);
-    return row;
+    return LINES;
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_shutdown  (JNIEnv * env, jobject obj) {
     endwin();
 }
 
+const char* get_key(int code) {
+    if(code == KEY_RESIZE) return "RESIZE";
+    if(code == ERR) return "ERR";
+    if(code == 27) return "ESC";
+    return "OTHER";
+}
+
+
 JNIEXPORT jobject JNICALL Java_org_jtext_system_CursesImpl_getCh  (JNIEnv * env, jobject obj) {
     jclass readKeyClass = (*env)->FindClass(env, "org/jtext/system/ReadKey");
     jclass controlKeyClass = (*env)->FindClass(env, "org/jtext/system/ControlKey");
-    jmethodID readKeyConstructor = (*env)->GetMethodID(env, readKeyClass, "<init>", "(Lorg/jtext/system/ControlKey;)V");
+    jmethodID readKeyConstructor = (*env)->GetMethodID(env, readKeyClass, "<init>", "(Lorg/jtext/system/ControlKey;I)V");
 
     int ch = getch();
 
-    const char * fieldName = ch == 27 ? "ESC" : "OTHER";
-    jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, fieldName, "Lorg/jtext/system/ControlKey;");
+    jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, get_key(ch), "Lorg/jtext/system/ControlKey;");
     jobject enumConst = (*env)->GetStaticObjectField(env, controlKeyClass, fieldNumber);
 
-    return (*env)->NewObject(env, readKeyClass, readKeyConstructor, enumConst);
+    return (*env)->NewObject(env, readKeyClass, readKeyConstructor, enumConst, ch);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_clearScreen  (JNIEnv * env, jobject obj) {
+    clear();
 }
 
 

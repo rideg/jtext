@@ -1,37 +1,39 @@
 package org.jtext;
 
 import org.jtext.system.*;
-import sun.misc.Signal;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         LibraryLoader.load();
         CursesImpl curses = new CursesImpl();
         curses.init();
 
-        final AtomicReference<Point> point = new AtomicReference<>(new Point(0, 0));
-        final Descriptor green = new Descriptor(CharacterColor.GREEN, CharacterColor.BLACK,
-                                                CharacterAttribute.UNDERLINE,
-                                                CharacterAttribute.BOLD);
-
-        Signal.handle(new Signal("WINCH"), s -> {
-            int screenHeight = curses.getScreenHeight();
-            int screenWidth = curses.getScreenWidth();
-            curses.printString("H:" + screenHeight + " W:" + screenWidth, point.get(), green);
-            point.set(point.get().nextRow());
-        });
-
         while (true) {
             ReadKey read = curses.getCh();
+            if(read.key() == ControlKey.ERR) {
+                Thread.sleep(1);
+                continue;
+            }
+            printScreenSize(curses, read);
             if (read.key() == ControlKey.ESC) {
                 break;
             }
         }
-
         curses.shutdown();
+    }
+
+    private static void printScreenSize(final Curses curses, final ReadKey read) {
+        curses.clearScreen();
+        Descriptor d1 = new Descriptor(CharacterColor.GREEN,
+                                               CharacterColor.BLACK,
+                                               CharacterAttribute.UNDERLINE,
+                                               CharacterAttribute.BOLD);
+
+        Descriptor d2 = new Descriptor(CharacterColor.MAGENTA, CharacterColor.BLACK, CharacterAttribute.NORMAL);
+        curses.printString("Got keykode: " + read.getValue(), new Point(0, 0), d1);
+
+        curses.printString("W: " + curses.getScreenWidth() + " H: "+curses.getScreenHeight(), new Point(0, 1), d2);
     }
 
 }
