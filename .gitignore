@@ -6,7 +6,7 @@
 
 
 # Package Files #
-/jtext
+jtext
 *.jar
 *.war
 *.ear

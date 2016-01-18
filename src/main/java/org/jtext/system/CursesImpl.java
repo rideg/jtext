@@ -63,4 +63,7 @@ public class CursesImpl implements Curses {
     @Override
     public native void clearScreen();
 
+    @Override
+    public native void setBackground(final char character, final Descriptor descriptor);
+
 }

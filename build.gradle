@@ -13,7 +13,7 @@ targetCompatibility = 1.8
 model {
     components {
         curses(NativeLibrarySpec) {
-            //targetPlatform "mac_64"
+            targetPlatform "mac_64"
             targetPlatform "linux_32"
             targetPlatform "linux_64"
             targetPlatform "windows_64"

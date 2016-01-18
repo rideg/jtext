@@ -31,4 +31,6 @@ public interface Curses {
     void setCursorAttributes(CursorAttribute attribute);
 
     void clearScreen();
+
+    void setBackground(char character, Descriptor descriptor);
 }
