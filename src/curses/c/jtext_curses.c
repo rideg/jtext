@@ -28,12 +28,14 @@ JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_init (JNIEnv * env, jobj
 {
     initscr();
     nodelay(stdscr, TRUE);
+    set_escdelay(0);
     configure_signal_handling();
     start_color();
     use_default_colors();
     init_color_pairs();
     raw();
     keypad(stdscr, TRUE);
+    meta(stdscr, TRUE);
     noecho();
     curs_set(FALSE);
 }

@@ -26,12 +26,12 @@ public class Main {
     private static void printScreenSize(final Curses curses, final ReadKey read) {
         curses.clearScreen();
         Descriptor d1 = new Descriptor(CharacterColor.GREEN,
-                                       CharacterColor.BLACK,
-                                       CharacterAttribute.UNDERLINE,
-                                       CharacterAttribute.BOLD);
+                CharacterColor.BLACK,
+                CharacterAttribute.UNDERLINE,
+                CharacterAttribute.BOLD);
 
         Descriptor d2 = new Descriptor(CharacterColor.MAGENTA, CharacterColor.BLACK, CharacterAttribute.NORMAL);
-        curses.printString("Got keykode: " + read.getValue(), new Point(0, 0), d1);
+        curses.printString("Got keykode: O" + Integer.toOctalString(read.getValue()) + " D" + read.getValue() + " (" + read.key().name()+")", new Point(0, 0), d1);
 
         curses.printString("W: " + curses.getScreenWidth() + " H: " + curses.getScreenHeight(), new Point(0, 1), d2);
     }
