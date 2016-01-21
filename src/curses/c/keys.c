@@ -42,7 +42,7 @@ const char* map_key(int code)
         return "FUNCTION_KEY";
     }
 
-    if (code == KEY_BACKSPACE) return "BACKSPACE";
+    if (code == KEY_BACKSPACE || code == 127) return "BACKSPACE";
     if (code == KEY_DC) return "DELETE";
     if (code == KEY_IC) return "INSERT";
     if (code == KEY_HOME) return "HOME";

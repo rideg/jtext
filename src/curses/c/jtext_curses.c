@@ -33,6 +33,7 @@ JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_init (JNIEnv * env, jobj
     start_color();
     use_default_colors();
     init_color_pairs();
+    nonl();
     raw();
     keypad(stdscr, TRUE);
     meta(stdscr, TRUE);
