@@ -7,23 +7,23 @@
 extern "C" {
 #endif
 
-JNIEXPORT jint JNICALL Java_org_jtext_system_CursesImpl_getScreenWidth  (JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getScreenWidth  (JNIEnv *, jobject);
 
-JNIEXPORT jint JNICALL Java_org_jtext_system_CursesImpl_getScreenHeight  (JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getScreenHeight  (JNIEnv *, jobject);
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_init  (JNIEnv *, jobject);
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_init  (JNIEnv *, jobject);
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_clearScreen  (JNIEnv *, jobject);
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen  (JNIEnv *, jobject);
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_shutdown  (JNIEnv *, jobject);
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_shutdown  (JNIEnv *, jobject);
 
-JNIEXPORT jobject JNICALL Java_org_jtext_system_CursesImpl_getCh  (JNIEnv *, jobject);
-
-
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_printString  (JNIEnv *, jobject, jstring, jobject, jobject);
+JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh  (JNIEnv *, jobject);
 
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_setBackground  (JNIEnv *, jobject, jchar, jobject);
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printString  (JNIEnv *, jobject, jstring, jobject, jobject);
+
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setBackground  (JNIEnv *, jobject, jchar, jobject);
 
 
 

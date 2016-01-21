@@ -24,7 +24,7 @@ void configure_signal_handling()
     sigaction(SIGWINCH, &sa, NULL);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_init (JNIEnv * env, jobject obj)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_init (JNIEnv * env, jobject obj)
 {
     initscr();
     nodelay(stdscr, TRUE);
@@ -41,42 +41,42 @@ JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_init (JNIEnv * env, jobj
     curs_set(FALSE);
 }
 
-JNIEXPORT jint JNICALL Java_org_jtext_system_CursesImpl_getScreenWidth  (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getScreenWidth  (JNIEnv * env, jobject obj)
 {
   return COLS;
 }
 
-JNIEXPORT jint JNICALL Java_org_jtext_system_CursesImpl_getScreenHeight  (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getScreenHeight  (JNIEnv * env, jobject obj)
 {
     return LINES;
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_shutdown  (JNIEnv * env, jobject obj)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_shutdown  (JNIEnv * env, jobject obj)
 {
     endwin();
 }
 
-JNIEXPORT jobject JNICALL Java_org_jtext_system_CursesImpl_getCh  (JNIEnv * env, jobject obj)
+JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh  (JNIEnv * env, jobject obj)
 {
-    jclass readKeyClass = (*env)->FindClass(env, "org/jtext/system/ReadKey");
-    jclass controlKeyClass = (*env)->FindClass(env, "org/jtext/system/ControlKey");
-    jmethodID readKeyConstructor = (*env)->GetMethodID(env, readKeyClass, "<init>", "(Lorg/jtext/system/ControlKey;I)V");
+    jclass readKeyClass = (*env)->FindClass(env, "org/jtext/curses/ReadKey");
+    jclass controlKeyClass = (*env)->FindClass(env, "org/jtext/curses/ControlKey");
+    jmethodID readKeyConstructor = (*env)->GetMethodID(env, readKeyClass, "<init>", "(Lorg/jtext/curses/ControlKey;I)V");
 
     while(!no_current_refresh);
 
     int ch = getch();
 
-    jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, map_key(ch), "Lorg/jtext/system/ControlKey;");
+    jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, map_key(ch), "Lorg/jtext/curses/ControlKey;");
     jobject enumConst = (*env)->GetStaticObjectField(env, controlKeyClass, fieldNumber);
 
     return (*env)->NewObject(env, readKeyClass, readKeyConstructor, enumConst, ch);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_clearScreen  (JNIEnv * env, jobject obj) {
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen  (JNIEnv * env, jobject obj) {
     clear();
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_printString (JNIEnv * env, jobject self, jstring text,
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printString (JNIEnv * env, jobject self, jstring text,
                                                                     jobject point, jobject descriptor)
 {
     const char * string = (*env)->GetStringUTFChars(env, text, NULL);
@@ -91,7 +91,7 @@ JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_printString (JNIEnv * en
     refresh();
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_system_CursesImpl_setBackground( JNIEnv* env, jobject self, jchar ch,
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setBackground( JNIEnv* env, jobject self, jchar ch,
             jobject descriptor)
 {
 

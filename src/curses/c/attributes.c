@@ -42,7 +42,7 @@ int get_attribute_value(JNIEnv * env, jobject attribute)
 
 int get_color_pair(JNIEnv* env, jobject fg, jobject bg)
 {
-    jclass colorCls = (*env)->FindClass(env, "org/jtext/system/CharacterColor");
+    jclass colorCls = (*env)->FindClass(env, "org/jtext/curses/CharacterColor");
     jmethodID ordinalM = (*env)->GetMethodID(env, colorCls, "ordinal", "()I");
 
     jint fgId = (*env)->CallIntMethod(env, fg, ordinalM);
@@ -55,9 +55,9 @@ int get_attribute(JNIEnv * env, jobject descriptor)
 {
 
     jclass descriptorCls = (*env)->GetObjectClass(env, descriptor);
-    jmethodID fgColM = (*env)->GetMethodID(env, descriptorCls, "getForegroundColor", "()Lorg/jtext/system/CharacterColor;");
-    jmethodID bgColM = (*env)->GetMethodID(env, descriptorCls, "getBackgroundColor", "()Lorg/jtext/system/CharacterColor;");
-    jmethodID attrM = (*env)->GetMethodID(env, descriptorCls, "getAttributes", "()[Lorg/jtext/system/CharacterAttribute;");
+    jmethodID fgColM = (*env)->GetMethodID(env, descriptorCls, "getForegroundColor", "()Lorg/jtext/curses/CharacterColor;");
+    jmethodID bgColM = (*env)->GetMethodID(env, descriptorCls, "getBackgroundColor", "()Lorg/jtext/curses/CharacterColor;");
+    jmethodID attrM = (*env)->GetMethodID(env, descriptorCls, "getAttributes", "()[Lorg/jtext/curses/CharacterAttribute;");
 
     jobject fg = (*env)->CallObjectMethod(env, descriptor, fgColM);
     jobject bg = (*env)->CallObjectMethod(env, descriptor,  bgColM);

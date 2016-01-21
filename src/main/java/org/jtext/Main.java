@@ -1,6 +1,6 @@
 package org.jtext;
 
-import org.jtext.system.*;
+import org.jtext.curses.*;
 
 public class Main {
 
