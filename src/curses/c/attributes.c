@@ -51,29 +51,15 @@ int get_color_pair(JNIEnv* env, jobject fg, jobject bg)
     return COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]);
 }
 
-int get_attribute(JNIEnv * env, jobject descriptor)
+int get_attribute(JNIEnv * env, jobject attributes)
 {
-
-    jclass descriptorCls = (*env)->GetObjectClass(env, descriptor);
-    jmethodID fgColM = (*env)->GetMethodID(env, descriptorCls, "getForegroundColor", "()Lorg/jtext/curses/CharacterColor;");
-    jmethodID bgColM = (*env)->GetMethodID(env, descriptorCls, "getBackgroundColor", "()Lorg/jtext/curses/CharacterColor;");
-    jmethodID attrM = (*env)->GetMethodID(env, descriptorCls, "getAttributes", "()[Lorg/jtext/curses/CharacterAttribute;");
-
-    jobject fg = (*env)->CallObjectMethod(env, descriptor, fgColM);
-    jobject bg = (*env)->CallObjectMethod(env, descriptor,  bgColM);
-
-    jobjectArray attributes = (*env)->CallObjectMethod(env, descriptor,  attrM);
-
     jsize size = (*env)->GetArrayLength(env, attributes);
-
     int attributeValue = 0;
-
     for(int i=0; i < size; i++) {
         jobject attribute = (*env)->GetObjectArrayElement(env, attributes, i);
         attributeValue |= get_attribute_value(env, attribute);
     }
-
-    return get_color_pair(env, fg, bg) | attributeValue;
+    return attributeValue;
 }
 
 

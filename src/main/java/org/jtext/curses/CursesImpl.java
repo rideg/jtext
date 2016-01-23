@@ -12,27 +12,65 @@ public class CursesImpl implements Curses {
     public native int getScreenHeight();
 
     @Override
-    public CursesWindow createWindow(final Rectangle area) {
-        return null;
-    }
+    public native void setColor(final CharacterColor foreground, final CharacterColor background);
 
     @Override
-    public void deleteWindow(final CursesWindow window) {
-
-    }
-
-    @Override
-    public void clearWindow(final CursesWindow window) {
+    public void setBackgroundColor(final CharacterColor color) {
 
     }
 
     @Override
-    public void drawHorizontalLine(final CursesWindow window, final Point point, final int length, final Descriptor descriptor) {
+    public void setForegroundColor(final CharacterColor color) {
 
     }
 
     @Override
-    public void drawVerticalLine(final CursesWindow window, final Point point, final int length, final Descriptor descriptor) {
+    public native void setAttributes(final CharacterAttribute[] attributes);
+
+    @Override
+    public void setAttribute(final CharacterAttribute attribute) {
+
+    }
+
+    @Override
+    public void toggleAttribute(final CharacterAttribute attribute) {
+
+    }
+
+    @Override
+    public native void drawHorizontalLineAt(final Point point, final char character, final int length);
+
+    @Override
+    public native void drawVerticalLineAt(final Point point, final char character, final int length);
+
+    @Override
+    public native void printStringAt(final Point point, final String string);
+
+    @Override
+    public native void putCharAt(final Point point, final char character);
+
+    @Override
+    public void changeAttributeAt(final Point point, final CharacterAttribute[] attributes) {
+
+    }
+
+    @Override
+    public native void moveCursor(final Point point);
+
+    @Override
+    public native void drawVerticalLine(final char character, final int length);
+
+    @Override
+    public native void drawHorizontalLine(final char character, final int length);
+
+    @Override
+    public native void printString(final String string);
+
+    @Override
+    public native void printChar(final char character);
+
+    @Override
+    public void changeAttribute(final CharacterAttribute[] attributes) {
 
     }
 
@@ -48,12 +86,7 @@ public class CursesImpl implements Curses {
     public native ReadKey getCh();
 
     @Override
-    public native void printString(final String string, final Point start, final Descriptor descriptor);
-
-    @Override
-    public void refresh() {
-
-    }
+    public native void refresh();
 
     @Override
     public void setCursorAttributes(final CursorAttribute attribute) {
@@ -64,6 +97,6 @@ public class CursesImpl implements Curses {
     public native void clearScreen();
 
     @Override
-    public native void setBackground(final char character, final Descriptor descriptor);
+    public native void clearStyle();
 
 }

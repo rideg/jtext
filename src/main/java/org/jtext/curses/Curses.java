@@ -1,5 +1,7 @@
 package org.jtext.curses;
 
+import java.util.EnumSet;
+
 public interface Curses {
 
     void init();
@@ -8,15 +10,41 @@ public interface Curses {
 
     int getScreenHeight();
 
-    CursesWindow createWindow(Rectangle area);
+    void setColor(CharacterColor foreground, CharacterColor background);
 
-    void deleteWindow(CursesWindow window);
+    void setBackgroundColor(CharacterColor color);
 
-    void clearWindow(CursesWindow window);
+    void setForegroundColor(CharacterColor color);
 
-    void drawHorizontalLine(CursesWindow window, Point point,  int length, Descriptor descriptor);
+    void setAttributes(CharacterAttribute[] attributes);
 
-    void drawVerticalLine(CursesWindow window, Point point, int length, Descriptor descriptor);
+    void setAttribute(CharacterAttribute attribute);
+
+    void toggleAttribute(CharacterAttribute attribute);
+
+    void drawHorizontalLineAt(Point point, char character, int length);
+
+    void drawVerticalLineAt(Point point, char character, int length);
+
+    void printStringAt(Point point, String string);
+
+    void putCharAt(Point point, char character);
+
+    void changeAttributeAt(Point point, CharacterAttribute[] attributes);
+
+    void moveCursor(Point point);
+
+    void drawVerticalLine(char character, int length);
+
+    void drawHorizontalLine(char character, int length);
+
+    void printString(String string);
+
+    void printChar(char character);
+
+    void changeAttribute(CharacterAttribute[] attributes);
+
+    void clearScreen();
 
     void bell();
 
@@ -24,13 +52,10 @@ public interface Curses {
 
     ReadKey getCh();
 
-    void printString(String string, Point start, Descriptor descriptor);
-
     void refresh();
 
     void setCursorAttributes(CursorAttribute attribute);
 
-    void clearScreen();
 
-    void setBackground(char character, Descriptor descriptor);
+    void clearStyle();
 }

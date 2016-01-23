@@ -16,7 +16,9 @@ typedef struct {
 
 void init_color_pairs(); // creates all possible 256 color pairs
 
-int get_attribute(JNIEnv*, jobject /*descriptor*/);
+int get_attribute(JNIEnv*, jobject /*attributes*/);
+
+int get_color_pair(JNIEnv*, jobject /*fg*/, jobject /*bg*/);
 
 jPoint get_point(JNIEnv*, jobject /*point*/);
 
