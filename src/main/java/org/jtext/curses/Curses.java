@@ -16,11 +16,11 @@ public interface Curses {
 
     void setForegroundColor(CharacterColor color);
 
-    void setAttributes(CharacterAttribute[] attributes);
+    void onAttributes(CharacterAttribute[] attributes);
 
-    void setAttribute(CharacterAttribute attribute);
+    void onAttribute(CharacterAttribute attribute);
 
-    void toggleAttribute(CharacterAttribute attribute);
+    void offAttribute(CharacterAttribute attribute);
 
     void drawHorizontalLineAt(Point point, char character, int length);
 
@@ -55,7 +55,6 @@ public interface Curses {
     void refresh();
 
     void setCursorAttributes(CursorAttribute attribute);
-
 
     void clearStyle();
 }

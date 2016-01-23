@@ -1,7 +1,10 @@
 #include "../headers/jtext_curses.h"
 #include "../headers/jtext_priv.h"
+#include "../headers/converter.h"
 #include <curses.h>
 #include <signal.h>
+#include <locale.h>
+#include <stdlib.h>
 
 
 bool no_current_refresh = true;
@@ -27,6 +30,7 @@ void configure_signal_handling()
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_init
  (JNIEnv * env, jobject obj)
 {
+    setlocale(LC_ALL, "");
     initscr();
     nodelay(stdscr, TRUE);
     set_escdelay(0);
@@ -59,6 +63,18 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_shutdown
     endwin();
 }
 
+
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawHorizontalLineAt
+  (JNIEnv * env, jobject self, jobject point, jchar ch, jint length)
+{
+    jPoint p = get_point(env, point);
+    const cchar_t* cch = convert_jchar(env, ch);
+
+    mvhline_set(p.y, p.x, cch, (int) length);
+    free(cch);
+}
+
 JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh
  (JNIEnv * env, jobject obj)
 {
@@ -85,9 +101,9 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printString
 (JNIEnv * env, jobject self, jstring text)
  {
-    const char * string = (*env)->GetStringUTFChars(env, text, NULL);
-    printw(string);
-    (*env)->ReleaseStringUTFChars(env, text, string);
+    wchar_t* buff = convert_string(env, text);
+    addwstr(buff);
+    free(buff);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_moveCursor
@@ -95,7 +111,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_moveCursor
 {
     jPoint p = get_point(env, point);
     move(p.y, p.x);
-    // free(&p)??
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_refresh
@@ -111,7 +126,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setColor
     attron(attr);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setAttributes
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttributes
   (JNIEnv *env, jobject self, jobject attr_array)
 {
     int attr = get_attribute(env, attr_array);

@@ -15,25 +15,19 @@ public class CursesImpl implements Curses {
     public native void setColor(final CharacterColor foreground, final CharacterColor background);
 
     @Override
-    public void setBackgroundColor(final CharacterColor color) {
-
-    }
+    public native void setBackgroundColor(final CharacterColor color);
 
     @Override
-    public void setForegroundColor(final CharacterColor color) {
-
-    }
+    public native void setForegroundColor(final CharacterColor color);
 
     @Override
-    public native void setAttributes(final CharacterAttribute[] attributes);
+    public native void onAttributes(final CharacterAttribute[] attributes);
 
     @Override
-    public void setAttribute(final CharacterAttribute attribute) {
-
-    }
+    public native void onAttribute(final CharacterAttribute attribute);
 
     @Override
-    public void toggleAttribute(final CharacterAttribute attribute) {
+    public void offAttribute(final CharacterAttribute attribute) {
 
     }
 
@@ -50,9 +44,7 @@ public class CursesImpl implements Curses {
     public native void putCharAt(final Point point, final char character);
 
     @Override
-    public void changeAttributeAt(final Point point, final CharacterAttribute[] attributes) {
-
-    }
+    public native void changeAttributeAt(final Point point, final CharacterAttribute[] attributes);
 
     @Override
     public native void moveCursor(final Point point);
@@ -70,14 +62,10 @@ public class CursesImpl implements Curses {
     public native void printChar(final char character);
 
     @Override
-    public void changeAttribute(final CharacterAttribute[] attributes) {
-
-    }
+    public native void changeAttribute(final CharacterAttribute[] attributes);
 
     @Override
-    public void bell() {
-
-    }
+    public native void bell();
 
     @Override
     public native void shutdown();

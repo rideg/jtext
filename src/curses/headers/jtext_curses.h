@@ -13,7 +13,7 @@ extern "C" {
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_init
-(JNIEnv *, jobject);
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
@@ -42,7 +42,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setColor
 /*
  * Class:     org_jtext_curses_CursesImpl
  * Method:    setAttributes
- * Signature: ([Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (Ljava/util/EnumSet;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setAttributes
   (JNIEnv *, jobject, jobject);
@@ -150,15 +150,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_refresh
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen
   (JNIEnv *, jobject);
-
-
-  /*
-   * Class:     org_jtext_curses_CursesImpl
-   * Method:    clearStyle
-   * Signature: ()V
-   */
-  JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearStyle
-    (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

@@ -22,12 +22,21 @@ model {
             binaries {
                 all {
 		 if (targetPlatform.name == 'mac_64') { 
-                    cCompiler.args "-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers", "-Xdebug"
+                    cCompiler.args "-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers",
+                                   "-Wall",
+                                   "-D _XOPEN_SOURCE_EXTENDED",
+                                    "-g",
+                                    "-O0"
 	          }
 		  if (targetPlatform.name == 'linux_32' || targetPlatform.name == 'linux_64') {
-                    cCompiler.args "-I$System.env.JAVA_HOME/include", "-I$System.env.JAVA_HOME/include/linux" 
+                    cCompiler.args "-I$System.env.JAVA_HOME/include",
+                            "-I$System.env.JAVA_HOME/include/linux",
+                            "-Wall",
+                            "-pedantic",
+                            "-g",
+                            "-D _XOPEN_SOURCE_EXTENDED"
 		  }
-                  linker.args  "-lncurses"
+                  linker.args  "-lncurses", "-liconv"
                 }
             }
         }
