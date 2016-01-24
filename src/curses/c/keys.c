@@ -1,7 +1,7 @@
 #include "../headers/keys.h"
 #include <curses.h>
 
-const char* map_key(int code)
+const char* map_key(wint_t code)
 {
 
     if (code == 0) return "NULL";

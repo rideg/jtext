@@ -32,7 +32,7 @@ public class Graphics {
     }
 
     public void startDraw() {
-        moveCursor(area.x, area.y);
+        moveCursor(area.topLeft());
     }
 
     public void setAttributes(final Set<CharacterAttribute> attributes) {
@@ -67,66 +67,53 @@ public class Graphics {
         curses.setForegroundColor(color);
     }
 
-    public void drawRectangleAt(final Rectangle rectangle, final Border border) {
-
-    }
-
-    public void drawRectangle(final int width, final int height, final Border border) {
-        Point start = getCursor();
-        putChar(border.getTopLeft());
-        drawHorizontalLineAt(start.x + 1, start.y, border.getHorizontal(), width - 2);
-        putCharAt(start.x + width - 1, start.y, border.getTopRight());
-        drawVerticalLineAt(start.x + width - 1, start.y + 1, border.getVertical(), height - 2);
-        drawVerticalLineAt(start.x, start.y + 1, border.getVertical(), height - 2);
-        putCharAt(start.x, start.y + height - 1, border.getBottomLeft());
-        drawHorizontalLineAt(start.x + 1, start.y + height - 1, border.getHorizontal(), width - 2);
-        putCharAt(start.x + width - 1, start.y + height - 1, border.getBottomRight());
+    public void drawRectangle(final Rectangle rectangle, final Border border) {
+        drawHorizontalLine(rectangle.topLeft(), border.horizontal, rectangle.width);
+        drawHorizontalLine(rectangle.bottomLeft(), border.horizontal, rectangle.width);
+        drawVerticalLine(rectangle.topLeft(), border.vertical, rectangle.height);
+        drawVerticalLine(rectangle.topRight(), border.vertical, rectangle.height);
+        putChar(rectangle.topLeft(), border.topLeft);
+        putChar(rectangle.topRight(), border.topRight);
+        putChar(rectangle.bottomRight(), border.bottomRight);
+        putChar(rectangle.bottomLeft(), border.bottomLeft);
     }
 
 
-    public void drawVerticalLineAt(final int x, final int y, final char ch, final int length) {
-        curses.drawVerticalLineAt(x, y, ch, length);
+    public void drawVerticalLine(final Point point, final char ch, final int length) {
+        final Point p = toReal(point);
+        curses.drawVerticalLineAt(p.x, p.y, ch, length);
     }
 
-    public void drawVerticalLine(final char ch, final int length) {
-        curses.drawVerticalLine(ch, length);
+    public void drawHorizontalLine(final Point point, final char ch, final int length) {
+        final Point p = toReal(point);
+        curses.drawHorizontalLineAt(p.x, p.y, ch, length);
     }
 
-    public void drawHorizontalLineAt(final int x, final int y, final char ch, final int lenght) {
-        curses.drawHorizontalLineAt(x, y, ch, lenght);
+    public void printString(final Point point, final String string) {
+        final Point p = toReal(point);
+        curses.printStringAt(p.x, p.y, string);
     }
 
-    public void drawHorizontalLine(final char ch, final int length) {
-        curses.drawHorizontalLine(ch, length);
+    public void putChar(final Point point, final char ch) {
+        final Point p = toReal(point);
+        curses.putCharAt(p.x, p.y, ch);
     }
 
-    public void printStringAt(final int x, final int y, final String string) {
-        curses.printStringAt(x, y, string);
+    private void moveCursor(final Point point) {
+        final Point p = toReal(point);
+        curses.moveCursor(p.x, p.y);
     }
 
-    public void printString(final String string) {
-        curses.printString(string);
+    private Point toReal(final Point point) {
+        return isRelative ? Point.at(point.x + area.x, point.y + area.y) : point;
     }
-
-    public void putCharAt(final int x, final int y, final char ch) {
-        curses.putCharAt(x, y, ch);
-    }
-
-    public void putChar(final char ch) {
-        curses.putChar(ch);
-    }
-
-    public void moveCursor(final int x, final int y) {
-        curses.moveCursor(x, y);
-    }
-
 
     public Point getTopLeft() {
-        return area.getTopLeft();
+        return area.topLeft();
     }
 
     public Point getCursor() {
-        return Point.of(curses.getCursorX(), curses.getCursorY());
+        return Point.at(curses.getCursorX(), curses.getCursorY());
     }
 
 

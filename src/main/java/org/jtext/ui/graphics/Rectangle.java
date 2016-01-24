@@ -14,12 +14,24 @@ public class Rectangle {
         this.height = height;
     }
 
-    public Point getTopLeft() {
-        return Point.of(x, y);
+    public Point topLeft() {
+        return Point.at(x, y);
+    }
+
+    public Point topRight() {
+        return Point.at(x + width - 1, y);
+    }
+
+    public Point bottomLeft() {
+        return Point.at(x, y + height - 1);
+    }
+
+    public Point bottomRight() {
+        return Point.at(x + width - 1, y + height - 1);
     }
 
     public Rectangle relativeTo(final Point p) {
-        return Rectangle.of(p.x + x, p.y, width, height);
+        return Rectangle.of(p.x + x, p.y + y, width, height);
     }
 
     public static Rectangle of(final int x, final int y, final int width, final int height) {
@@ -29,4 +41,9 @@ public class Rectangle {
     public static Rectangle of(final Point point, final int width, final int height) {
         return new Rectangle(point.x, point.y, width, height);
     }
+
+    public Rectangle move(final Point point) {
+        return Rectangle.of(point.x, point.y, width, height);
+    }
+
 }

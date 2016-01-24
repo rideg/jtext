@@ -12,12 +12,12 @@ public class Border {
                                                     (char) 188);
 
 
-    private final char vertical;
-    private final char horizontal;
-    private final char topLeft;
-    private final char topRight;
-    private final char bottomLeft;
-    private final char bottomRight;
+    public final char vertical;
+    public final char horizontal;
+    public final char topLeft;
+    public final char topRight;
+    public final char bottomLeft;
+    public final char bottomRight;
 
 
     public Border(final char vertical, final char horizontal,
@@ -31,27 +31,4 @@ public class Border {
         this.bottomRight = bottomRight;
     }
 
-    public char getVertical() {
-        return vertical;
-    }
-
-    public char getHorizontal() {
-        return horizontal;
-    }
-
-    public char getTopLeft() {
-        return topLeft;
-    }
-
-    public char getTopRight() {
-        return topRight;
-    }
-
-    public char getBottomLeft() {
-        return bottomLeft;
-    }
-
-    public char getBottomRight() {
-        return bottomRight;
-    }
 }

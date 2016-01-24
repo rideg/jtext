@@ -10,10 +10,12 @@ const cchar_t* convert_jchar(jchar ch)
  size_t s = sizeof(jchar);
  iconv_t cd = iconv_open("WCHAR_T", "UTF-16LE");
  cchar_t* ret = malloc(sizeof(cchar_t));
+ memset(ret, 0, sizeof(cchar_t));
  short cp;
  attr_get(&ret->attr, &cp, NULL);
 
  char* wchars = ret->chars;
+
  size_t ws = sizeof(wchar_t);
 
  iconv(cd, &p_ch, &s, &wchars, &ws);

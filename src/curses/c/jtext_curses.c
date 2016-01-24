@@ -142,7 +142,8 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putCharAt
   (JNIEnv * env, jobject self, jint x, jint y, jchar ch)
 {
     const cchar_t* cch = convert_jchar(ch);
-    mvins_wch(y, x,cch);
+    mvdelch(y,x);
+    mvins_wch(y, x, cch);
     free(cch);
 }
 
@@ -193,7 +194,8 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh
 
     while(!no_current_refresh);
 
-    int ch = getch();
+    wint_t ch;
+    get_wch(&ch);
 
     jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, map_key(ch), "Lorg/jtext/curses/ControlKey;");
     jobject enumConst = (*env)->GetStaticObjectField(env, controlKeyClass, fieldNumber);

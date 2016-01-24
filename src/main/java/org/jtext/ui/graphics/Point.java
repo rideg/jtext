@@ -10,23 +10,23 @@ public class Point {
         this.y = y;
     }
 
-    public static Point of(final int x, final int y) {
+    public static Point at(final int x, final int y) {
         return new Point(x, y);
     }
 
     public Point decY() {
-        return Point.of(x, y - 1);
+        return Point.at(x, y - 1);
     }
 
     public Point decX() {
-        return Point.of(x - 1, y);
+        return Point.at(x - 1, y);
     }
 
     public Point incY() {
-        return Point.of(x, y + 1);
+        return Point.at(x, y + 1);
     }
 
     public Point incX() {
-        return Point.of(x + 1, y);
+        return Point.at(x + 1, y);
     }
 }

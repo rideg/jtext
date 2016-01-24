@@ -8,12 +8,8 @@ import org.jtext.ui.graphics.Rectangle;
 
 public class Main {
 
-    private static final String NAME = "jText 0.0.1";
-    private static final String MAIN_MENU = "(M) - Ctrl-p";
-    private static Point rectStart = Point.of(5, 5);
-    private static int height = 10;
-    private static int width = 10;
-    private static boolean dirty = true;
+    private static Point rectStart = Point.at(5, 5);
+    private static final StringBuilder text = new StringBuilder();
 
     public static void main(String[] args) throws InterruptedException {
         LibraryLoader.load();
@@ -41,41 +37,40 @@ public class Main {
         int screenHeight = curses.getScreenHeight();
 
         if (read.key() == ControlKey.UP) {
-            rectStart =  rectStart.y > 0? rectStart.decY() : rectStart;
+            rectStart = rectStart.y > 0 ? rectStart.decY() : rectStart;
         }
 
-        if(read.key() == ControlKey.DOWN) {
-            rectStart = rectStart.y < screenHeight - height ? rectStart.incY() : rectStart;
+        if (read.key() == ControlKey.DOWN) {
+            rectStart = rectStart.y < screenHeight - 3 ? rectStart.incY() : rectStart;
         }
 
         if (read.key() == ControlKey.RIGHT) {
-            rectStart = rectStart.x < screenWidth - width ? rectStart.incX() : rectStart;
+            rectStart = rectStart.x < screenWidth - text.length() + 4 ? rectStart.incX() : rectStart;
         }
 
         if (read.key() == ControlKey.LEFT) {
             rectStart = rectStart.x > 0 ? rectStart.decX() : rectStart;
         }
 
-        if(read.key() == ControlKey.SHIFT_UP) {
-            height++;
+        if (read.key() == ControlKey.UNKNOWN) {
+            text.append(new String(Character.toChars(read.getValue())));
         }
 
-        if(read.key() == ControlKey.SHIFT_DOWN) {
-            height--;
-        }
-
-        if(read.key() == ControlKey.SHIFT_RIGHT) {
-            width++;
-        }
-
-        if (read.key() == ControlKey.SHIFT_LEFT) {
-            width--;
+        if (read.key() == ControlKey.BACKSPACE && text.length() > 0) {
+            text.setLength(text.length() - 1);
         }
 
         curses.clearScreen();
+        curses.setForegroundColor(CharacterColor.GREEN);
+        curses.printStringAt(0, 0, "Arrived code: " + read.key().name());
+
+
         Graphics graphics = new Graphics(Rectangle.of(rectStart, screenWidth, screenHeight), curses);
         graphics.startDraw();
-        graphics.drawRectangle(width, height, Border.SINGLE);
+        graphics.printString(Point.at(2, 1), text.toString());
+        graphics.setForegroundColor(CharacterColor.CYAN);
+        graphics.drawRectangle(Rectangle.of(0, 0, text.length() + 4, 3), Border.SINGLE);
+        graphics.setForegroundColor(CharacterColor.RED);
         curses.refresh();
     }
 
