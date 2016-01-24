@@ -52,7 +52,5 @@ public interface Curses {
 
     void refresh();
 
-    void setCursorAttributes(CursorAttribute attribute);
-
     void clearStyle();
 }

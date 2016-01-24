@@ -75,9 +75,6 @@ public class CursesImpl implements Curses {
     public native void refresh();
 
     @Override
-    public native void setCursorAttributes(final CursorAttribute attribute);
-
-    @Override
     public native void clearScreen();
 
     @Override

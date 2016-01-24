@@ -201,14 +201,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_refresh
 
 /*
  * Class:     org_jtext_curses_CursesImpl
- * Method:    setCursorAttributes
- * Signature: (Lorg/jtext/curses/CursorAttribute;)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setCursorAttributes
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     org_jtext_curses_CursesImpl
  * Method:    clearScreen
  * Signature: ()V
  */
