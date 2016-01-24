@@ -112,6 +112,7 @@ public enum ControlKey {
     // OTHER
     RESIZE,
     ERR,
-    UNKNOWN
+    UNKNOWN,
+    NORMAL
 
 }

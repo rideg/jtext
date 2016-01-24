@@ -39,6 +39,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_init
     init_color_pairs();
     nonl();
     raw();
+    meta(stdscr, TRUE);
     keypad(stdscr, TRUE);
     noecho();
     curs_set(FALSE);
@@ -195,9 +196,18 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh
     while(!no_current_refresh);
 
     wint_t ch;
-    get_wch(&ch);
+    int res = get_wch(&ch);
 
-    jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, map_key(ch), "Lorg/jtext/curses/ControlKey;");
+    const char* name;
+    if(res == ERR) {
+        name = "ERR";
+    } else if(res == KEY_CODE_YES) {
+        name = map_key(ch);
+    } else {
+        name = "NORMAL";
+    }
+
+    jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, name, "Lorg/jtext/curses/ControlKey;");
     jobject enumConst = (*env)->GetStaticObjectField(env, controlKeyClass, fieldNumber);
 
     return (*env)->NewObject(env, readKeyClass, readKeyConstructor, enumConst, ch);

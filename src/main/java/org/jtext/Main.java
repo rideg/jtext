@@ -52,7 +52,7 @@ public class Main {
             rectStart = rectStart.x > 0 ? rectStart.decX() : rectStart;
         }
 
-        if (read.key() == ControlKey.UNKNOWN) {
+        if (read.key() == ControlKey.NORMAL || read.key() == ControlKey.SPACE) {
             text.append(new String(Character.toChars(read.getValue())));
         }
 
@@ -62,7 +62,7 @@ public class Main {
 
         curses.clearScreen();
         curses.setForegroundColor(CharacterColor.GREEN);
-        curses.printStringAt(0, 0, "Arrived code: " + read.key().name());
+        curses.printStringAt(0, 0, "Arrived code: " + read.key().name() + " : " + new String(Character.toChars(read.getValue())));
 
 
         Graphics graphics = new Graphics(Rectangle.of(rectStart, screenWidth, screenHeight), curses);
