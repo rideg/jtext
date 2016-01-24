@@ -215,6 +215,22 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearStyle
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    getCursorX
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getCursorX
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    getCursorY
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getCursorY
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

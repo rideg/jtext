@@ -80,4 +80,9 @@ public class CursesImpl implements Curses {
     @Override
     public native void clearStyle();
 
+    @Override
+    public native int getCursorX();
+
+    @Override
+    public native int getCursorY();
 }

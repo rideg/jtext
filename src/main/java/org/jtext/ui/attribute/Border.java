@@ -2,13 +2,9 @@ package org.jtext.ui.attribute;
 
 public class Border {
 
-    private static final Border SINGLE = new Border('-', '|',
-                                                    (char) 218,
-                                                    (char) 191,
-                                                    (char) 192,
-                                                    (char) 217);
+    public static final Border SINGLE = new Border('┃', '━', '┏', '┓', '┗', '┛');
 
-    private static final Border DOUBLE = new Border('=',
+    public static final Border DOUBLE = new Border('=',
                                                     (char) 186,
                                                     (char) 201,
                                                     (char) 187,

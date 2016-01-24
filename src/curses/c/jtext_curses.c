@@ -225,3 +225,21 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setColor
 {
     standend();
 }
+
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getCursorX
+  (JNIEnv * env, jobject self)
+{
+    int x;
+    int y;
+    getyx(stdscr, y, x);
+    return x;
+}
+
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getCursorY
+  (JNIEnv * env, jobject self)
+{
+    int x;
+    int y;
+    getyx(stdscr, y, x);
+    return y;
+}

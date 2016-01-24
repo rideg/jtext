@@ -53,4 +53,8 @@ public interface Curses {
     void refresh();
 
     void clearStyle();
+
+    int getCursorX();
+
+    int getCursorY();
 }
