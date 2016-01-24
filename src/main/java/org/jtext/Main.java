@@ -32,21 +32,25 @@ public class Main {
         curses.clearStyle();
         curses.setColor(CharacterColor.CYAN, CharacterColor.BLACK);
         curses.onAttributes(new CharacterAttribute[] { CharacterAttribute.DIM });
-        curses.drawHorizontalLineAt(new Point(0, 0), '=', curses.getScreenWidth());
+        curses.drawVerticalLineAt(new Point(0, 2), '|', curses.getScreenHeight() - 2);
 
-        curses.moveCursor(new Point(0, 1));
+        curses.moveCursor(new Point(0, 0));
         curses.clearStyle();
         curses.setColor(CharacterColor.GREEN, CharacterColor.BLACK);
         curses.onAttributes(new CharacterAttribute[] { CharacterAttribute.BOLD });
         curses.printString("(✺) Got code: " + read.getValue() +
                            " 0x" + Integer.toHexString(read.getValue()) +
                            " 0" + Integer.toOctalString(read.getValue()) +
-                          " (" + read.key().name() + ")");
+                           " (" + read.key().name() + ")");
 
-        curses.moveCursor(new Point(0, 2));
+        curses.moveCursor(new Point(0, 1));
         curses.clearStyle();
         curses.setColor(CharacterColor.MAGENTA, CharacterColor.BLACK);
-        curses.printString("W: " + curses.getScreenWidth() + " H: " + curses.getScreenHeight());
+        curses.setForegroundColor(CharacterColor.RED);
+        curses.printStringAt(new Point(5, 5), "W: " + curses.getScreenWidth() + " H: " + curses.getScreenHeight());
+
+        curses.setBackgroundColor(CharacterColor.BLUE);
+        curses.putCharAt(new Point(10, 15), 'J');
         curses.refresh();
     }
 

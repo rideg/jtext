@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-const cchar_t* convert_jchar(JNIEnv* , jchar );
+const cchar_t* convert_jchar(jchar);
 
 wchar_t* convert_string(JNIEnv*, jobject);
 

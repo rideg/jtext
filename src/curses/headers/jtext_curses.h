@@ -41,10 +41,42 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setColor
 
 /*
  * Class:     org_jtext_curses_CursesImpl
- * Method:    setAttributes
- * Signature: (Ljava/util/EnumSet;)V
+ * Method:    setBackgroundColor
+ * Signature: (Lorg/jtext/curses/CharacterColor;)V
  */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setAttributes
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setBackgroundColor
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    setForegroundColor
+ * Signature: (Lorg/jtext/curses/CharacterColor;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setForegroundColor
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    onAttributes
+ * Signature: ([Lorg/jtext/curses/CharacterAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttributes
+  (JNIEnv *, jobject, jobjectArray);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    onAttribute
+ * Signature: (Lorg/jtext/curses/CharacterAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttribute
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    offAttribute
+ * Signature: (Lorg/jtext/curses/CharacterAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_offAttribute
   (JNIEnv *, jobject, jobject);
 
 /*
@@ -81,6 +113,14 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putCharAt
 
 /*
  * Class:     org_jtext_curses_CursesImpl
+ * Method:    changeAttributeAt
+ * Signature: (Lorg/jtext/curses/Point;[Lorg/jtext/curses/CharacterAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_changeAttributeAt
+  (JNIEnv *, jobject, jobject, jobjectArray);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
  * Method:    moveCursor
  * Signature: (Lorg/jtext/curses/Point;)V
  */
@@ -113,11 +153,27 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printString
 
 /*
  * Class:     org_jtext_curses_CursesImpl
- * Method:    printChar
+ * Method:    putChar
  * Signature: (C)V
  */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printChar
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putChar
   (JNIEnv *, jobject, jchar);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    changeAttribute
+ * Signature: ([Lorg/jtext/curses/CharacterAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_changeAttribute
+  (JNIEnv *, jobject, jobjectArray);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    bell
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_bell
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
@@ -145,10 +201,26 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_refresh
 
 /*
  * Class:     org_jtext_curses_CursesImpl
+ * Method:    setCursorAttributes
+ * Signature: (Lorg/jtext/curses/CursorAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setCursorAttributes
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
  * Method:    clearScreen
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesImpl
+ * Method:    clearStyle
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearStyle
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

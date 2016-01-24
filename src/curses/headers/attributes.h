@@ -22,6 +22,10 @@ int get_color_pair(JNIEnv*, jobject /*fg*/, jobject /*bg*/);
 
 jPoint get_point(JNIEnv*, jobject /*point*/);
 
+jint get_color_id(JNIEnv*, jobject);
+
+int get_attribute_value(JNIEnv *, jobject /*attribute*/);
+
 
 #ifdef __cpluplus
 }

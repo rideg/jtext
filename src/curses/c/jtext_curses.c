@@ -1,6 +1,5 @@
 #include "../headers/jtext_curses.h"
 #include "../headers/jtext_priv.h"
-#include "../headers/converter.h"
 #include <curses.h>
 #include <signal.h>
 #include <locale.h>
@@ -63,15 +62,130 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_shutdown
     endwin();
 }
 
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setBackgroundColor
+  (JNIEnv * env, jobject self, jobject color)
+{
 
+    int attr;
+    short pair_id;
+    attr_get(&attr, &pair_id, NULL);
+
+    jint fgId = pair_id / 8;
+    jint bgId = get_color_id(env, color);
+
+    attron(COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
+
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setForegroundColor
+  (JNIEnv * env, jobject self, jobject color)
+{
+
+    int attr;
+    short pair_id;
+    attr_get(&attr, &pair_id, NULL);
+
+    jint fgId = get_color_id(env, color);
+    jint bgId = pair_id % 8;
+
+    attron(COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
+
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttributes
+  (JNIEnv *env, jobject self, jobject attr_array)
+{
+    int attr = get_attribute(env, attr_array);
+    attron(attr);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttribute
+  (JNIEnv * env, jobject self, jobject attribute)
+{
+    int attr = get_attribute_value(env, attribute);
+    attron(attr);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_offAttribute
+  (JNIEnv * env, jobject self, jobject attribute)
+{
+    int attr = get_attribute_value(env, attribute);
+    attroff(attr);
+}
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawHorizontalLineAt
   (JNIEnv * env, jobject self, jobject point, jchar ch, jint length)
 {
     jPoint p = get_point(env, point);
-    const cchar_t* cch = convert_jchar(env, ch);
+    const cchar_t* cch = convert_jchar(ch);
 
     mvhline_set(p.y, p.x, cch, (int) length);
+    free(cch);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawVerticalLineAt
+  (JNIEnv * env, jobject self, jobject point, jchar ch, jint length)
+{
+    jPoint p = get_point(env, point);
+    const cchar_t* cch = convert_jchar(ch);
+    mvvline_set(p.y, p.x, cch, (int) length);
+    free(cch);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printStringAt
+  (JNIEnv * env, jobject self, jobject point, jstring text)
+{
+     jPoint p = get_point(env, point);
+     wchar_t* buff = convert_string(env, text);
+     mvaddwstr(p.y, p.x, buff);
+     free(buff);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putCharAt
+  (JNIEnv * env, jobject self, jobject point, jchar ch)
+{
+    jPoint p = get_point(env, point);
+    const cchar_t* cch = convert_jchar(ch);
+    mvins_wch(p.y, p.x,cch);
+    free(cch);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_moveCursor
+  (JNIEnv * env, jobject self, jobject point)
+{
+    jPoint p = get_point(env, point);
+    move(p.y, p.x);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawVerticalLine
+  (JNIEnv * env, jobject self, jchar ch, jint length)
+{
+    const cchar_t* cch = convert_jchar(ch);
+    vline_set(cch, (int) length);
+    free(cch);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawHorizontalLine
+  (JNIEnv * env, jobject self, jchar ch, jint length)
+{
+    const cchar_t* cch = convert_jchar(ch);
+    hline_set(cch, (int) length);
+    free(cch);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printString
+(JNIEnv * env, jobject self, jstring text)
+ {
+    wchar_t* buff = convert_string(env, text);
+    addwstr(buff);
+    free(buff);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putChar
+  (JNIEnv * env, jobject self, jchar ch)
+{
+    const cchar_t* cch = convert_jchar(ch);
+    ins_wch(cch);
     free(cch);
 }
 
@@ -98,21 +212,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen
     clear();
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printString
-(JNIEnv * env, jobject self, jstring text)
- {
-    wchar_t* buff = convert_string(env, text);
-    addwstr(buff);
-    free(buff);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_moveCursor
-  (JNIEnv * env, jobject self, jobject point)
-{
-    jPoint p = get_point(env, point);
-    move(p.y, p.x);
-}
-
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_refresh
   (JNIEnv * env, jobject self)
 {
@@ -123,13 +222,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setColor
   (JNIEnv * env, jobject self, jobject fg, jobject bg)
 {
     int attr = get_color_pair(env, fg, bg);
-    attron(attr);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttributes
-  (JNIEnv *env, jobject self, jobject attr_array)
-{
-    int attr = get_attribute(env, attr_array);
     attron(attr);
 }
 

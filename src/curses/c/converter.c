@@ -3,7 +3,7 @@
 #include <iconv.h>
 
 
-const cchar_t* convert_jchar(JNIEnv* env, jchar ch)
+const cchar_t* convert_jchar(jchar ch)
 {
 
  char* p_ch = (char*) &ch;

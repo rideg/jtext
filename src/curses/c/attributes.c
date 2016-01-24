@@ -40,13 +40,18 @@ int get_attribute_value(JNIEnv * env, jobject attribute)
     return value;
 }
 
-int get_color_pair(JNIEnv* env, jobject fg, jobject bg)
+jint get_color_id(JNIEnv* env, jobject color)
 {
-    jclass colorCls = (*env)->FindClass(env, "org/jtext/curses/CharacterColor");
+    jclass colorCls = (*env)->GetObjectClass(env, color);
     jmethodID ordinalM = (*env)->GetMethodID(env, colorCls, "ordinal", "()I");
 
-    jint fgId = (*env)->CallIntMethod(env, fg, ordinalM);
-    jint bgId = (*env)->CallIntMethod(env, bg, ordinalM);
+    return (*env)->CallIntMethod(env, color, ordinalM);
+}
+
+int get_color_pair(JNIEnv* env, jobject fg, jobject bg)
+{
+    jint fgId = get_color_id(env, fg);
+    jint bgId = get_color_id(env, bg);
 
     return COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]);
 }

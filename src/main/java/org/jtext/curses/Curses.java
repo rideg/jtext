@@ -40,7 +40,7 @@ public interface Curses {
 
     void printString(String string);
 
-    void printChar(char character);
+    void putChar(char character);
 
     void changeAttribute(CharacterAttribute[] attributes);
 

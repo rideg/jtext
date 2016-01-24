@@ -27,9 +27,7 @@ public class CursesImpl implements Curses {
     public native void onAttribute(final CharacterAttribute attribute);
 
     @Override
-    public void offAttribute(final CharacterAttribute attribute) {
-
-    }
+    public native void offAttribute(final CharacterAttribute attribute);
 
     @Override
     public native void drawHorizontalLineAt(final Point point, final char character, final int length);
@@ -59,7 +57,7 @@ public class CursesImpl implements Curses {
     public native void printString(final String string);
 
     @Override
-    public native void printChar(final char character);
+    public native void putChar(final char character);
 
     @Override
     public native void changeAttribute(final CharacterAttribute[] attributes);
@@ -77,9 +75,7 @@ public class CursesImpl implements Curses {
     public native void refresh();
 
     @Override
-    public void setCursorAttributes(final CursorAttribute attribute) {
-
-    }
+    public native void setCursorAttributes(final CursorAttribute attribute);
 
     @Override
     public native void clearScreen();
