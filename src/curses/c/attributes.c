@@ -66,19 +66,3 @@ int get_attribute(JNIEnv * env, jobject attributes)
     }
     return attributeValue;
 }
-
-
-jPoint get_point(JNIEnv* env, jobject point)
-{
-    jclass pcls = (*env)->GetObjectClass(env, point);
-    jmethodID xMethod = (*env)->GetMethodID(env, pcls, "getX", "()I");
-    jmethodID yMethod = (*env)->GetMethodID(env, pcls, "getY", "()I");
-
-    jPoint p = {
-             .x = (*env)->CallIntMethod(env, point, xMethod),
-             .y = (*env)->CallIntMethod(env, point, yMethod)
-           };
-     return p;
-}
-
-

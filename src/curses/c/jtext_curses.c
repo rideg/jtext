@@ -114,47 +114,42 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_offAttribute
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawHorizontalLineAt
-  (JNIEnv * env, jobject self, jobject point, jchar ch, jint length)
+  (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
 {
-    jPoint p = get_point(env, point);
     const cchar_t* cch = convert_jchar(ch);
 
-    mvhline_set(p.y, p.x, cch, (int) length);
+    mvhline_set(y, x, cch, (int) length);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawVerticalLineAt
-  (JNIEnv * env, jobject self, jobject point, jchar ch, jint length)
+  (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
 {
-    jPoint p = get_point(env, point);
     const cchar_t* cch = convert_jchar(ch);
-    mvvline_set(p.y, p.x, cch, (int) length);
+    mvvline_set(y, x, cch, (int) length);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printStringAt
-  (JNIEnv * env, jobject self, jobject point, jstring text)
+  (JNIEnv * env, jobject self, jint x, jint y, jstring text)
 {
-     jPoint p = get_point(env, point);
      wchar_t* buff = convert_string(env, text);
-     mvaddwstr(p.y, p.x, buff);
+     mvaddwstr(y, x, buff);
      free(buff);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putCharAt
-  (JNIEnv * env, jobject self, jobject point, jchar ch)
+  (JNIEnv * env, jobject self, jint x, jint y, jchar ch)
 {
-    jPoint p = get_point(env, point);
     const cchar_t* cch = convert_jchar(ch);
-    mvins_wch(p.y, p.x,cch);
+    mvins_wch(y, x,cch);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_moveCursor
-  (JNIEnv * env, jobject self, jobject point)
+  (JNIEnv * env, jobject self, jint x, jint y)
 {
-    jPoint p = get_point(env, point);
-    move(p.y, p.x);
+    move(y, x);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawVerticalLine

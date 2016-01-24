@@ -30,22 +30,22 @@ public class CursesImpl implements Curses {
     public native void offAttribute(final CharacterAttribute attribute);
 
     @Override
-    public native void drawHorizontalLineAt(final Point point, final char character, final int length);
+    public native void drawHorizontalLineAt(final int x, final int y, final char character, final int length);
 
     @Override
-    public native void drawVerticalLineAt(final Point point, final char character, final int length);
+    public native void drawVerticalLineAt(final int x, final int y, final char character, final int length);
 
     @Override
-    public native void printStringAt(final Point point, final String string);
+    public native void printStringAt(final int x, final int y, final String string);
 
     @Override
-    public native void putCharAt(final Point point, final char character);
+    public native void putCharAt(final int x, final int y, final char character);
 
     @Override
-    public native void changeAttributeAt(final Point point, final CharacterAttribute[] attributes);
+    public native void changeAttributeAt(final int x, final int y, final CharacterAttribute[] attributes);
 
     @Override
-    public native void moveCursor(final Point point);
+    public native void moveCursor(final int x, final int y);
 
     @Override
     public native void drawVerticalLine(final char character, final int length);

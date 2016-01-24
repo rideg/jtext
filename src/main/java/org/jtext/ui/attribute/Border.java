@@ -1,4 +1,4 @@
-package org.jtext.widget.attribute;
+package org.jtext.ui.attribute;
 
 public class Border {
 

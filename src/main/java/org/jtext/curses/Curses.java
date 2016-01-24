@@ -1,7 +1,5 @@
 package org.jtext.curses;
 
-import java.util.EnumSet;
-
 public interface Curses {
 
     void init();
@@ -22,17 +20,17 @@ public interface Curses {
 
     void offAttribute(CharacterAttribute attribute);
 
-    void drawHorizontalLineAt(Point point, char character, int length);
+    void drawHorizontalLineAt(int x, int y, char character, int length);
 
-    void drawVerticalLineAt(Point point, char character, int length);
+    void drawVerticalLineAt(int x, int y, char character, int length);
 
-    void printStringAt(Point point, String string);
+    void printStringAt(int x, int y, String string);
 
-    void putCharAt(Point point, char character);
+    void putCharAt(int x, int y, char character);
 
-    void changeAttributeAt(Point point, CharacterAttribute[] attributes);
+    void changeAttributeAt(int x, int y, CharacterAttribute[] attributes);
 
-    void moveCursor(Point point);
+    void moveCursor(int x, int y);
 
     void drawVerticalLine(char character, int length);
 

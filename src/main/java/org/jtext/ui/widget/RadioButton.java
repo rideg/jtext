@@ -1,4 +1,4 @@
-package org.jtext.widget;
+package org.jtext.ui.widget;
 
 public class RadioButton {
 }

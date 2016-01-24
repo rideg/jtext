@@ -82,50 +82,50 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_offAttribute
 /*
  * Class:     org_jtext_curses_CursesImpl
  * Method:    drawHorizontalLineAt
- * Signature: (Lorg/jtext/curses/Point;CI)V
+ * Signature: (IICI)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawHorizontalLineAt
-  (JNIEnv *, jobject, jobject, jchar, jint);
+  (JNIEnv *, jobject, jint, jint, jchar, jint);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
  * Method:    drawVerticalLineAt
- * Signature: (Lorg/jtext/curses/Point;CI)V
+ * Signature: (IICI)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawVerticalLineAt
-  (JNIEnv *, jobject, jobject, jchar, jint);
+  (JNIEnv *, jobject, jint, jint, jchar, jint);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
  * Method:    printStringAt
- * Signature: (Lorg/jtext/curses/Point;Ljava/lang/String;)V
+ * Signature: (IILjava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printStringAt
-  (JNIEnv *, jobject, jobject, jstring);
+  (JNIEnv *, jobject, jint, jint, jstring);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
  * Method:    putCharAt
- * Signature: (Lorg/jtext/curses/Point;C)V
+ * Signature: (IIC)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putCharAt
-  (JNIEnv *, jobject, jobject, jchar);
+  (JNIEnv *, jobject, jint, jint, jchar);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
  * Method:    changeAttributeAt
- * Signature: (Lorg/jtext/curses/Point;[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (II[Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_changeAttributeAt
-  (JNIEnv *, jobject, jobject, jobjectArray);
+  (JNIEnv *, jobject, jint, jint, jobjectArray);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
  * Method:    moveCursor
- * Signature: (Lorg/jtext/curses/Point;)V
+ * Signature: (II)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_moveCursor
-  (JNIEnv *, jobject, jobject);
+  (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     org_jtext_curses_CursesImpl
