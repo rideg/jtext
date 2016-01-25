@@ -1,3 +1,5 @@
+#include <curses.h>
+
 #ifndef __JTEXT_KEYS
 #define __JTEXT_KEYS
 
@@ -5,8 +7,7 @@
 extern "C" {
 #endif
 
-const char* map_key(win_t);
-
+const char* map_key(wint_t);
 
 #ifdef __cpluplus
 }
