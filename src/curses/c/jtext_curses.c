@@ -201,8 +201,8 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh
     const char* name;
     if(res == ERR) {
         name = "ERR";
-    } else if(res == KEY_CODE_YES || ch < 32) {
-        name = map_key(ch);
+    } else if(res == KEY_CODE_YES || ch < 32 || ch == 127) {
+        name = map
     } else {
         name = "NORMAL";
     }

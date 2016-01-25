@@ -1,4 +1,4 @@
-#include <curses.h>
+#include <wchar.h>
 
 #ifndef __JTEXT_KEYS
 #define __JTEXT_KEYS
