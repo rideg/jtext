@@ -27,6 +27,7 @@ model {
                                    "-D _XOPEN_SOURCE_EXTENDED",
                                     "-g",
                                     "-O0"
+		    linker.args "-lncurses", "-liconv"
 	          }
 		  if (targetPlatform.name == 'linux_32' || targetPlatform.name == 'linux_64') {
                     cCompiler.args "-I$System.env.JAVA_HOME/include",
@@ -35,8 +36,8 @@ model {
                             "-pedantic",
                             "-g",
                             "-D _XOPEN_SOURCE_EXTENDED"
+                     linker.args  "-lncursesw"
 		  }
-                  linker.args  "-lncurses", "-liconv"
                 }
             }
         }

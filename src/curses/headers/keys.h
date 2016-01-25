@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-const char* map_key(int);
+const char* map_key(win_t);
 
 
 #ifdef __cpluplus
