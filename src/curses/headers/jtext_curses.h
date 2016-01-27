@@ -122,10 +122,10 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putCharAt
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    changeAttributeAt
- * Signature: (III[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (IIIILorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
-  (JNIEnv *, jobject, jint, jint, jint, jobjectArray);
+  (JNIEnv *, jobject, jint, jint, jint, jint, jobject, jobject, jobjectArray);
 
 /*
  * Class:     org_jtext_curses_CursesDriver

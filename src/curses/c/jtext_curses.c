@@ -7,6 +7,8 @@
 
 
 bool no_current_refresh = true;
+WINDOW** __WINDOWS;
+const int MAX_WINDOW = 500;
 
 void handle_winch(int sig)
 {
@@ -29,6 +31,9 @@ void configure_signal_handling()
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
  (JNIEnv * env, jobject obj)
 {
+    __WINDOWS = malloc(MAX_WINDOW*sizeof(WINDOW*));
+    memset(__WINDOWS, 0, MAX_WINDOW*sizeof(WINDOW*));
+
     setlocale(LC_ALL, "");
     initscr();
     nodelay(stdscr, TRUE);
@@ -57,136 +62,171 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenHeight
     return LINES;
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_shutdown
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
+  (JNIEnv * env, jobject self, jint x, jint y, jint width, jint height)
+{
+   WINDOW* win = newwin(height, width, y, x);
+   for(int i=0; i< MAX_WINDOW; i++) {
+        if(__WINDOWS[i] != NULL) {
+          __WINDOWS[i] = win;
+           return i;
+        }
+   }
+
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_shutdown
  (JNIEnv * env, jobject obj)
 {
+
+    for(int i=0; i< MAX_WINDOW; i++) {
+        if(__WINDOWS[i] != NULL) {
+           delwin(__WINDOWS[i]);
+        }
+    }
     endwin();
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setBackgroundColor
-  (JNIEnv * env, jobject self, jobject color)
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
+  (JNIEnv * env, jobject self, jint window_id, jobject fg , jobject bg);
+{
+    attr_t attr = get_color_pair(env, fg, bg);
+    wattron(__WINDOWS[window_id], attr);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackgroundColor
+  (JNIEnv * env, jobject self, jint window_id, jobject color)
 {
 
-    int attr;
+    attr_t attr;
     short pair_id;
     attr_get(&attr, &pair_id, NULL);
 
     jint fgId = pair_id / 8;
     jint bgId = get_color_id(env, color);
 
-    attron(COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
+    wattron(__WINDOWS[window_id], COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
 
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setForegroundColor
-  (JNIEnv * env, jobject self, jobject color)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
+  (JNIEnv * env, jobject self, jint window_id, jobject color)
 {
 
-    int attr;
+    attr_t attr;
     short pair_id;
     attr_get(&attr, &pair_id, NULL);
 
     jint fgId = get_color_id(env, color);
     jint bgId = pair_id % 8;
 
-    attron(COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
+    attron(__WINDOWS[window_id], COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
 
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttributes
-  (JNIEnv *env, jobject self, jobject attr_array)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttributes
+  (JNIEnv *env, jobject self, jint window_id, jobject attr_array)
 {
-    int attr = get_attribute(env, attr_array);
-    attron(attr);
+    attr_t attr = get_attribute(env, attr_array);
+    wattron(__WINDOWS[window_id], attr);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_onAttribute
-  (JNIEnv * env, jobject self, jobject attribute)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttribute
+  (JNIEnv * env, jobject self, jint window_id, jobject attribute)
 {
-    int attr = get_attribute_value(env, attribute);
-    attron(attr);
+    attr_t attr = get_attribute_value(env, attribute);
+    wattron(__WINDOWS[window_id], attr);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_offAttribute
-  (JNIEnv * env, jobject self, jobject attribute)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_offAttribute
+  (JNIEnv * env, jobject self, jint window_id, jobject attribute)
 {
-    int attr = get_attribute_value(env, attribute);
-    attroff(attr);
+    attr_t attr = get_attribute_value(env, attribute);
+    wattroff(__WINDOWS[window_id], attr);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawHorizontalLineAt
-  (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLineAt
+  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-
-    mvhline_set(y, x, cch, (int) length);
+    mvwhline_set(__WINDOWS[window_id], y, x, cch, length);
     free(cch);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawVerticalLineAt
-  (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLineAt
+  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-    mvvline_set(y, x, cch, (int) length);
+    mvwvline_set(__WINDOWS[window_id], y, x, cch, length);
     free(cch);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printStringAt
-  (JNIEnv * env, jobject self, jint x, jint y, jstring text)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printStringAt
+  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jstring text)
 {
      wchar_t* buff = convert_string(env, text);
-     mvaddwstr(y, x, buff);
+     mvwaddwstr(__WINDOWS[window_id], y, x, buff);
      free(buff);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putCharAt
-  (JNIEnv * env, jobject self, jint x, jint y, jchar ch)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putCharAt
+  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jchar ch)
 {
     const cchar_t* cch = convert_jchar(ch);
-    mvdelch(y,x);
-    mvins_wch(y, x, cch);
+    mvwvline_set(__WINDOWS[window_id], y, x, cch, 1);
     free(cch);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_moveCursor
-  (JNIEnv * env, jobject self, jint x, jint y)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
+  (JNIEnv * env, jobject self, jint window_id, jint x, jint y,
+    jint length, jobject fg, jobject bg, jobjectArray attributes)
 {
-    move(y, x);
+    attr_t attr = get_attribute(env, attributes);
+    short color = get_color_pair(env, fg, bg);
+    mvwchgat(__WINDOWS[window_id], y, x, length, attr_t, color, NULL);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawVerticalLine
-  (JNIEnv * env, jobject self, jchar ch, jint length)
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_moveCursor
+  (JNIEnv * env, jobject self, jint window_id, jint x, jint y)
+{
+    wmove(__WINDOWS[window_id], y, x);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLine
+  (JNIEnv * env, jobject self, jint window_id, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-    vline_set(cch, (int) length);
+    wvline(__WINDOWS[window_id], cch, (int) length);
     free(cch);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_drawHorizontalLine
-  (JNIEnv * env, jobject self, jchar ch, jint length)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLine
+  (JNIEnv * env, jobject self, jint window_id, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-    hline_set(cch, (int) length);
+    whline(__WINDOWS[window_id], cch, (int) length);
     free(cch);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_printString
-(JNIEnv * env, jobject self, jstring text)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printString
+(JNIEnv * env, jobject self, jint window_id, jstring text)
  {
     wchar_t* buff = convert_string(env, text);
-    addwstr(buff);
+    waddwstr(__WINDOWS[window_id], buff);
     free(buff);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_putChar
-  (JNIEnv * env, jobject self, jchar ch)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putChar
+  (JNIEnv * env, jobject self, jint window_id, jchar ch)
 {
     const cchar_t* cch = convert_jchar(ch);
-    ins_wch(cch);
+    wins_wch(__WINDOWS[window_id], cch);
     free(cch);
 }
 
-JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh
+JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
  (JNIEnv * env, jobject obj)
 {
     jclass readKeyClass = (*env)->FindClass(env, "org/jtext/curses/ReadKey");
@@ -213,23 +253,16 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesImpl_getCh
     return (*env)->NewObject(env, readKeyClass, readKeyConstructor, enumConst, ch);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearScreen
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearScreen
 (JNIEnv * env, jobject obj)
 {
     clear();
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_refresh
-  (JNIEnv * env, jobject self)
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
+  (JNIEnv * env, jobject self, jint window_id)
 {
-    refresh();
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_setColor
-  (JNIEnv * env, jobject self, jobject fg, jobject bg)
-{
-    int attr = get_color_pair(env, fg, bg);
-    attron(attr);
+    wrefresh(__WINDOWS[window_id]);
 }
 
   JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_clearStyle

@@ -45,7 +45,13 @@ public class CursesDriver implements Driver {
     public native void putCharAt(final int windowId, final int x, final int y, final char character);
 
     @Override
-    public native void changeAttributeAt(final int windowId, final int x, final int y, final CharacterAttribute[] attributes);
+    public native void changeAttributeAt(final int windowId,
+                                         final int x,
+                                         final int y,
+                                         final int length,
+                                         final CharacterColor foregroundColor,
+                                         final CharacterColor backgroundColor,
+                                         final CharacterAttribute[] attributes);
 
     @Override
     public native void moveCursor(final int windowId, final int x, final int y);

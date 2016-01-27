@@ -14,7 +14,7 @@ void init_color_pairs()
     }
 }
 
-int get_attribute_code(const char* name)
+attr_t get_attribute_code(const char* name)
 {
     if(strcmp(name, "NORMAL") == 0) return A_NORMAL;
     if(strcmp(name, "STANDOUT") == 0) return A_STANDOUT;
@@ -28,7 +28,7 @@ int get_attribute_code(const char* name)
     return 0;
 }
 
-int get_attribute_value(JNIEnv * env, jobject attribute)
+attr_t get_attribute_value(JNIEnv * env, jobject attribute)
 {
     jclass charAttrCls = (*env)->GetObjectClass(env, attribute);
     jmethodID nameM = (*env)->GetMethodID(env, charAttrCls, "name", "()Ljava/lang/String;");
@@ -48,7 +48,7 @@ jint get_color_id(JNIEnv* env, jobject color)
     return (*env)->CallIntMethod(env, color, ordinalM);
 }
 
-int get_color_pair(JNIEnv* env, jobject fg, jobject bg)
+attr_t get_color_pair(JNIEnv* env, jobject fg, jobject bg)
 {
     jint fgId = get_color_id(env, fg);
     jint bgId = get_color_id(env, bg);
@@ -56,10 +56,10 @@ int get_color_pair(JNIEnv* env, jobject fg, jobject bg)
     return COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]);
 }
 
-int get_attribute(JNIEnv * env, jobject attributes)
+attr_t get_attribute(JNIEnv * env, jobject attributes)
 {
     jsize size = (*env)->GetArrayLength(env, attributes);
-    int attributeValue = 0;
+    attr_t attributeValue = 0;
     for(int i=0; i < size; i++) {
         jobject attribute = (*env)->GetObjectArrayElement(env, attributes, i);
         attributeValue |= get_attribute_value(env, attribute);

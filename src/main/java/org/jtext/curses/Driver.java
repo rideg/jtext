@@ -30,7 +30,8 @@ public interface Driver {
 
     void putCharAt(int windowId, int x, int y, char character);
 
-    void changeAttributeAt(int windowId, int x, int y, CharacterAttribute[] attributes);
+    void changeAttributeAt(int windowId, int x, int y, int length, final CharacterColor foregroundColor,
+                           final CharacterColor backgroundColor, CharacterAttribute[] attributes);
 
     void moveCursor(int windowId, int x, int y);
 
