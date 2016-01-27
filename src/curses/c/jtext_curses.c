@@ -26,7 +26,7 @@ void configure_signal_handling()
     sigaction(SIGWINCH, &sa, NULL);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_init
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
  (JNIEnv * env, jobject obj)
 {
     setlocale(LC_ALL, "");
@@ -45,13 +45,13 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesImpl_init
     curs_set(FALSE);
 }
 
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getScreenWidth
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenWidth
  (JNIEnv * env, jobject obj)
 {
   return COLS;
 }
 
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesImpl_getScreenHeight
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenHeight
  (JNIEnv * env, jobject obj)
 {
     return LINES;

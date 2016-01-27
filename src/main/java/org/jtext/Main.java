@@ -13,9 +13,9 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         LibraryLoader.load();
-        CursesImpl curses = new CursesImpl();
+        CursesDriver curses = new CursesDriver();
         curses.init();
-        curses.setColor(CharacterColor.CYAN, CharacterColor.BLACK);
+//        curses.setColor(CharacterColor.CYAN, CharacterColor.BLACK);
 
         drawRectangle(curses, new ReadKey(ControlKey.NULL, 0));
         while (true) {
@@ -32,9 +32,9 @@ public class Main {
         curses.shutdown();
     }
 
-    private static void drawRectangle(final Curses curses, final ReadKey read) {
-        int screenWidth = curses.getScreenWidth();
-        int screenHeight = curses.getScreenHeight();
+    private static void drawRectangle(final Driver driver, final ReadKey read) {
+        int screenWidth = driver.getScreenWidth();
+        int screenHeight = driver.getScreenHeight();
 
         if (read.key() == ControlKey.UP) {
             rectStart = rectStart.y > 0 ? rectStart.decY() : rectStart;
@@ -60,18 +60,18 @@ public class Main {
             text.setLength(text.length() - 1);
         }
 
-        curses.clearScreen();
-        curses.setForegroundColor(CharacterColor.GREEN);
-        curses.printStringAt(0, 0, "Arrived code: " + read.key().name() + " : " + new String(Character.toChars(read.getValue())));
+        driver.clearScreen();
+//        driver.setForegroundColor(CharacterColor.GREEN);
+//        driver.printStringAt(0, 0, "Arrived code: " + read.key().name() + " : " + new String(Character.toChars(read.getValue())));
 
 
-        Graphics graphics = new Graphics(Rectangle.of(rectStart, screenWidth, screenHeight), curses);
+        Graphics graphics = new Graphics(Rectangle.of(rectStart, screenWidth, screenHeight), driver);
         graphics.startDraw();
         graphics.printString(Point.at(2, 1), text.toString());
         graphics.setForegroundColor(CharacterColor.CYAN);
         graphics.drawRectangle(Rectangle.of(0, 0, text.length() + 4, 3), Border.SINGLE);
         graphics.setForegroundColor(CharacterColor.RED);
-        curses.refresh();
+//        driver.refresh();
     }
 
 }

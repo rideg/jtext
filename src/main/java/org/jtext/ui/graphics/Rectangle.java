@@ -46,4 +46,7 @@ public class Rectangle {
         return Rectangle.of(point.x, point.y, width, height);
     }
 
+    public Rectangle resize(final int width, final int height) {
+        return Rectangle.of(topLeft(), width, height);
+    }
 }

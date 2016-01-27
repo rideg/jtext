@@ -2,7 +2,7 @@ package org.jtext.ui.graphics;
 
 import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.CharacterColor;
-import org.jtext.curses.Curses;
+import org.jtext.curses.Driver;
 import org.jtext.ui.attribute.Border;
 
 import java.util.Set;
@@ -10,17 +10,17 @@ import java.util.Set;
 public class Graphics {
 
     private final Rectangle area;
-    private final Curses curses;
+    private final Driver driver;
     private boolean isRelative = true;
 
 
-    public Graphics(final Rectangle area, final Curses curses) {
+    public Graphics(final Rectangle area, final Driver driver) {
         this.area = area;
-        this.curses = curses;
+        this.driver = driver;
     }
 
     public Graphics(final Rectangle area, final Graphics graphics) {
-        this(area.relativeTo(graphics.getTopLeft()), graphics.curses);
+        this(area.relativeTo(graphics.getTopLeft()), graphics.driver);
     }
 
     public void setAbsoluteMode() {
@@ -36,15 +36,15 @@ public class Graphics {
     }
 
     public void setAttributes(final Set<CharacterAttribute> attributes) {
-        curses.onAttributes(attributes.toArray(new CharacterAttribute[attributes.size()]));
+//        driver.onAttributes(attributes.toArray(new CharacterAttribute[attributes.size()]));
     }
 
     public void setAttribute(final CharacterAttribute attribute) {
-        curses.onAttribute(attribute);
+//        driver.onAttribute(attribute);
     }
 
     public void removeAttribute(final CharacterAttribute attribute) {
-        curses.offAttribute(attribute);
+//        driver.offAttribute(attribute);
     }
 
     public Set<CharacterAttribute> getAttributes() {
@@ -60,11 +60,11 @@ public class Graphics {
     }
 
     public void setBackgroundColor(final CharacterColor color) {
-        curses.setBackgroundColor(color);
+//        driver.setBackgroundColor(color);
     }
 
     public void setForegroundColor(final CharacterColor color) {
-        curses.setForegroundColor(color);
+//        driver.setForegroundColor(color);
     }
 
     public void drawRectangle(final Rectangle rectangle, final Border border) {
@@ -81,27 +81,27 @@ public class Graphics {
 
     public void drawVerticalLine(final Point point, final char ch, final int length) {
         final Point p = toReal(point);
-        curses.drawVerticalLineAt(p.x, p.y, ch, length);
+//        driver.drawVerticalLineAt(p.x, p.y, ch, length);
     }
 
     public void drawHorizontalLine(final Point point, final char ch, final int length) {
         final Point p = toReal(point);
-        curses.drawHorizontalLineAt(p.x, p.y, ch, length);
+//        driver.drawHorizontalLineAt(p.x, p.y, ch, length);
     }
 
     public void printString(final Point point, final String string) {
         final Point p = toReal(point);
-        curses.printStringAt(p.x, p.y, string);
+//        driver.printStringAt(p.x, p.y, string);
     }
 
     public void putChar(final Point point, final char ch) {
         final Point p = toReal(point);
-        curses.putCharAt(p.x, p.y, ch);
+//        driver.putCharAt(p.x, p.y, ch);
     }
 
     private void moveCursor(final Point point) {
         final Point p = toReal(point);
-        curses.moveCursor(p.x, p.y);
+//        driver.moveCursor(p.x, p.y);
     }
 
     private Point toReal(final Point point) {
@@ -113,7 +113,8 @@ public class Graphics {
     }
 
     public Point getCursor() {
-        return Point.at(curses.getCursorX(), curses.getCursorY());
+        return null;
+//        return Point.at(driver.getCursorX(), driver.getCursorY());
     }
 
 
