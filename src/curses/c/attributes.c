@@ -1,6 +1,5 @@
 #include "../headers/attributes.h"
 #include <string.h>
-#include <curses.h>
 
 void init_color_pairs()
 {

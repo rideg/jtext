@@ -5,21 +5,31 @@
 
 const cchar_t* convert_jchar(jchar ch)
 {
+    cchar_t* ret = convert_jchar(ch);
+    short cp;
+    attr_get(&ret->attr, &cp, NULL);
+    return ret;
+}
 
+const cchar_t* convert_jchar_with_attributes(jchar ch, attr_t* attrs)
+{
+    cchar_t* ret = convert_jchar(ch);
+    ret->attr = attrs;
+    return ret;
+}
+
+const cchar_t* convert_jchar_base(jchar ch)
+{
  char* p_ch = (char*) &ch;
  size_t s = sizeof(jchar);
- iconv_t cd = iconv_open("WCHAR_T", "UTF-16LE");
  cchar_t* ret = malloc(sizeof(cchar_t));
  memset(ret, 0, sizeof(cchar_t));
- short cp;
- attr_get(&ret->attr, &cp, NULL);
-
- char* wchars = ret->chars;
-
  size_t ws = sizeof(wchar_t);
-
+ char* wchars = ret->chars;
+ iconv_t cd = iconv_open("WCHAR_T", "UTF-16LE");
  iconv(cd, &p_ch, &s, &wchars, &ws);
  iconv_close(cd);
+
  return ret;
 }
 

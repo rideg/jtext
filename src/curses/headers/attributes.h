@@ -2,6 +2,7 @@
 #define __JTEXT_ATTRIBUTES
 
 #include <jni.h>
+#include <curses.h>
 
 #ifdef __cpluplus
 extern "C" {
@@ -11,13 +12,13 @@ char __COLOR_PAIRS[8][8];
 
 void init_color_pairs(); // creates all possible 256 color pairs
 
-int get_attribute(JNIEnv*, jobject /*attributes*/);
+attr_t get_attribute(JNIEnv*, jobject /*attributes*/);
 
-int get_color_pair(JNIEnv*, jobject /*fg*/, jobject /*bg*/);
+attr_t get_color_pair(JNIEnv*, jobject /*fg*/, jobject /*bg*/);
 
 jint get_color_id(JNIEnv*, jobject);
 
-int get_attribute_value(JNIEnv *, jobject /*attribute*/);
+attr_t get_attribute_value(JNIEnv *, jobject /*attribute*/);
 
 
 #ifdef __cpluplus

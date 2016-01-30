@@ -87,6 +87,9 @@ public class CursesDriver implements Driver {
     public native void clearScreen();
 
     @Override
+    public native void clear(final int windowId);
+
+    @Override
     public native void clearStyle(final int windowId);
 
     @Override
@@ -103,5 +106,11 @@ public class CursesDriver implements Driver {
 
     @Override
     public native void deleteWindow(final int windowId);
+
+    @Override
+    public native void setBackground(final int windowId, final char character, final CharacterColor foregroundColor, final CharacterColor backgroundColor, final CharacterAttribute[] attributes);
+
+    @Override
+    public native void changeBackground(final int windowId, final char character, final CharacterColor foregroundColor,final CharacterColor backgroundColor, final CharacterAttribute[] attributes);
 
 }

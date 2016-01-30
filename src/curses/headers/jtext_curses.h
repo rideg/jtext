@@ -217,6 +217,14 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearScreen
 
 /*
  * Class:     org_jtext_curses_CursesDriver
+ * Method:    clear
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clear
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
  * Method:    clearStyle
  * Signature: (I)V
  */
@@ -262,6 +270,22 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_resizeWindow
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_deleteWindow
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    setBackground
+ * Signature: (ICLorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
+  (JNIEnv *, jobject, jint, jchar, jobject, jobject, jobjectArray);
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    changeBackground
+ * Signature: (ICLorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
+  (JNIEnv *, jobject, jint, jchar, jobject, jobject, jobjectArray);
 
 #ifdef __cplusplus
 }

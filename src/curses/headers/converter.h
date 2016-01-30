@@ -11,6 +11,8 @@ extern "C" {
 
 const cchar_t* convert_jchar(jchar);
 
+const cchar_t* convert_jchar_with_attributes(jchar, attr_t*);
+
 wchar_t* convert_string(JNIEnv*, jobject);
 
 

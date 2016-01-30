@@ -47,6 +47,8 @@ public interface Driver {
 
     void clearScreen();
 
+    void clear(int windowId);
+
     void bell();
 
     void shutdown();
@@ -66,4 +68,16 @@ public interface Driver {
     void resizeWindow(int windowId, int width, int height);
 
     void deleteWindow(int windowId);
+
+    void setBackground(int windowId,
+                       char character,
+                       CharacterColor foregroundColor,
+                       CharacterColor backgroundColor,
+                       CharacterAttribute[] attributes);
+
+    void changeBackground(int windowId,
+                          char character,
+                          CharacterColor foregroundColor,
+                          CharacterColor backgroundColor,
+                          CharacterAttribute[] attributes);
 }
