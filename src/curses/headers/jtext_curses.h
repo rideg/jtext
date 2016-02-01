@@ -274,18 +274,34 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_deleteWindow
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    setBackground
- * Signature: (ICLorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (ILorg/jtext/curses/CellDescriptor;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
-  (JNIEnv *, jobject, jint, jchar, jobject, jobject, jobjectArray);
+  (JNIEnv *, jobject, jint, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    changeBackground
- * Signature: (ICLorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (ILorg/jtext/curses/CellDescriptor;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
-  (JNIEnv *, jobject, jint, jchar, jobject, jobject, jobjectArray);
+  (JNIEnv *, jobject, jint, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    drawBox
+ * Signature: (ILorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ILorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2
+  (JNIEnv *, jobject, jint, jobject, jobject, jobject, jobject, jobject, jobject, jobject, jobject);
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    drawBox
+ * Signature: (ICCCCCCCC)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ICCCCCCCC
+  (JNIEnv *, jobject, jint, jchar, jchar, jchar, jchar, jchar, jchar, jchar, jchar);
 
 #ifdef __cplusplus
 }

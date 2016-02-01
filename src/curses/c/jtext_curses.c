@@ -320,16 +320,82 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_deleteWindow
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
-  (JNIEnv * env, jobject self, jint window_id, jchar ch, jobject fg, jobject bg, jobjectArray attributes)
+  (JNIEnv * env, jobject self, jint window_id, jobject cell_descriptor)
 {
-
 
  //   bkgrndset(__WINDOWS[window_id], );
 }
 
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
-  (JNIEnv * env, jobject self, jint window_id, jchar ch, jobject fg, jobject bg, jobjectArray attributes)
+  (JNIEnv * env, jobject self, jint window_id, jobject cell_descriptor)
 {
 
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ILorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2
+  (JNIEnv * env, jobject self, jint window_id,
+  jobject top_left,
+  jobject top,
+  jobject top_right,
+  jobject right,
+  jobject bottom_right,
+  jobject bottom,
+  jobject bottom_left,
+  jobject left)
+{
+
+    const cchar_t* top_left_c = convert_cell_descriptor(env, top_left);
+    const cchar_t* top_c = convert_cell_descriptor(env, top);
+    const cchar_t* top_right_c = convert_cell_descriptor(env, top_right);
+    const cchar_t* right_c = convert_cell_descriptor(env, right);
+    const cchar_t* bottom_right_c = convert_cell_descriptor(env, bottom_right);
+    const cchar_t* bottom_c = convert_cell_descriptor(env, bottom);
+    const cchar_t* bottom_left_c = convert_cell_descriptor(env, bottom_left);
+    const cchar_t* left_c = convert_cell_descriptor(env, left);
+
+    wborder_set(__WINDOWS[window_id], left_c, right_c, top_c, bottom_c, top_left_c, top_right_c, bottom_left_c, bottom_right_c);
+
+    free(top_left_c);
+    free(top_c);
+    free(top_right_c);
+    free(right_c);
+    free(bottom_right_c);
+    free(bottom_c);
+    free(bottom_left_c);
+    free(left_c);
+
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ICCCCCCCC
+  (JNIEnv * env, jobject self, jint window_id,
+  jchar top_left,
+  jchar top,
+  jchar top_right,
+  jchar right,
+  jchar bottom_right,
+  jchar bottom,
+  jchar bottom_left,
+  jchar left)
+{
+
+    const cchar_t* top_left_c = convert_jchar(top_left);
+    const cchar_t* top_c = convert_jchar(top);
+    const cchar_t* top_right_c = convert_jchar(top_right);
+    const cchar_t* right_c = convert_jchar(right);
+    const cchar_t* bottom_right_c = convert_jchar(bottom_right);
+    const cchar_t* bottom_c = convert_jchar(bottom);
+    const cchar_t* bottom_left_c = convert_jchar(bottom_left);
+    const cchar_t* left_c = convert_jchar(left);
+
+    wborder_set(__WINDOWS[window_id], left_c, right_c, top_c, bottom_c, top_left_c, top_right_c, bottom_left_c, bottom_right_c);
+
+    free(top_left_c);
+    free(top_c);
+    free(top_right_c);
+    free(right_c);
+    free(bottom_right_c);
+    free(bottom_c);
+    free(bottom_left_c);
+    free(left_c);
 }

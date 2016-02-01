@@ -69,15 +69,31 @@ public interface Driver {
 
     void deleteWindow(int windowId);
 
-    void setBackground(int windowId,
-                       char character,
-                       CharacterColor foregroundColor,
-                       CharacterColor backgroundColor,
-                       CharacterAttribute[] attributes);
+    void setBackground(int windowId, CellDescriptor descriptor);
 
-    void changeBackground(int windowId,
-                          char character,
-                          CharacterColor foregroundColor,
-                          CharacterColor backgroundColor,
-                          CharacterAttribute[] attributes);
+    void changeBackground(int windowId, CellDescriptor descriptor);
+
+    void drawBox(int windowId,
+                 int x, int y,
+                 int width, int height,
+                 CellDescriptor topLeft,
+                 CellDescriptor top,
+                 CellDescriptor topRight,
+                 CellDescriptor right,
+                 CellDescriptor bottomRight,
+                 CellDescriptor bottom,
+                 CellDescriptor bottomLeft,
+                 CellDescriptor left);
+
+    void drawBox(int windowId,
+                 int x, int y,
+                 int width, int height,
+                 char topLeft,
+                 char top,
+                 char topRight,
+                 char right,
+                 char bottomRight,
+                 char bottom,
+                 char bottomLeft,
+                 char left);
 }
