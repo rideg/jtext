@@ -1,5 +1,8 @@
 #include <jni.h>
 #include <curses.h>
+#include <string.h>
+#include <stdlib.h>
+#include <iconv.h>
 #include "attributes.h"
 
 
@@ -12,7 +15,7 @@ extern "C" {
 
 const cchar_t* convert_jchar(jchar);
 
-const cchar_t* convert_jchar_with_attributes(jchar, attr_t*);
+const cchar_t* convert_jchar_with_attributes(jchar, attr_t);
 
 wchar_t* convert_string(JNIEnv*, jobject);
 
