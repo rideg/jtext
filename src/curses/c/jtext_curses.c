@@ -10,6 +10,7 @@ bool no_current_refresh = true;
 WINDOW** __WINDOWS;
 const int MAX_WINDOW = 500;
 WINDOW* screen;
+WINDOW* pad;
 
 void handle_winch(int sig)
 {
@@ -49,6 +50,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
     keypad(stdscr, TRUE);
     noecho();
     curs_set(FALSE);
+    pad = newpad(1, 1);
 }
 
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenWidth
@@ -73,21 +75,19 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
            return i;
         }
    }
-
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_shutdown
  (JNIEnv * env, jobject obj)
 {
-
     for(int i=0; i< MAX_WINDOW; i++) {
         if(__WINDOWS[i] != NULL) {
            delwin(__WINDOWS[i]);
         }
     }
+    delwin(pad);
     endwin();
 }
-
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
   (JNIEnv * env, jobject self, jint window_id, jobject fg, jobject bg)
@@ -242,7 +242,7 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
     while(!no_current_refresh);
 
     wint_t ch;
-    int res = get_wch(&ch);
+    int res = wget_wch(pad, &ch);
 
     const char* name;
     if(res == ERR) {
@@ -322,8 +322,9 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_deleteWindow
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
   (JNIEnv * env, jobject self, jint window_id, jobject cell_descriptor)
 {
-
- //   bkgrndset(__WINDOWS[window_id], );
+    const cchar_t* bg = convert_cell_descriptor(env, cell_descriptor);
+    wbkgrndset(__WINDOWS[window_id], bg);
+    free(bg);
 }
 
 

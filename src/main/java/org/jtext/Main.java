@@ -53,12 +53,15 @@ public class Main {
 
         curses.refresh(windowId);
 
-//        while(curses.getCh().getValue() != 'q') {
-//            ;
-//        }
+        while(true) {
+            ReadKey ch = curses.getCh();
+            if(ch.getValue() == 'q') {
+                break;
+            }
+        }
 
 
-        TimeUnit.SECONDS.sleep(5);
+//        TimeUnit.SECONDS.sleep(5);
         curses.deleteWindow(windowId);
         curses.shutdown();
 //        curses.setColor(CharacterColor.CYAN, CharacterColor.BLACK);

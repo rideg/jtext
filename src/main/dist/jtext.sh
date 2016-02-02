@@ -12,5 +12,5 @@ fi
 #DEBUG=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7843
 
 
-clear; $JAVA_CMD -cp lib/* org.jtext.Main
+clear; $JAVA_CMD -cp lib/* $DEBUG org.jtext.Main
 
