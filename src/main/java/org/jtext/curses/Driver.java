@@ -74,8 +74,6 @@ public interface Driver {
     void changeBackground(int windowId, CellDescriptor descriptor);
 
     void drawBox(int windowId,
-                 int x, int y,
-                 int width, int height,
                  CellDescriptor topLeft,
                  CellDescriptor top,
                  CellDescriptor topRight,
@@ -86,8 +84,6 @@ public interface Driver {
                  CellDescriptor left);
 
     void drawBox(int windowId,
-                 int x, int y,
-                 int width, int height,
                  char topLeft,
                  char top,
                  char topRight,

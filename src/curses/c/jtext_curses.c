@@ -9,6 +9,7 @@
 bool no_current_refresh = true;
 WINDOW** __WINDOWS;
 const int MAX_WINDOW = 500;
+WINDOW* screen;
 
 void handle_winch(int sig)
 {
@@ -35,7 +36,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
     memset(__WINDOWS, 0, MAX_WINDOW*sizeof(WINDOW*));
 
     setlocale(LC_ALL, "");
-    initscr();
+    screen = initscr();
     nodelay(stdscr, TRUE);
     set_escdelay(0);
     configure_signal_handling();
@@ -67,7 +68,7 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
 {
    WINDOW* win = newwin(height, width, y, x);
    for(int i=0; i< MAX_WINDOW; i++) {
-        if(__WINDOWS[i] != NULL) {
+        if(__WINDOWS[i] == NULL) {
           __WINDOWS[i] = win;
            return i;
         }
@@ -254,7 +255,6 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
 
     jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, name, "Lorg/jtext/curses/ControlKey;");
     jobject enumConst = (*env)->GetStaticObjectField(env, controlKeyClass, fieldNumber);
-
     return (*env)->NewObject(env, readKeyClass, readKeyConstructor, enumConst, ch);
 }
 
