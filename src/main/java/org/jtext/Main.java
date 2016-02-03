@@ -44,6 +44,16 @@ public class Main {
                 p = p.incX();
                 curses.moveWindow(windowId, p.x, p.y);
             }
+
+            if (ch.key() == ControlKey.SHIFT_RIGHT) {
+                width++;
+                curses.resizeWindow(windowId, width, height);
+            }
+
+            if (ch.key() == ControlKey.SHIFT_LEFT) {
+                width--;
+                curses.resizeWindow(windowId, width, height);
+            }
             drawWindow(curses, windowId, ch.key().name());
         }
 
