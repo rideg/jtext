@@ -273,7 +273,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clear
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
   (JNIEnv * env, jobject self, jint window_id)
 {
-//    wrefresh(screen);
+    wrefresh(screen);
     wrefresh(__WINDOWS[window_id]);
 }
 
