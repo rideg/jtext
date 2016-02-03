@@ -37,7 +37,8 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
 
     setlocale(LC_ALL, "");
     screen = initscr();
-    nodelay(stdscr, TRUE);
+    pad = newpad(1, 1);
+    nodelay(pad, TRUE);
     set_escdelay(0);
     configure_signal_handling();
     start_color();
@@ -45,11 +46,10 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
     init_color_pairs();
     nonl();
     raw();
-    meta(stdscr, TRUE);
-    keypad(stdscr, TRUE);
+    meta(pad, TRUE);
+    keypad(pad, TRUE);
     noecho();
     curs_set(FALSE);
-    pad = newpad(1, 1);
 }
 
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenWidth
@@ -273,6 +273,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clear
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
   (JNIEnv * env, jobject self, jint window_id)
 {
+//    wrefresh(screen);
     wrefresh(__WINDOWS[window_id]);
 }
 

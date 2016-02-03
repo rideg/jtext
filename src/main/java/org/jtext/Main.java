@@ -23,9 +23,9 @@ public class Main {
         int height = 15;
 
 
-        int windowId = curses.createWindow((screenWidth - width) / 2,
-                (screenHeight - height) / 2,
-                width, height);
+        Point p = Point.at((screenWidth - width) / 2, (screenHeight - height) / 2);
+
+        int windowId = curses.createWindow(p.x, p.y, width, height);
 
 //        curses.setBackground(windowId,
 //                CellDescriptor.builder()
@@ -37,7 +37,7 @@ public class Main {
 
 //        curses.clearScreen();
 
-        curses.printStringAt(windowId, 1,1, "Hello world!");
+//        curses.printStringAt(windowId, 1,1, "Hello world!");
 
 
         final CellDescriptor prototype = CellDescriptor.builder()
@@ -50,12 +50,7 @@ public class Main {
                 prototype.ch(Border.SINGLE.topLeft),
                 prototype.ch(Border.SINGLE.horizontal),
                 prototype.ch(Border.SINGLE.topRight),
-                CellDescriptor.builder()
-                        .ch(Border.SINGLE.vertical)
-                        .bg(CharacterColor.RED)
-                        .fg(CharacterColor.BLUE)
-                        .attr(CharacterAttribute.BLINK)
-                        .create(),
+                prototype.ch(Border.SINGLE.vertical),
                 prototype.ch(Border.SINGLE.bottomRight),
                 prototype.ch(Border.SINGLE.horizontal),
                 prototype.ch(Border.SINGLE.bottomLeft),
@@ -66,13 +61,24 @@ public class Main {
 //                new HashSet<>(Arrays.asList(CharacterAttribute.BOLD))
 //        ));
 
-        curses.refresh(windowId);
+//        curses.refresh(windowId);
 
         while (true) {
             ReadKey ch = curses.getCh();
             if (ch.getValue() == 'q') {
                 break;
             }
+
+            if (ch.key() == ControlKey.ERR) {
+                Thread.sleep(1);
+                continue;
+            }
+            curses.printStringAt(windowId, 1, 1, ch.key().name());
+            if (ch.key() == ControlKey.LEFT) {
+                p = p.decX();
+                curses.moveWindow(windowId, p.x, p.y);
+            }
+            curses.refresh(windowId);
         }
 
 
