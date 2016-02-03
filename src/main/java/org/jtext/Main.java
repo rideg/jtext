@@ -6,10 +6,6 @@ import org.jtext.ui.graphics.Graphics;
 import org.jtext.ui.graphics.Point;
 import org.jtext.ui.graphics.Rectangle;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.concurrent.TimeUnit;
-
 public class Main {
 
     private static Point rectStart = Point.at(5, 5);
@@ -27,24 +23,30 @@ public class Main {
         int height = 15;
 
 
+        int windowId = curses.createWindow((screenWidth - width) / 2,
+                (screenHeight - height) / 2,
+                width, height);
 
-
-        int windowId = curses.createWindow((screenWidth - width) /2,
-                                           (screenHeight - height) /2,
-                                           width, height);
+        curses.setBackground(windowId,
+                CellDescriptor.builder()
+                        .fg(CharacterColor.MAGENTA)
+                        .bg(CharacterColor.BLUE)
+                        .ch('.')
+                        .attr(CharacterAttribute.BOLD)
+                        .create());
 
 //        curses.clearScreen();
-        curses.setForegroundColor(windowId, CharacterColor.BLUE);
-        curses.setBackgroundColor(windowId, CharacterColor.RED);
-        curses.drawBox(windowId,
-                       Border.SINGLE.topLeft,
-                       Border.SINGLE.horizontal,
-                       Border.SINGLE.topRight,
-                       Border.SINGLE.vertical,
-                       Border.SINGLE.bottomRight,
-                       Border.SINGLE.horizontal,
-                       Border.SINGLE.bottomLeft,
-                       Border.SINGLE.vertical);
+//        curses.setForegroundColor(windowId, CharacterColor.BLUE);
+//        curses.setBackgroundColor(windowId, CharacterColor.RED);
+//        curses.drawBox(windowId,
+//                Border.SINGLE.topLeft,
+//                Border.SINGLE.horizontal,
+//                Border.SINGLE.topRight,
+//                Border.SINGLE.vertical,
+//                Border.SINGLE.bottomRight,
+//                Border.SINGLE.horizontal,
+//                Border.SINGLE.bottomLeft,
+//                Border.SINGLE.vertical);
 
 //        curses.changeBackground(windowId, new CellDescriptor(
 //                '.', CharacterColor.BLUE, CharacterColor.MAGENTA,
@@ -53,9 +55,9 @@ public class Main {
 
         curses.refresh(windowId);
 
-        while(true) {
+        while (true) {
             ReadKey ch = curses.getCh();
-            if(ch.getValue() == 'q') {
+            if (ch.getValue() == 'q') {
                 break;
             }
         }

@@ -1,5 +1,7 @@
 package org.jtext.curses;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class CellDescriptor {
@@ -33,5 +35,58 @@ public class CellDescriptor {
 
     public CharacterAttribute[] getAttributes() {
         return attributes;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static Builder copy(final CellDescriptor descriptor) {
+        return new Builder()
+                .ch(descriptor.getCharacter())
+                .bg(descriptor.getBackgroundColor())
+                .fg(descriptor.getForegroundColor())
+                .attr(descriptor.getAttributes());
+    }
+
+    public static class Builder {
+
+        private char character = ' ';
+        private CharacterColor foregroundColor = CharacterColor.WHITE;
+        private CharacterColor backgroundColor = CharacterColor.BLACK;
+        private Set<CharacterAttribute> attributes = new HashSet<>();
+
+
+        public Builder ch(final char character) {
+            this.character = character;
+            return this;
+        }
+
+        public Builder fg(final CharacterColor color) {
+            this.foregroundColor = color;
+            return this;
+        }
+
+        public Builder bg(final CharacterColor color) {
+            this.backgroundColor = color;
+            return this;
+        }
+
+        public Builder attr(final CharacterAttribute attribute, final CharacterAttribute... rest) {
+            attributes = new HashSet<>();
+            attributes.add(attribute);
+            attributes.addAll(Arrays.asList(rest));
+            return this;
+        }
+
+        public Builder attr(final CharacterAttribute[] attributes) {
+            this.attributes = new HashSet<>();
+            this.attributes.addAll(Arrays.asList(attributes));
+            return this;
+        }
+
+        public CellDescriptor create() {
+            return new CellDescriptor(character, foregroundColor, backgroundColor, attributes);
+        }
     }
 }

@@ -5,7 +5,6 @@
 #include <locale.h>
 #include <stdlib.h>
 
-
 bool no_current_refresh = true;
 WINDOW** __WINDOWS;
 const int MAX_WINDOW = 500;
@@ -323,15 +322,17 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
   (JNIEnv * env, jobject self, jint window_id, jobject cell_descriptor)
 {
     const cchar_t* bg = convert_cell_descriptor(env, cell_descriptor);
-    wbkgrndset(__WINDOWS[window_id], bg);
+    wbkgrnd(__WINDOWS[window_id], bg);
     free(bg);
 }
-
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
   (JNIEnv * env, jobject self, jint window_id, jobject cell_descriptor)
 {
 
+    const cchar_t* bg = convert_cell_descriptor(env, cell_descriptor);
+    wbkgrndset(__WINDOWS[window_id], bg);
+    free(bg);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ILorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2
