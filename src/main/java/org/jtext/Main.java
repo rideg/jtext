@@ -27,26 +27,39 @@ public class Main {
                 (screenHeight - height) / 2,
                 width, height);
 
-        curses.setBackground(windowId,
-                CellDescriptor.builder()
-                        .fg(CharacterColor.MAGENTA)
-                        .bg(CharacterColor.BLUE)
-                        .ch('.')
-                        .attr(CharacterAttribute.BOLD)
-                        .create());
+//        curses.setBackground(windowId,
+//                CellDescriptor.builder()
+//                        .fg(CharacterColor.MAGENTA)
+//                        .bg(CharacterColor.BLUE)
+//                        .ch(' ')
+//                        .attr(CharacterAttribute.BOLD)
+//                        .create());
 
 //        curses.clearScreen();
-//        curses.setForegroundColor(windowId, CharacterColor.BLUE);
-//        curses.setBackgroundColor(windowId, CharacterColor.RED);
-//        curses.drawBox(windowId,
-//                Border.SINGLE.topLeft,
-//                Border.SINGLE.horizontal,
-//                Border.SINGLE.topRight,
-//                Border.SINGLE.vertical,
-//                Border.SINGLE.bottomRight,
-//                Border.SINGLE.horizontal,
-//                Border.SINGLE.bottomLeft,
-//                Border.SINGLE.vertical);
+
+        curses.printStringAt(windowId, 1,1, "Hello world!");
+
+
+        final CellDescriptor prototype = CellDescriptor.builder()
+                .bg(CharacterColor.RED)
+                .fg(CharacterColor.WHITE)
+                .attr(CharacterAttribute.BOLD)
+                .create();
+//
+        curses.drawBox(windowId,
+                prototype.ch(Border.SINGLE.topLeft),
+                prototype.ch(Border.SINGLE.horizontal),
+                prototype.ch(Border.SINGLE.topRight),
+                CellDescriptor.builder()
+                        .ch(Border.SINGLE.vertical)
+                        .bg(CharacterColor.RED)
+                        .fg(CharacterColor.BLUE)
+                        .attr(CharacterAttribute.BLINK)
+                        .create(),
+                prototype.ch(Border.SINGLE.bottomRight),
+                prototype.ch(Border.SINGLE.horizontal),
+                prototype.ch(Border.SINGLE.bottomLeft),
+                prototype.ch(Border.SINGLE.vertical));
 
 //        curses.changeBackground(windowId, new CellDescriptor(
 //                '.', CharacterColor.BLUE, CharacterColor.MAGENTA,

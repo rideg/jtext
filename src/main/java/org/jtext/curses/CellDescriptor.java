@@ -37,6 +37,10 @@ public class CellDescriptor {
         return attributes;
     }
 
+    public CellDescriptor ch(final char ch) {
+        return new CellDescriptor(ch, foregroundColor, backgroundColor, new HashSet<>(Arrays.asList(attributes)));
+    }
+
     public static Builder builder() {
         return new Builder();
     }

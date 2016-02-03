@@ -4,8 +4,8 @@
 void init_color_pairs()
 {
     short pair_id = 0;
-    for(short i=0; i< 8; i++) {
-        for(short j = 0; j<8; j++) {
+    for(short i = 0; i < 8; i++) {
+        for(short j = 0; j < 8; j++) {
             init_pair(pair_id, i, j);
             __COLOR_PAIRS[i][j] = pair_id;
             pair_id++;

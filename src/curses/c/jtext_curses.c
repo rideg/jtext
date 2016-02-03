@@ -101,9 +101,9 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackgroundColor
 
     attr_t attr;
     short pair_id;
-    attr_get(&attr, &pair_id, NULL);
+    wattr_get(__WINDOWS[window_id], &attr, &pair_id, NULL);
 
-    jint fgId = pair_id / 8;
+    jint fgId = pair_id >> 3;
     jint bgId = get_color_id(env, color);
 
     wattron(__WINDOWS[window_id], COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
@@ -116,7 +116,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
 
     attr_t attr;
     short pair_id;
-    attr_get(&attr, &pair_id, NULL);
+    wattr_get(__WINDOWS[window_id], &attr, &pair_id, NULL);
 
     jint fgId = get_color_id(env, color);
     jint bgId = pair_id % 8;
