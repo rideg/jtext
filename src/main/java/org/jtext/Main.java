@@ -1,5 +1,6 @@
 package org.jtext;
 
+import javafx.scene.control.Cell;
 import org.jtext.curses.*;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.graphics.Point;
@@ -59,10 +60,12 @@ public class Main {
         driver.clear(windowId);
 
         final CellDescriptor prototype = CellDescriptor.builder()
-                .bg(CharacterColor.RED)
+                .bg(CharacterColor.BLACK)
                 .fg(CharacterColor.WHITE)
                 .attr(CharacterAttribute.BOLD)
                 .create();
+
+        driver.setBackground(windowId, CellDescriptor.builder().bg(CharacterColor.BLUE).create());
 
         driver.drawBox(windowId,
                 prototype.ch(Border.SINGLE.topLeft),
@@ -74,7 +77,9 @@ public class Main {
                 prototype.ch(Border.SINGLE.bottomLeft),
                 prototype.ch(Border.SINGLE.vertical));
 
-        driver.printStringAt(windowId, 1, 1, text);
+        driver.setForegroundColor(windowId, CharacterColor.GREEN);
+        driver.onAttribute(windowId, CharacterAttribute.UNDERLINE);
+        driver.printStringAt(windowId, 2, 2, text);
 
         driver.refresh(windowId);
     }
