@@ -68,7 +68,8 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
   (JNIEnv * env, jobject self, jint x, jint y, jint width, jint height)
 {
    WINDOW* win = newwin(height, width, y, x);
-   for(int i=0; i< MAX_WINDOW; i++) {
+   int i;
+   for(i=0; i< MAX_WINDOW; i++) {
         if(__WINDOWS[i] == NULL) {
           __WINDOWS[i] = win;
            return i;
@@ -79,7 +80,8 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_shutdown
  (JNIEnv * env, jobject obj)
 {
-    for(int i=0; i< MAX_WINDOW; i++) {
+    int i;
+    for(i=0; i< MAX_WINDOW; i++) {
         if(__WINDOWS[i] != NULL) {
            delwin(__WINDOWS[i]);
         }

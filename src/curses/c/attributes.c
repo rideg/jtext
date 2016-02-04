@@ -4,8 +4,10 @@
 void init_color_pairs()
 {
     short pair_id = 0;
-    for(short i = 0; i < 8; i++) {
-        for(short j = 0; j < 8; j++) {
+    short i;
+    short j;
+    for(i = 0; i < 8; i++) {
+        for(j = 0; j < 8; j++) {
             init_pair(pair_id, i, j);
             __COLOR_PAIRS[i][j] = pair_id;
             pair_id++;
@@ -59,7 +61,8 @@ attr_t get_attribute(JNIEnv * env, jobject attributes)
 {
     jsize size = (*env)->GetArrayLength(env, attributes);
     attr_t attributeValue = 0;
-    for(int i=0; i < size; i++) {
+    int i;
+    for(i=0; i < size; i++) {
         jobject attribute = (*env)->GetObjectArrayElement(env, attributes, i);
         attributeValue |= get_attribute_value(env, attribute);
     }
