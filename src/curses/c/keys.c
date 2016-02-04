@@ -108,13 +108,13 @@ const char* map_key(wint_t code)
     if (code == 545) return "SHIFT_ALT_LEFT";
     if (code == 560) return "SHIFT_ALT_RIGHT";
 
-    if( code == 535) return "SHIFT_ALT_HOME";
-    if( code == 530) return "SHIFT_ALT_END";
-    if( code == 519) return "SHIFT_ALT_DELETE";
-    if( code == 550) return "SHIFT_ALT_NEXT_PAGE";
-    if( code == 555) return "SHIFT_ALT_PREVIOUS_PAG";
+    if(code == 535) return "SHIFT_ALT_HOME";
+    if(code == 530) return "SHIFT_ALT_END";
+    if(code == 519) return "SHIFT_ALT_DELETE";
+    if(code == 550) return "SHIFT_ALT_NEXT_PAGE";
+    if(code == 555) return "SHIFT_ALT_PREVIOUS_PAGE";
 
-    if( code == KEY_RESIZE) return "RESIZE";
-    if( code == ERR) return "ERR";
+    if(code == KEY_RESIZE) return "RESIZE";
+    if(code == ERR) return "ERR";
     return "UNKNOWN";
 }

@@ -89,6 +89,9 @@ public enum ControlKey {
     CTRL_ALT_DOWN,
     CTRL_ALT_LEFT,
     CTRL_ALT_RIGHT,
+    CTRL_ALT_PREVIOUS_PAGE,
+    CTRL_ALT_NEXT_PAGE,
+
 
     SHIFT_CTRL_UP,
     SHIFT_CTRL_DOWN,

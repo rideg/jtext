@@ -1,6 +1,5 @@
 package org.jtext;
 
-import javafx.scene.control.Cell;
 import org.jtext.curses.*;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.graphics.Point;
