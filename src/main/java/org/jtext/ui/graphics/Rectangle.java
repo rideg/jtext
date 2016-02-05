@@ -49,4 +49,8 @@ public class Rectangle {
     public Rectangle resize(final int width, final int height) {
         return Rectangle.of(topLeft(), width, height);
     }
+
+    public Rectangle copy() {
+        return Rectangle.of(x, y, width, height);
+    }
 }

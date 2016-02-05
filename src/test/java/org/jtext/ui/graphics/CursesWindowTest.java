@@ -23,17 +23,17 @@ public class CursesWindowTest {
     @Before
     public void setUp() throws Exception {
         driver = mock(Driver.class);
-        window = new CursesWindow(driver, WINDOW_ID, AREA, Z_INDEX, VISIBLE);
+        window = new CursesWindow(driver, WINDOW_ID, new WindowState(AREA, Z_INDEX, VISIBLE));
     }
 
     @Test
-    public void shouldSetDirtyFlagInCaseOfDrawing() throws Exception {
+    public void shouldUpdateStateWhenMoved() throws Exception {
         // when
-        window.drawHorizontalLine('=', 10);
+        window.move(Point.at(10, 15));
 
         // then
-        verify(driver).drawHorizontalLine(WINDOW_ID, '=', 10);
-        assertThat(window.isDirty(), is(true));
+        verify(driver).moveWindow(WINDOW_ID, 10, 15);
+        assertThat(window.getArea().topLeft(), is(Point.at(10, 15)));
     }
 
 }

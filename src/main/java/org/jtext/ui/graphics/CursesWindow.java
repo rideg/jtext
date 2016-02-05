@@ -8,165 +8,140 @@ import org.jtext.curses.Driver;
 public class CursesWindow {
 
     private final Driver driver;
-    private final int windowId;
-
-    private Rectangle area;
-    private int zIndex;
-    private boolean dirty;
-    private boolean areaChanged;
-    private boolean visible;
+    private final int id;
+    private final WindowState state;
 
 
-    public CursesWindow(final Driver driver, int windowId, Rectangle area, int zIndex, boolean visible) {
+    public CursesWindow(final Driver driver, final int id, final WindowState state) {
         this.driver = driver;
-        this.windowId = windowId;
-        this.area = area;
-        this.zIndex = zIndex;
-        this.visible = visible;
+        this.id = id;
+        this.state = state;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public WindowState getState() {
+        return state;
     }
 
     public boolean isVisible() {
-        return visible;
+        return state.isVisible();
     }
 
-    public Point getTopLeft() {
-        return area.topLeft();
+    public Rectangle getArea() {
+        return state.getArea();
     }
 
     public int getZIndex() {
-        return zIndex;
-    }
-
-    public boolean isDirty() {
-        return dirty;
-    }
-
-    public boolean isAreaChanged() {
-        return areaChanged;
+        return state.getZIndex();
     }
 
     public void setColor(final CharacterColor foreground, final CharacterColor background) {
-        driver.setColor(windowId, foreground, background);
+        driver.setColor(id, foreground, background);
     }
 
     public void setBackgroundColor(final CharacterColor color) {
-        driver.setBackgroundColor(windowId, color);
+        driver.setBackgroundColor(id, color);
     }
 
     public void setForegroundColor(final CharacterColor color) {
-        driver.setForegroundColor(windowId, color);
+        driver.setForegroundColor(id, color);
     }
 
     public void onAttributes(final CharacterAttribute[] attributes) {
-        driver.onAttributes(windowId, attributes);
+        driver.onAttributes(id, attributes);
     }
 
     public void onAttribute(final CharacterAttribute attribute) {
-        driver.onAttribute(windowId, attribute);
+        driver.onAttribute(id, attribute);
     }
 
     public void offAttribute(final CharacterAttribute attribute) {
-        driver.offAttribute(windowId, attribute);
+        driver.offAttribute(id, attribute);
     }
 
     public void drawHorizontalLineAt(final Point point, char character, int length) {
-        driver.drawHorizontalLineAt(windowId, point.x, point.y, character, length);
-        dirty();
+        driver.drawHorizontalLineAt(id, point.x, point.y, character, length);
     }
 
     public void drawVerticalLineAt(final Point point, char character, int length) {
-        driver.drawVerticalLineAt(windowId, point.x, point.y, character, length);
-        dirty();
+        driver.drawVerticalLineAt(id, point.x, point.y, character, length);
     }
 
     public void printStringAt(final Point point, final String string) {
-        driver.printStringAt(windowId, point.x, point.y, string);
-        dirty();
+        driver.printStringAt(id, point.x, point.y, string);
     }
 
     public void putCharAt(final Point point, final char character) {
-        driver.putCharAt(windowId, point.x, point.y, character);
-        dirty();
+        driver.putCharAt(id, point.x, point.y, character);
     }
 
     public void changeAttributeAt(final Point point, final int length, final CharacterColor foregroundColor,
                                   final CharacterColor backgroundColor, final CharacterAttribute[] attributes) {
-        driver.changeAttributeAt(windowId, point.x, point.y, length, foregroundColor, backgroundColor, attributes);
-        dirty();
+        driver.changeAttributeAt(id, point.x, point.y, length, foregroundColor, backgroundColor, attributes);
     }
 
     public void moveCursor(final Point point) {
-        driver.moveCursor(windowId, point.x, point.y);
+        driver.moveCursor(id, point.x, point.y);
     }
 
     public void drawVerticalLine(final char character, final int length) {
-        driver.drawVerticalLine(windowId, character, length);
-        dirty();
+        driver.drawVerticalLine(id, character, length);
     }
 
     public void drawHorizontalLine(final char character, final int length) {
-        driver.drawHorizontalLine(windowId, character, length);
-        dirty();
+        driver.drawHorizontalLine(id, character, length);
     }
 
     public void printString(final String string) {
-        driver.printString(windowId, string);
-        dirty();
+        driver.printString(id, string);
     }
 
     public void putChar(final char character) {
-        driver.putChar(windowId, character);
-        dirty();
+        driver.putChar(id, character);
     }
 
     public void changeAttribute(final CharacterAttribute[] attributes) {
-        driver.changeAttribute(windowId, attributes);
+        driver.changeAttribute(id, attributes);
     }
 
     public void clear() {
-        driver.clear(windowId);
-        dirty();
+        driver.clear(id);
     }
 
-    public void refresh() {
-        driver.refresh(windowId);
-        dirty = false;
+    public void unDirty() {
     }
-
 
     public void clearStyle() {
-        driver.clearStyle(windowId);
+        driver.clearStyle(id);
     }
 
     public int getCursorX() {
-        return driver.getCursorX(windowId);
+        return driver.getCursorX(id);
     }
 
     public int getCursorY() {
-        return driver.getCursorY(windowId);
+        return driver.getCursorY(id);
     }
 
     public void move(final Point point) {
-        driver.moveWindow(windowId, point.x, point.y);
-        area = area.move(point);
-        areaChanged();
+        driver.moveWindow(id, point.x, point.y);
+        state.move(point);
     }
 
     public void resize(final int width, final int height) {
-        driver.resizeWindow(windowId, width, height);
-        area = area.resize(width, height);
-        dirty();
-        areaChanged();
+        driver.resizeWindow(id, width, height);
+        state.resize(width, height);
     }
 
     public void setBackground(final CellDescriptor descriptor) {
-        driver.setBackground(windowId, descriptor);
-        dirty();
+        driver.setBackground(id, descriptor);
     }
 
     public void changeBackground(final CellDescriptor descriptor) {
-        driver.changeBackground(windowId, descriptor);
-        dirty();
+        driver.changeBackground(id, descriptor);
     }
 
     public void drawBox(final CellDescriptor topLeft,
@@ -177,8 +152,7 @@ public class CursesWindow {
                         final CellDescriptor bottom,
                         final CellDescriptor bottomLeft,
                         final CellDescriptor left) {
-        driver.drawBox(windowId, topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
-        dirty();
+        driver.drawBox(id, topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
     }
 
     public void drawBox(final char topLeft,
@@ -189,34 +163,23 @@ public class CursesWindow {
                         final char bottom,
                         final char bottomLeft,
                         final char left) {
-        driver.drawBox(windowId, topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
-        dirty();
+        driver.drawBox(id, topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
     }
 
     public void show() {
-        if (!visible) dirty();
-        visible = true;
+        state.show();
     }
 
     public void hide() {
-        dirty = false;
-        areaChanged();
-        visible = false;
+        state.hide();
     }
 
     public void setZIndex(final int newIndex) {
-        if (newIndex > zIndex) dirty();
-        zIndex = newIndex;
+        state.setZIndex(newIndex);
     }
 
-    private void areaChanged() {
-        areaChanged = true;
-    }
-
-    private void dirty() {
-        if (visible) {
-            dirty = true;
-        }
+    public Point topLeft() {
+        return state.getArea().topLeft();
     }
 }
 
