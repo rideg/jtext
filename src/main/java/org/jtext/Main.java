@@ -22,11 +22,12 @@ public class Main {
 
 
         final CursesWindow top = new CursesWindow(driver, new WindowState(Rectangle.of(p, width, height), 5));
-        int twoThird = 2 * screenWidth / 3;
 
-        final CursesWindow upperLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, twoThird, screenHeight - 30), 1));
-        final CursesWindow bottomLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, upperLeft.getArea().height - 1, upperLeft.getArea().width, 10), 1));
-//        final CursesWindow right = new CursesWindow(driver, new WindowState(Rectangle.of(upperLeft.getArea().width, 0, screenWidth - upperLeft.getArea().width, screenHeight), 1, true));
+        int twoThird = 2 * screenWidth / 3;
+        int sTwoThird = 2 * screenHeight / 3;
+        final CursesWindow upperLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, twoThird, sTwoThird), 1));
+        final CursesWindow bottomLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, upperLeft.getArea().height, upperLeft.getArea().width, screenHeight - upperLeft.getArea().height), 2));
+        final CursesWindow right = new CursesWindow(driver, new WindowState(Rectangle.of(upperLeft.getArea().width, 0, screenWidth - upperLeft.getArea().width, screenHeight), 3, true));
 
 
         final WindowLayoutManager manager = new WindowLayoutManager(driver);
@@ -34,13 +35,10 @@ public class Main {
         manager.addWindow(top);
         manager.addWindow(upperLeft);
         manager.addWindow(bottomLeft);
-//        manager.addWindow(right);
+        manager.addWindow(right);
 
 
-        upperLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.GREEN).create());
-        bottomLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.MAGENTA).create());
-//        right.setBackground(CellDescriptor.builder().bg(CharacterColor.YELLOW).fg(CharacterColor.WHITE).create());
-//        right.drawBox(Border.SINGLE.vertical, ' ', ' ', ' ', ' ', ' ', Border.SINGLE.vertical, Border.SINGLE.vertical);
+
 
         manager.refresh();
 
@@ -55,10 +53,18 @@ public class Main {
             }
             if (ch.key() == ControlKey.LEFT) {
                 p = p.decX();
-                top.move(p.decX());
+                top.move(p);
             }
             if (ch.key() == ControlKey.RIGHT) {
                 p = p.incX();
+                top.move(p);
+            }
+            if (ch.key() == ControlKey.UP) {
+                p = p.decY();
+                top.move(p);
+            }
+            if (ch.key() == ControlKey.DOWN) {
+                p = p.incY();
                 top.move(p);
             }
             if (ch.key() == ControlKey.SHIFT_RIGHT) {
@@ -69,6 +75,7 @@ public class Main {
                 width--;
                 top.resize(width, height);
             }
+            drawWindows(upperLeft, bottomLeft, right);
             drawWindow(top, ch);
             manager.refresh();
         }
@@ -76,6 +83,22 @@ public class Main {
         driver.shutdown();
 
     }
+
+    private static void drawWindows(CursesWindow upperLeft, CursesWindow bottomLeft, CursesWindow right) {
+        upperLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.GREEN).create());
+        bottomLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.MAGENTA).create());
+        right.setBackground(CellDescriptor.builder().bg(CharacterColor.YELLOW).fg(CharacterColor.BLACK).create());
+
+        right.setColor(CharacterColor.WHITE, CharacterColor.BLACK);
+        right.onAttribute(CharacterAttribute.BOLD);
+        right.drawVerticalLineAt(Point.at(0, 0), '│', right.getArea().height);
+        right.putCharAt(Point.at(0, upperLeft.getArea().height), '┤');
+
+        bottomLeft.setColor(CharacterColor.WHITE, CharacterColor.BLACK);
+        bottomLeft.onAttribute(CharacterAttribute.BOLD);
+        bottomLeft.drawHorizontalLineAt(Point.at(0,0), '─', bottomLeft.getArea().width);
+    }
+
 
     private static void drawWindow(CursesWindow top, ReadKey ch) {
         top.clear();
