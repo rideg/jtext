@@ -2,32 +2,50 @@ package org.jtext;
 
 import org.jtext.curses.*;
 import org.jtext.ui.attribute.Border;
-import org.jtext.ui.graphics.Point;
+import org.jtext.ui.graphics.*;
 
 public class Main {
 
-    private static Point rectStart = Point.at(5, 5);
-    private static final StringBuilder text = new StringBuilder();
-
     public static void main(String[] args) throws InterruptedException {
         LibraryLoader.load();
-        CursesDriver curses = new CursesDriver();
-        curses.init();
+        CursesDriver driver = new CursesDriver();
+        driver.init();
 
 
-        int screenWidth = curses.getScreenWidth();
-        int screenHeight = curses.getScreenHeight();
+        int screenWidth = driver.getScreenWidth();
+        int screenHeight = driver.getScreenHeight();
         int width = 30;
         int height = 15;
 
 
         Point p = Point.at((screenWidth - width) / 2, (screenHeight - height) / 2);
 
-        int windowId = curses.createWindow(p.x, p.y, width, height);
 
+        final CursesWindow top = new CursesWindow(driver, new WindowState(Rectangle.of(p, width, height), 5));
+        int twoThird = 2 * screenWidth / 3;
+
+        final CursesWindow upperLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, twoThird, screenHeight - 30), 1));
+        final CursesWindow bottomLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, upperLeft.getArea().height - 1, upperLeft.getArea().width, 10), 1));
+//        final CursesWindow right = new CursesWindow(driver, new WindowState(Rectangle.of(upperLeft.getArea().width, 0, screenWidth - upperLeft.getArea().width, screenHeight), 1, true));
+
+
+        final WindowLayoutManager manager = new WindowLayoutManager(driver);
+
+        manager.addWindow(top);
+        manager.addWindow(upperLeft);
+        manager.addWindow(bottomLeft);
+//        manager.addWindow(right);
+
+
+        upperLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.GREEN).create());
+        bottomLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.MAGENTA).create());
+//        right.setBackground(CellDescriptor.builder().bg(CharacterColor.YELLOW).fg(CharacterColor.WHITE).create());
+//        right.drawBox(Border.SINGLE.vertical, ' ', ' ', ' ', ' ', ' ', Border.SINGLE.vertical, Border.SINGLE.vertical);
+
+        manager.refresh();
 
         while (true) {
-            ReadKey ch = curses.getCh();
+            ReadKey ch = driver.getCh();
             if (ch.getValue() == 'q') {
                 break;
             }
@@ -35,38 +53,32 @@ public class Main {
                 Thread.sleep(1);
                 continue;
             }
-            curses.printStringAt(windowId, 1, 1, ch.key().name());
             if (ch.key() == ControlKey.LEFT) {
                 p = p.decX();
-                curses.moveWindow(windowId, p.x, p.y);
+                top.move(p.decX());
             }
             if (ch.key() == ControlKey.RIGHT) {
                 p = p.incX();
-                curses.moveWindow(windowId, p.x, p.y);
+                top.move(p);
             }
-
             if (ch.key() == ControlKey.SHIFT_RIGHT) {
                 width++;
-                curses.resizeWindow(windowId, width, height);
+                top.resize(width, height);
             }
-
             if (ch.key() == ControlKey.SHIFT_LEFT) {
                 width--;
-                curses.resizeWindow(windowId, width, height);
+                top.resize(width, height);
             }
-            drawWindow(curses, windowId, ch.key().name());
+            drawWindow(top, ch);
+            manager.refresh();
         }
 
-        curses.deleteWindow(windowId);
-        curses.shutdown();
+        driver.shutdown();
 
     }
 
-
-    public static void drawWindow(final Driver driver, final int windowId, final String text) {
-        driver.clearScreen();
-
-        driver.clear(windowId);
+    private static void drawWindow(CursesWindow top, ReadKey ch) {
+        top.clear();
 
         final CellDescriptor prototype = CellDescriptor.builder()
                 .bg(CharacterColor.BLACK)
@@ -74,10 +86,9 @@ public class Main {
                 .attr(CharacterAttribute.BOLD)
                 .create();
 
-        driver.setBackground(windowId, CellDescriptor.builder().bg(CharacterColor.BLUE).create());
+        top.setBackground(CellDescriptor.builder().bg(CharacterColor.BLUE).create());
 
-        driver.drawBox(windowId,
-                prototype.ch(Border.SINGLE.topLeft),
+        top.drawBox(prototype.ch(Border.SINGLE.topLeft),
                 prototype.ch(Border.SINGLE.horizontal),
                 prototype.ch(Border.SINGLE.topRight),
                 prototype.ch(Border.SINGLE.vertical),
@@ -86,13 +97,10 @@ public class Main {
                 prototype.ch(Border.SINGLE.bottomLeft),
                 prototype.ch(Border.SINGLE.vertical));
 
-        driver.setForegroundColor(windowId, CharacterColor.GREEN);
-        driver.onAttribute(windowId, CharacterAttribute.UNDERLINE);
-        driver.printStringAt(windowId, 2, 2, text);
-
-        driver.refresh(Driver.SCREEN_WINDOW_ID);
-        driver.refresh(windowId);
-        driver.doUpdate();
+        top.setForegroundColor(CharacterColor.GREEN);
+        top.onAttribute(CharacterAttribute.UNDERLINE);
+        top.printStringAt(Point.at(2, 2), ch.key().name());
     }
+
 
 }

@@ -6,6 +6,11 @@ public class WindowState {
     private boolean visible;
     private int zIndex;
 
+    public WindowState(final Rectangle area, final int zIndex) {
+        this.zIndex = zIndex;
+        this.visible = true;
+        this.area = area;
+    }
 
     public WindowState(final Rectangle area, final int zIndex, final boolean visible) {
         this.zIndex = zIndex;

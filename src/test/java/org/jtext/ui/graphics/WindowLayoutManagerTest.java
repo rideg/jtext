@@ -6,6 +6,10 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import java.util.UUID;
+
+import static org.mockito.Matchers.anyInt;
+
 public class WindowLayoutManagerTest {
 
 
@@ -15,16 +19,21 @@ public class WindowLayoutManagerTest {
     @Before
     public void setUp() throws Exception {
         driver = Mockito.mock(Driver.class);
-        manager = new WindowLayoutManager(driver);
-    }
+        Mockito.doAnswer(invocation -> UUID.randomUUID().hashCode()).when(driver).createWindow(anyInt(),
+                anyInt(),
+                anyInt(),
+                anyInt());
 
+        manager = new WindowLayoutManager(driver);
+
+    }
 
     @Test
     public void shouldUpdateWindowsInZIndexOrder() throws Exception {
         // given
-        final CursesWindow bottom = new CursesWindow(driver, 1, new WindowState(Rectangle.of(0, 0, 50, 50), 1, true));
-        final CursesWindow middle = new CursesWindow(driver, 2, new WindowState(Rectangle.of(25, 25, 10, 10), 2, true));
-        final CursesWindow top = new CursesWindow(driver, 3, new WindowState(Rectangle.of(20, 20, 10, 10), 2, true));
+        final CursesWindow bottom = new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, 50, 50), 1, true));
+        final CursesWindow middle = new CursesWindow(driver, new WindowState(Rectangle.of(25, 25, 10, 10), 2, true));
+        final CursesWindow top = new CursesWindow(driver, new WindowState(Rectangle.of(20, 20, 10, 10), 3, true));
 
 
         manager.addWindow(bottom);
@@ -45,8 +54,8 @@ public class WindowLayoutManagerTest {
     @Test
     public void shouldNotUpdateTopWindowIfThatIsInvisible() throws Exception {
         // given
-        final CursesWindow bottom = new CursesWindow(driver, 1, new WindowState(Rectangle.of(0, 0, 50, 50), 1, true));
-        final CursesWindow top = new CursesWindow(driver, 2, new WindowState(Rectangle.of(20, 20, 10, 10), 2, false));
+        final CursesWindow bottom = new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, 50, 50), 1, true));
+        final CursesWindow top = new CursesWindow(driver, new WindowState(Rectangle.of(20, 20, 10, 10), 2, false));
 
         manager.addWindow(bottom);
         manager.addWindow(top);

@@ -12,7 +12,6 @@ import static org.mockito.Mockito.verify;
 public class CursesWindowTest {
 
 
-    public static final int WINDOW_ID = 141234;
     public static final Rectangle AREA = Rectangle.of(0, 0, 10, 10);
     public static final int Z_INDEX = 10;
     public static final boolean VISIBLE = true;
@@ -23,7 +22,7 @@ public class CursesWindowTest {
     @Before
     public void setUp() throws Exception {
         driver = mock(Driver.class);
-        window = new CursesWindow(driver, WINDOW_ID, new WindowState(AREA, Z_INDEX, VISIBLE));
+        window = new CursesWindow(driver, new WindowState(AREA, Z_INDEX, VISIBLE));
     }
 
     @Test
@@ -32,7 +31,7 @@ public class CursesWindowTest {
         window.move(Point.at(10, 15));
 
         // then
-        verify(driver).moveWindow(WINDOW_ID, 10, 15);
+        verify(driver).moveWindow(window.getId(), 10, 15);
         assertThat(window.getArea().topLeft(), is(Point.at(10, 15)));
     }
 

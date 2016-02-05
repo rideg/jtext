@@ -12,10 +12,11 @@ public class CursesWindow {
     private final WindowState state;
 
 
-    public CursesWindow(final Driver driver, final int id, final WindowState state) {
+    public CursesWindow(final Driver driver, final WindowState state) {
         this.driver = driver;
-        this.id = id;
         this.state = state;
+        final Rectangle area = state.getArea();
+        this.id = driver.createWindow(area.x, area.y, area.width, area.height);
     }
 
     public int getId() {
@@ -180,6 +181,22 @@ public class CursesWindow {
 
     public Point topLeft() {
         return state.getArea().topLeft();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CursesWindow window = (CursesWindow) o;
+
+        return id == window.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }
 
