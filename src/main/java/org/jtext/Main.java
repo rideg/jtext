@@ -90,7 +90,9 @@ public class Main {
         driver.onAttribute(windowId, CharacterAttribute.UNDERLINE);
         driver.printStringAt(windowId, 2, 2, text);
 
+        driver.refresh(Driver.SCREEN_WINDOW_ID);
         driver.refresh(windowId);
+        driver.doUpdate();
     }
 
 }

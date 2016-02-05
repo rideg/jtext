@@ -2,6 +2,8 @@ package org.jtext.curses;
 
 public interface Driver {
 
+    int SCREEN_WINDOW_ID = 0;
+
     void init();
 
     int getScreenWidth();
@@ -56,6 +58,8 @@ public interface Driver {
     ReadKey getCh();
 
     void refresh(int windowId);
+
+    void doUpdate();
 
     void clearStyle(int windowId);
 

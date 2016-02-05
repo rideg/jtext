@@ -207,6 +207,15 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
   (JNIEnv *, jobject, jint);
 
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    doUpdate
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_doUpdate
+  (JNIEnv *, jobject);
+
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    clearScreen

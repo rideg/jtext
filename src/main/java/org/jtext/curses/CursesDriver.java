@@ -84,6 +84,9 @@ public class CursesDriver implements Driver {
     public native void refresh(final int windowId);
 
     @Override
+    public native void doUpdate();
+
+    @Override
     public native void clearScreen();
 
     @Override

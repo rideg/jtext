@@ -7,7 +7,7 @@
 
 bool no_current_refresh = true;
 WINDOW** __WINDOWS;
-const int MAX_WINDOW = 500;
+const int MAX_WINDOW = 501;
 WINDOW* screen;
 WINDOW* pad;
 
@@ -37,6 +37,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
 
     setlocale(LC_ALL, "");
     screen = initscr();
+    __WINDOWS[0] = screen;
     pad = newpad(1, 1);
     nodelay(pad, TRUE);
     set_escdelay(0);
@@ -69,7 +70,7 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
 {
    WINDOW* win = newwin(height, width, y, x);
    int i;
-   for(i=0; i< MAX_WINDOW; i++) {
+   for(i = 1; i < MAX_WINDOW; i++) {
         if(__WINDOWS[i] == NULL) {
           __WINDOWS[i] = win;
            return i;
@@ -81,7 +82,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_shutdown
  (JNIEnv * env, jobject obj)
 {
     int i;
-    for(i=0; i< MAX_WINDOW; i++) {
+    for(i = 1; i < MAX_WINDOW; i++) {
         if(__WINDOWS[i] != NULL) {
            delwin(__WINDOWS[i]);
         }
@@ -275,8 +276,13 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clear
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
   (JNIEnv * env, jobject self, jint window_id)
 {
-    wrefresh(screen);
-    wrefresh(__WINDOWS[window_id]);
+    wnoutrefresh(__WINDOWS[window_id]);
+}
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_doUpdate
+  (JNIEnv *env, jobject self)
+{
+    doupdate();
 }
 
   JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearStyle
