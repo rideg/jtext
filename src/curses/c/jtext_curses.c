@@ -309,16 +309,20 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
     return y;
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_moveWindow
+JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_moveWindow
   (JNIEnv * env, jobject self, jint window_id, jint x, jint y)
 {
-    mvwin(__WINDOWS[window_id], y, x);
+    int result;
+    result = mvwin(__WINDOWS[window_id], y, x);
+    return result == ERR ? JNI_FALSE : JNI_TRUE;
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_resizeWindow
+JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_resizeWindow
   (JNIEnv * env, jobject self, jint window_id, jint width, jint height)
 {
-    wresize(__WINDOWS[window_id], height, width);
+    int result;
+    result = wresize(__WINDOWS[window_id], height, width);
+    return result == ERR ? JNI_FALSE : JNI_TRUE;
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_deleteWindow

@@ -259,17 +259,17 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    moveWindow
- * Signature: (III)V
+ * Signature: (III)Z
  */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_moveWindow
+JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_moveWindow
   (JNIEnv *, jobject, jint, jint, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    resizeWindow
- * Signature: (III)V
+ * Signature: (III)Z
  */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_resizeWindow
+JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_resizeWindow
   (JNIEnv *, jobject, jint, jint, jint);
 
 /*

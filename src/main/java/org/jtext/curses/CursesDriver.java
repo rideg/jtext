@@ -102,10 +102,10 @@ public class CursesDriver implements Driver {
     public native int getCursorY(final int windowId);
 
     @Override
-    public native void moveWindow(final int windowId, final int x, final int y);
+    public native boolean moveWindow(final int windowId, final int x, final int y);
 
     @Override
-    public native void resizeWindow(final int windowId, final int width, final int height);
+    public native boolean resizeWindow(final int windowId, final int width, final int height);
 
     @Override
     public native void deleteWindow(final int windowId);

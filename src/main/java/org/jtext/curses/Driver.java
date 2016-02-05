@@ -67,11 +67,9 @@ public interface Driver {
 
     int getCursorY(int windowId);
 
-    // todo: return indicator whether the operation was successful or not
-    void moveWindow(int windowId, int x, int y);
+    boolean moveWindow(int windowId, int x, int y);
 
-    // todo: return indicator whether the operation was successful or not
-    void resizeWindow(int windowId, int width, int height);
+    boolean resizeWindow(int windowId, int width, int height);
 
     void deleteWindow(int windowId);
 
