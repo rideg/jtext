@@ -8,5 +8,10 @@ public interface Widget {
 
     OccupationType getPreferredHeight();
 
+    Position getPosition();
+
     void setArea(Rectangle area);
+
+
+
 }
