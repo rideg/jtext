@@ -14,6 +14,10 @@ public class Rectangle {
         this.height = height;
     }
 
+    public Dimension dimension() {
+        return Dimension.of(width, height);
+    }
+
     public Point topLeft() {
         return Point.at(x, y);
     }
@@ -38,8 +42,8 @@ public class Rectangle {
         return new Rectangle(x, y, width, height);
     }
 
-    public static Rectangle of(final Point point, final int width, final int height) {
-        return new Rectangle(point.x, point.y, width, height);
+    public static Rectangle of(final Point point, final Dimension dimension) {
+        return new Rectangle(point.x, point.y, dimension.width, dimension.height);
     }
 
     public Rectangle move(final Point point) {
@@ -47,7 +51,11 @@ public class Rectangle {
     }
 
     public Rectangle resize(final int width, final int height) {
-        return Rectangle.of(topLeft(), width, height);
+        return Rectangle.of(topLeft(), Dimension.of(width, height));
+    }
+
+    public Rectangle resize(final Dimension dimension) {
+        return Rectangle.of(topLeft(), dimension);
     }
 
     public Rectangle copy() {

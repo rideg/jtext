@@ -14,20 +14,30 @@ public class Main {
 
         int screenWidth = driver.getScreenWidth();
         int screenHeight = driver.getScreenHeight();
-        int width = 30;
-        int height = 15;
+        Dimension dim = Dimension.of(30, 15);
+
+        Point p = Point.at((screenWidth - dim.width) / 2, (screenHeight - dim.height) / 2);
 
 
-        Point p = Point.at((screenWidth - width) / 2, (screenHeight - height) / 2);
-
-
-        final CursesWindow top = new CursesWindow(driver, new WindowState(Rectangle.of(p, width, height), 5));
+        final CursesWindow top = new CursesWindow(driver, new WindowState(Rectangle.of(p, dim), 5));
 
         int twoThird = 2 * screenWidth / 3;
         int sTwoThird = 2 * screenHeight / 3;
         final CursesWindow upperLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, twoThird, sTwoThird), 1));
-        final CursesWindow bottomLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, upperLeft.getArea().height, upperLeft.getArea().width, screenHeight - upperLeft.getArea().height), 2));
-        final CursesWindow right = new CursesWindow(driver, new WindowState(Rectangle.of(upperLeft.getArea().width, 0, screenWidth - upperLeft.getArea().width, screenHeight), 3, true));
+        final CursesWindow bottomLeft = new CursesWindow(driver,
+                new WindowState(Rectangle.of(
+                        0,
+                        upperLeft.getArea().height,
+                        upperLeft.getArea().width,
+                        screenHeight - upperLeft.getArea().height
+                ), 2));
+        final CursesWindow right = new CursesWindow(driver,
+                new WindowState(Rectangle.of(
+                        upperLeft.getArea().width,
+                        0,
+                        screenWidth - upperLeft.getArea().width,
+                        screenHeight
+                ), 3, true));
 
 
         final WindowLayoutManager manager = new WindowLayoutManager(driver);
@@ -36,8 +46,6 @@ public class Main {
         manager.addWindow(upperLeft);
         manager.addWindow(bottomLeft);
         manager.addWindow(right);
-
-
 
 
         manager.refresh();
@@ -68,12 +76,12 @@ public class Main {
                 top.move(p);
             }
             if (ch.key() == ControlKey.SHIFT_RIGHT) {
-                width++;
-                top.resize(width, height);
+                dim = dim.incWidth();
+                top.resize(dim);
             }
             if (ch.key() == ControlKey.SHIFT_LEFT) {
-                width--;
-                top.resize(width, height);
+                dim = dim.decWidth();
+                top.resize(dim);
             }
             drawWindows(upperLeft, bottomLeft, right);
             drawWindow(top, ch);
@@ -96,7 +104,7 @@ public class Main {
 
         bottomLeft.setColor(CharacterColor.WHITE, CharacterColor.BLACK);
         bottomLeft.onAttribute(CharacterAttribute.BOLD);
-        bottomLeft.drawHorizontalLineAt(Point.at(0,0), '─', bottomLeft.getArea().width);
+        bottomLeft.drawHorizontalLineAt(Point.at(0, 0), '─', bottomLeft.getArea().width);
     }
 
 

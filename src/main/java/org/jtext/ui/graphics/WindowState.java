@@ -54,4 +54,8 @@ public class WindowState {
     public WindowState copy() {
         return new WindowState(area.copy(), zIndex, visible);
     }
+
+    public void resize(Dimension dimension) {
+        area.resize(dimension);
+    }
 }

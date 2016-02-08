@@ -132,9 +132,10 @@ public class CursesWindow {
         state.move(point);
     }
 
-    public void resize(final int width, final int height) {
-        driver.resizeWindow(id, width, height);
-        state.resize(width, height);
+
+    public void resize(final Dimension dimension) {
+        driver.resizeWindow(id, dimension.width, dimension.height);
+        state.resize(dimension);
     }
 
     public void setBackground(final CellDescriptor descriptor) {
