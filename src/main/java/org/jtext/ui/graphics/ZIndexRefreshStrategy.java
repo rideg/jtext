@@ -6,13 +6,13 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class WindowLayoutManager {
+public class ZIndexRefreshStrategy {
 
     public static final Comparator<CursesWindow> Z_INDEX_COMPARATOR = (a, b) -> Integer.compare(a.getZIndex(), b.getZIndex());
     private final Driver driver;
     private final Set<CursesWindow> windows;
 
-    public WindowLayoutManager(Driver driver) {
+    public ZIndexRefreshStrategy(Driver driver) {
         this.driver = driver;
         this.windows = new TreeSet<>(Z_INDEX_COMPARATOR);
     }

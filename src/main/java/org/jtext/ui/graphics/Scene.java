@@ -6,7 +6,7 @@ public class Scene {
 
     private Widget activeWidget;
     private Driver driver;
-    private WindowLayoutManager windowLayout;
+    private ZIndexRefreshStrategy windowLayout;
 
 
 

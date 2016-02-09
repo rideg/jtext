@@ -14,7 +14,7 @@ public class WindowLayoutManagerTest {
 
 
     private Driver driver;
-    private WindowLayoutManager manager;
+    private ZIndexRefreshStrategy manager;
 
     @Before
     public void setUp() throws Exception {
@@ -24,7 +24,7 @@ public class WindowLayoutManagerTest {
                 anyInt(),
                 anyInt());
 
-        manager = new WindowLayoutManager(driver);
+        manager = new ZIndexRefreshStrategy(driver);
 
     }
 

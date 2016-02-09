@@ -40,7 +40,7 @@ public class Main {
                 ), 3, true));
 
 
-        final WindowLayoutManager manager = new WindowLayoutManager(driver);
+        final ZIndexRefreshStrategy manager = new ZIndexRefreshStrategy(driver);
 
         manager.addWindow(top);
         manager.addWindow(upperLeft);
