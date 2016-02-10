@@ -1,18 +1,21 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.ui.event.UIEvent;
+
 import java.util.Set;
 
-public class Container implements Widget {
+public class Container extends Widget {
 
     private Set<Widget> widgets;
     private LayoutManager layoutManager;
 
-    public Container(LayoutManager layoutManager) {
+    public Container(final int id, final LayoutManager layoutManager) {
+        super(id);
         this.layoutManager = layoutManager;
     }
 
     @Override
-    public void paint(Graphics graphics) {
+    public void draw(Graphics graphics) {
 
     }
 
@@ -34,5 +37,15 @@ public class Container implements Widget {
     @Override
     public void setArea(Rectangle area) {
         layoutManager.setArea(area);
+    }
+
+    @Override
+    protected void reValidate() {
+
+    }
+
+    @Override
+    protected void handleEvent(UIEvent event) {
+
     }
 }

@@ -23,21 +23,22 @@ public class Main {
 
         int twoThird = 2 * screenWidth / 3;
         int sTwoThird = 2 * screenHeight / 3;
-        final CursesWindow upperLeft = new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, twoThird, sTwoThird), 1));
+        final CursesWindow upperLeft =
+                new CursesWindow(driver, new WindowState(Rectangle.of(0, 0, twoThird, sTwoThird), 1));
         final CursesWindow bottomLeft = new CursesWindow(driver,
-                new WindowState(Rectangle.of(
-                        0,
-                        upperLeft.getArea().height,
-                        upperLeft.getArea().width,
-                        screenHeight - upperLeft.getArea().height
-                ), 2));
+                                                         new WindowState(Rectangle.of(
+                                                                 0,
+                                                                 upperLeft.getArea().height,
+                                                                 upperLeft.getArea().width,
+                                                                 screenHeight - upperLeft.getArea().height
+                                                                                     ), 2));
         final CursesWindow right = new CursesWindow(driver,
-                new WindowState(Rectangle.of(
-                        upperLeft.getArea().width,
-                        0,
-                        screenWidth - upperLeft.getArea().width,
-                        screenHeight
-                ), 3, true));
+                                                    new WindowState(Rectangle.of(
+                                                            upperLeft.getArea().width,
+                                                            0,
+                                                            screenWidth - upperLeft.getArea().width,
+                                                            screenHeight
+                                                                                ), 3, true));
 
 
         final ZIndexRefreshStrategy manager = new ZIndexRefreshStrategy(driver);
@@ -93,9 +94,9 @@ public class Main {
     }
 
     private static void drawWindows(CursesWindow upperLeft, CursesWindow bottomLeft, CursesWindow right) {
-        upperLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.GREEN).create());
-        bottomLeft.setBackground(CellDescriptor.builder().bg(CharacterColor.MAGENTA).create());
-        right.setBackground(CellDescriptor.builder().bg(CharacterColor.YELLOW).fg(CharacterColor.BLACK).create());
+        upperLeft.fillBackground(CellDescriptor.builder().bg(CharacterColor.GREEN).create());
+        bottomLeft.fillBackground(CellDescriptor.builder().bg(CharacterColor.MAGENTA).create());
+        right.fillBackground(CellDescriptor.builder().bg(CharacterColor.YELLOW).fg(CharacterColor.BLACK).create());
 
         right.setColor(CharacterColor.WHITE, CharacterColor.BLACK);
         right.onAttribute(CharacterAttribute.BOLD);
@@ -112,21 +113,14 @@ public class Main {
         top.clear();
 
         final CellDescriptor prototype = CellDescriptor.builder()
-                .bg(CharacterColor.BLACK)
-                .fg(CharacterColor.WHITE)
-                .attr(CharacterAttribute.BOLD)
-                .create();
+                                                 .bg(CharacterColor.BLACK)
+                                                 .fg(CharacterColor.WHITE)
+                                                 .attr(CharacterAttribute.BOLD)
+                                                 .create();
 
-        top.setBackground(CellDescriptor.builder().bg(CharacterColor.BLUE).create());
+        top.fillBackground(CellDescriptor.builder().bg(CharacterColor.BLUE).create());
 
-        top.drawBox(prototype.ch(Border.SINGLE.topLeft),
-                prototype.ch(Border.SINGLE.horizontal),
-                prototype.ch(Border.SINGLE.topRight),
-                prototype.ch(Border.SINGLE.vertical),
-                prototype.ch(Border.SINGLE.bottomRight),
-                prototype.ch(Border.SINGLE.horizontal),
-                prototype.ch(Border.SINGLE.bottomLeft),
-                prototype.ch(Border.SINGLE.vertical));
+        top.drawBox(Border.DOUBLE.changeCell(prototype));
 
         top.setForegroundColor(CharacterColor.GREEN);
         top.onAttribute(CharacterAttribute.UNDERLINE);

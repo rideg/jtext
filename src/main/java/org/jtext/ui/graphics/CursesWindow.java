@@ -4,6 +4,7 @@ import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.CharacterColor;
 import org.jtext.curses.Driver;
+import org.jtext.ui.attribute.Border;
 
 public class CursesWindow {
 
@@ -138,12 +139,36 @@ public class CursesWindow {
         state.resize(dimension);
     }
 
-    public void setBackground(final CellDescriptor descriptor) {
+    public void fillBackground(final CellDescriptor descriptor) {
         driver.setBackground(id, descriptor);
     }
 
     public void changeBackground(final CellDescriptor descriptor) {
         driver.changeBackground(id, descriptor);
+    }
+
+    public void drawBox(final Border border) {
+        driver.drawBox(id,
+                       border.topLeft,
+                       border.top,
+                       border.topRight,
+                       border.right,
+                       border.bottomRight,
+                       border.bottom,
+                       border.bottomLeft,
+                       border.left);
+    }
+
+    public void drawBoxWithoutAttributes(final Border border) {
+        driver.drawBox(id,
+                       border.topLeft.getCharacter(),
+                       border.top.getCharacter(),
+                       border.topRight.getCharacter(),
+                       border.right.getCharacter(),
+                       border.bottomRight.getCharacter(),
+                       border.bottom.getCharacter(),
+                       border.bottomLeft.getCharacter(),
+                       border.left.getCharacter());
     }
 
     public void drawBox(final CellDescriptor topLeft,
@@ -186,8 +211,8 @@ public class CursesWindow {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
 
         CursesWindow window = (CursesWindow) o;
 

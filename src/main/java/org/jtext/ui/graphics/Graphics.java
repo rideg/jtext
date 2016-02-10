@@ -1,8 +1,8 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.CharacterColor;
-import org.jtext.curses.Driver;
 import org.jtext.ui.attribute.Border;
 
 import java.util.Set;
@@ -10,17 +10,17 @@ import java.util.Set;
 public class Graphics {
 
     private final Rectangle area;
-    private final Driver driver;
+    private final CursesWindow window;
     private boolean isRelative = true;
 
 
-    public Graphics(final Rectangle area, final Driver driver) {
+    public Graphics(final Rectangle area, final CursesWindow window) {
         this.area = area;
-        this.driver = driver;
+        this.window = window;
     }
 
     public Graphics(final Rectangle area, final Graphics graphics) {
-        this(area.relativeTo(graphics.getTopLeft()), graphics.driver);
+        this(area.relativeTo(graphics.getTopLeft()), graphics.window);
     }
 
     public void setAbsoluteMode() {
@@ -36,15 +36,15 @@ public class Graphics {
     }
 
     public void setAttributes(final Set<CharacterAttribute> attributes) {
-//        driver.onAttributes(attributes.toArray(new CharacterAttribute[attributes.size()]));
+        window.onAttributes(attributes.toArray(new CharacterAttribute[attributes.size()]));
     }
 
     public void setAttribute(final CharacterAttribute attribute) {
-//        driver.onAttribute(attribute);
+        window.onAttribute(attribute);
     }
 
     public void removeAttribute(final CharacterAttribute attribute) {
-//        driver.offAttribute(attribute);
+        window.offAttribute(attribute);
     }
 
     public Set<CharacterAttribute> getAttributes() {
@@ -60,48 +60,36 @@ public class Graphics {
     }
 
     public void setBackgroundColor(final CharacterColor color) {
-//        driver.setBackgroundColor(color);
+        window.setBackgroundColor(color);
     }
 
     public void setForegroundColor(final CharacterColor color) {
-//        driver.setForegroundColor(color);
+        window.setForegroundColor(color);
     }
-
-    public void drawRectangle(final Rectangle rectangle, final Border border) {
-        drawHorizontalLine(rectangle.topLeft(), border.horizontal, rectangle.width);
-        drawHorizontalLine(rectangle.bottomLeft(), border.horizontal, rectangle.width);
-        drawVerticalLine(rectangle.topLeft(), border.vertical, rectangle.height);
-        drawVerticalLine(rectangle.topRight(), border.vertical, rectangle.height);
-        putChar(rectangle.topLeft(), border.topLeft);
-        putChar(rectangle.topRight(), border.topRight);
-        putChar(rectangle.bottomRight(), border.bottomRight);
-        putChar(rectangle.bottomLeft(), border.bottomLeft);
-    }
-
 
     public void drawVerticalLine(final Point point, final char ch, final int length) {
         final Point p = toReal(point);
-//        driver.drawVerticalLineAt(p.x, p.y, ch, length);
+        window.drawVerticalLineAt(p, ch, length);
     }
 
     public void drawHorizontalLine(final Point point, final char ch, final int length) {
         final Point p = toReal(point);
-//        driver.drawHorizontalLineAt(p.x, p.y, ch, length);
+        window.drawHorizontalLineAt(p, ch, length);
     }
 
     public void printString(final Point point, final String string) {
         final Point p = toReal(point);
-//        driver.printStringAt(p.x, p.y, string);
+        window.printStringAt(p, string);
     }
 
     public void putChar(final Point point, final char ch) {
         final Point p = toReal(point);
-//        driver.putCharAt(p.x, p.y, ch);
+        window.putCharAt(p, ch);
     }
 
     private void moveCursor(final Point point) {
         final Point p = toReal(point);
-//        driver.moveCursor(p.x, p.y);
+        window.moveCursor(p);
     }
 
     private Point toReal(final Point point) {
@@ -113,9 +101,14 @@ public class Graphics {
     }
 
     public Point getCursor() {
-        return null;
-//        return Point.at(driver.getCursorX(), driver.getCursorY());
+        return Point.at(window.getCursorX(), window.getCursorY());
     }
 
+    public void fillBackground(final CharacterColor characterColor) {
+        window.fillBackground(CellDescriptor.builder().bg(characterColor).create());
+    }
 
+    public void drawBorder(final Border border) {
+
+    }
 }

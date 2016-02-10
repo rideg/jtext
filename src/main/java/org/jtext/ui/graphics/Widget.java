@@ -28,7 +28,6 @@ public abstract class Widget {
 
     public abstract Position getPosition();
 
-
     public void clearParent() {
         parent = Optional.empty();
     }
