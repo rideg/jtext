@@ -33,10 +33,12 @@ public class CursesDriver implements Driver {
     public native void offAttribute(final int windowId, final CharacterAttribute attribute);
 
     @Override
-    public native void drawHorizontalLineAt(final int windowId, final int x, final int y, final char character, final int length);
+    public native void drawHorizontalLineAt(final int windowId, final int x, final int y, final char character,
+                                            final int length);
 
     @Override
-    public native void drawVerticalLineAt(final int windowId, final int x, final int y, final char character, final int length);
+    public native void drawVerticalLineAt(final int windowId, final int x, final int y, final char character,
+                                          final int length);
 
     @Override
     public native void printStringAt(final int windowId, final int x, final int y, final String string);
@@ -117,12 +119,14 @@ public class CursesDriver implements Driver {
     public native void changeBackground(final int windowId, final CellDescriptor descriptor);
 
     @Override
-    public native void drawBox(final int windowId, final CellDescriptor topLeft, final CellDescriptor top, final CellDescriptor topRight,
+    public native void drawBox(final int windowId, final CellDescriptor topLeft, final CellDescriptor top,
+                               final CellDescriptor topRight,
                                final CellDescriptor right, final CellDescriptor bottomRight,
                                final CellDescriptor bottom, final CellDescriptor bottomLeft, final CellDescriptor left);
 
     @Override
-    public native void drawBox(final int windowId, final char topLeft, final char top, final char topRight, final char right,
+    public native void drawBox(final int windowId, final char topLeft, final char top, final char topRight,
+                               final char right,
                                final char bottomRight, final char bottom, final char bottomLeft, final char left);
 
 }

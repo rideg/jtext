@@ -8,7 +8,8 @@ import java.util.TreeSet;
 
 public class ZIndexRefreshStrategy {
 
-    public static final Comparator<CursesWindow> Z_INDEX_COMPARATOR = (a, b) -> Integer.compare(a.getZIndex(), b.getZIndex());
+    public static final Comparator<CursesWindow> Z_INDEX_COMPARATOR =
+            (a, b) -> Integer.compare(a.getZIndex(), b.getZIndex());
     private final Driver driver;
     private final Set<CursesWindow> windows;
 

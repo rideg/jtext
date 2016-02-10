@@ -9,7 +9,4 @@ public class Scene {
     private ZIndexRefreshStrategy windowLayout;
 
 
-
-
-
 }
