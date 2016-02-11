@@ -8,7 +8,6 @@ public abstract class Widget {
 
     private final int id;
     private Optional<Widget> parent;
-    private Rectangle area;
 
     public Widget(final int id) {
         this.id = id;
@@ -18,6 +17,10 @@ public abstract class Widget {
     public Widget(final int id, final Widget widget) {
         this.id = id;
         this.parent = Optional.of(widget);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public abstract void draw(Graphics graphics);
@@ -36,19 +39,12 @@ public abstract class Widget {
         parent = Optional.of(widget);
     }
 
-    public void setArea(Rectangle area) {
-        this.area = area;
-        reValidate();
-    }
-
     public final void onEvent(final UIEvent event) {
         handleEvent(event);
         if (event.isBubbling()) {
             parent.ifPresent(p -> p.handleEvent(event));
         }
     }
-
-    protected abstract void reValidate(); //what is the aim of this?
 
     protected abstract void handleEvent(final UIEvent event);
 

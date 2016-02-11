@@ -16,7 +16,7 @@ public class Container extends Widget {
 
     @Override
     public void draw(Graphics graphics) {
-
+        widgets.forEach(widget -> widget.draw(new Graphics(layoutManager.getAreaFor(widget), graphics)));
     }
 
     @Override
@@ -34,14 +34,8 @@ public class Container extends Widget {
         return null;
     }
 
-    @Override
     public void setArea(Rectangle area) {
         layoutManager.setArea(area);
-    }
-
-    @Override
-    protected void reValidate() {
-
     }
 
     @Override

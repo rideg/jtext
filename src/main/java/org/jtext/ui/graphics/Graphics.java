@@ -17,6 +17,7 @@ public class Graphics {
     public Graphics(final Rectangle area, final Driver driver) {
         this.area = area;
         this.driver = driver;
+        moveCursor(area.topLeft());
     }
 
     public Graphics(final Rectangle area, final Graphics graphics) {
@@ -31,10 +32,6 @@ public class Graphics {
         isRelative = true;
     }
 
-    public void startDraw() {
-        moveCursor(area.topLeft());
-    }
-
     public void setAttributes(final Set<CharacterAttribute> attributes) {
         driver.onAttributes(attributes.toArray(new CharacterAttribute[attributes.size()]));
     }
@@ -45,18 +42,6 @@ public class Graphics {
 
     public void removeAttribute(final CharacterAttribute attribute) {
         driver.offAttribute(attribute);
-    }
-
-    public Set<CharacterAttribute> getAttributes() {
-        return null;
-    }
-
-    public CharacterColor getBackgroundColor() {
-        return null;
-    }
-
-    public CharacterColor getForegroundColor() {
-        return null;
     }
 
     public void setBackgroundColor(final CharacterColor color) {
@@ -100,6 +85,10 @@ public class Graphics {
         return area.topLeft();
     }
 
+    public Rectangle getArea() {
+        return area;
+    }
+
     public Point getCursor() {
         return Point.at(driver.getCursorX(), driver.getCursorY());
     }
@@ -109,6 +98,10 @@ public class Graphics {
     }
 
     public void drawBorder(final Border border) {
+
+    }
+
+    public void clear() {
 
     }
 }

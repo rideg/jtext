@@ -13,7 +13,6 @@ public class Border {
                                                    '╔', '═', '╗', '║', '╝', '═', '╚', '║'
     );
 
-
     public static final Border ROUNDED_SINGLE = new Border(CellDescriptor.builder().create(),
                                                            '╭', '─', '╮', '│', '╯', '─', '╰', '│'
     );

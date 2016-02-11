@@ -12,4 +12,8 @@ public class LayoutManager {
     public void setArea(Rectangle area) {
 
     }
+
+    public Rectangle getAreaFor(final Widget widget) {
+        return null;
+    }
 }

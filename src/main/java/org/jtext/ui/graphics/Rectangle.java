@@ -8,6 +8,9 @@ public class Rectangle {
     public final int height;
 
     private Rectangle(final int x, final int y, final int width, final int height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Dimension cannot be negative!");
+        }
         this.x = x;
         this.y = y;
         this.width = width;
