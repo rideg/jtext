@@ -12,43 +12,39 @@ public class CursesDriver implements Driver {
     public native int getScreenHeight();
 
     @Override
-    public native int createWindow(final int x, final int y, final int width, final int height);
+    public native void setColor(final CharacterColor foreground, final CharacterColor background);
 
     @Override
-    public native void setColor(final int windowId, final CharacterColor foreground, final CharacterColor background);
+    public native void setBackgroundColor(final CharacterColor color);
 
     @Override
-    public native void setBackgroundColor(final int windowId, final CharacterColor color);
+    public native void setForegroundColor(final CharacterColor color);
 
     @Override
-    public native void setForegroundColor(final int windowId, final CharacterColor color);
+    public native void onAttributes(final CharacterAttribute[] attributes);
 
     @Override
-    public native void onAttributes(final int windowId, final CharacterAttribute[] attributes);
+    public native void onAttribute(final CharacterAttribute attribute);
 
     @Override
-    public native void onAttribute(final int windowId, final CharacterAttribute attribute);
+    public native void offAttribute(final CharacterAttribute attribute);
 
     @Override
-    public native void offAttribute(final int windowId, final CharacterAttribute attribute);
-
-    @Override
-    public native void drawHorizontalLineAt(final int windowId, final int x, final int y, final char character,
+    public native void drawHorizontalLineAt(final int x, final int y, final char character,
                                             final int length);
 
     @Override
-    public native void drawVerticalLineAt(final int windowId, final int x, final int y, final char character,
+    public native void drawVerticalLineAt(final int x, final int y, final char character,
                                           final int length);
 
     @Override
-    public native void printStringAt(final int windowId, final int x, final int y, final String string);
+    public native void printStringAt(final int x, final int y, final String string);
 
     @Override
-    public native void putCharAt(final int windowId, final int x, final int y, final char character);
+    public native void putCharAt(final int x, final int y, final char character);
 
     @Override
-    public native void changeAttributeAt(final int windowId,
-                                         final int x,
+    public native void changeAttributeAt(final int x,
                                          final int y,
                                          final int length,
                                          final CharacterColor foregroundColor,
@@ -56,22 +52,22 @@ public class CursesDriver implements Driver {
                                          final CharacterAttribute[] attributes);
 
     @Override
-    public native void moveCursor(final int windowId, final int x, final int y);
+    public native void moveCursor(final int x, final int y);
 
     @Override
-    public native void drawVerticalLine(final int windowId, final char character, final int length);
+    public native void drawVerticalLine(final char character, final int length);
 
     @Override
-    public native void drawHorizontalLine(final int windowId, final char character, final int length);
+    public native void drawHorizontalLine(final char character, final int length);
 
     @Override
-    public native void printString(final int windowId, final String string);
+    public native void printString(final String string);
 
     @Override
-    public native void putChar(final int windowId, final char character);
+    public native void putChar(final char character);
 
     @Override
-    public native void changeAttribute(final int windowId, final CharacterAttribute[] attributes);
+    public native void changeAttribute(final CharacterAttribute[] attributes);
 
     @Override
     public native void bell();
@@ -83,7 +79,7 @@ public class CursesDriver implements Driver {
     public native ReadKey getCh();
 
     @Override
-    public native void refresh(final int windowId);
+    public native void refresh();
 
     @Override
     public native void doUpdate();
@@ -91,42 +87,19 @@ public class CursesDriver implements Driver {
     @Override
     public native void clearScreen();
 
-    @Override
-    public native void clear(final int windowId);
 
     @Override
-    public native void clearStyle(final int windowId);
+    public native void clearStyle();
 
     @Override
-    public native int getCursorX(final int windowId);
+    public native int getCursorX();
 
     @Override
-    public native int getCursorY(final int windowId);
+    public native int getCursorY();
 
     @Override
-    public native boolean moveWindow(final int windowId, final int x, final int y);
+    public native void setBackground(final CellDescriptor descriptor);
 
     @Override
-    public native boolean resizeWindow(final int windowId, final int width, final int height);
-
-    @Override
-    public native void deleteWindow(final int windowId);
-
-    @Override
-    public native void setBackground(final int windowId, final CellDescriptor descriptor);
-
-    @Override
-    public native void changeBackground(final int windowId, final CellDescriptor descriptor);
-
-    @Override
-    public native void drawBox(final int windowId, final CellDescriptor topLeft, final CellDescriptor top,
-                               final CellDescriptor topRight,
-                               final CellDescriptor right, final CellDescriptor bottomRight,
-                               final CellDescriptor bottom, final CellDescriptor bottomLeft, final CellDescriptor left);
-
-    @Override
-    public native void drawBox(final int windowId, final char topLeft, final char top, final char topRight,
-                               final char right,
-                               final char bottomRight, final char bottom, final char bottomLeft, final char left);
-
+    public native void changeBackground(final CellDescriptor descriptor);
 }

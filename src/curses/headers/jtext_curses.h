@@ -31,149 +31,142 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenWidth
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenHeight
   (JNIEnv *, jobject);
 
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    createWindow
- * Signature: (IIII)I
- */
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
-  (JNIEnv *, jobject, jint, jint, jint, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    setColor
- * Signature: (ILorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;)V
+ * Signature: (Lorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
-  (JNIEnv *, jobject, jint, jobject, jobject);
+  (JNIEnv *, jobject, jobject, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    setBackgroundColor
- * Signature: (ILorg/jtext/curses/CharacterColor;)V
+ * Signature: (Lorg/jtext/curses/CharacterColor;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackgroundColor
-  (JNIEnv *, jobject, jint, jobject);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    setForegroundColor
- * Signature: (ILorg/jtext/curses/CharacterColor;)V
+ * Signature: (Lorg/jtext/curses/CharacterColor;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
-  (JNIEnv *, jobject, jint, jobject);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    onAttributes
- * Signature: (I[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: ([Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttributes
-  (JNIEnv *, jobject, jint, jobjectArray);
+  (JNIEnv *, jobject, jobjectArray);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    onAttribute
- * Signature: (ILorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttribute
-  (JNIEnv *, jobject, jint, jobject);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    offAttribute
- * Signature: (ILorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_offAttribute
-  (JNIEnv *, jobject, jint, jobject);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    drawHorizontalLineAt
- * Signature: (IIICI)V
+ * Signature: (IICI)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLineAt
-  (JNIEnv *, jobject, jint, jint, jint, jchar, jint);
+  (JNIEnv *, jobject, jint, jint, jchar, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    drawVerticalLineAt
- * Signature: (IIICI)V
+ * Signature: (IICI)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLineAt
-  (JNIEnv *, jobject, jint, jint, jint, jchar, jint);
+  (JNIEnv *, jobject, jint, jint, jchar, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    printStringAt
- * Signature: (IIILjava/lang/String;)V
+ * Signature: (IILjava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printStringAt
-  (JNIEnv *, jobject, jint, jint, jint, jstring);
+  (JNIEnv *, jobject, jint, jint, jstring);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    putCharAt
- * Signature: (IIIC)V
+ * Signature: (IIC)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putCharAt
-  (JNIEnv *, jobject, jint, jint, jint, jchar);
+  (JNIEnv *, jobject, jint, jint, jchar);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    changeAttributeAt
- * Signature: (IIIILorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (IIILorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
-  (JNIEnv *, jobject, jint, jint, jint, jint, jobject, jobject, jobjectArray);
+  (JNIEnv *, jobject, jint, jint, jint, jobject, jobject, jobjectArray);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    moveCursor
- * Signature: (III)V
+ * Signature: (II)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_moveCursor
-  (JNIEnv *, jobject, jint, jint, jint);
+  (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    drawVerticalLine
- * Signature: (ICI)V
+ * Signature: (CI)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLine
-  (JNIEnv *, jobject, jint, jchar, jint);
+  (JNIEnv *, jobject, jchar, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    drawHorizontalLine
- * Signature: (ICI)V
+ * Signature: (CI)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLine
-  (JNIEnv *, jobject, jint, jchar, jint);
+  (JNIEnv *, jobject, jchar, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    printString
- * Signature: (ILjava/lang/String;)V
+ * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printString
-  (JNIEnv *, jobject, jint, jstring);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    putChar
- * Signature: (IC)V
+ * Signature: (C)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putChar
-  (JNIEnv *, jobject, jint, jchar);
+  (JNIEnv *, jobject, jchar);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    changeAttribute
- * Signature: (I[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: ([Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttribute
-  (JNIEnv *, jobject, jint, jobjectArray);
+  (JNIEnv *, jobject, jobjectArray);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
@@ -202,10 +195,10 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    refresh
- * Signature: (I)V
+ * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject);
 
 
 /*
@@ -226,91 +219,43 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearScreen
 
 /*
  * Class:     org_jtext_curses_CursesDriver
- * Method:    clear
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clear
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
  * Method:    clearStyle
- * Signature: (I)V
+ * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearStyle
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    getCursorX
- * Signature: (I)I
+ * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorX
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    getCursorY
- * Signature: (I)I
+ * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    moveWindow
- * Signature: (III)Z
- */
-JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_moveWindow
-  (JNIEnv *, jobject, jint, jint, jint);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    resizeWindow
- * Signature: (III)Z
- */
-JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_resizeWindow
-  (JNIEnv *, jobject, jint, jint, jint);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    deleteWindow
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_deleteWindow
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    setBackground
- * Signature: (ILorg/jtext/curses/CellDescriptor;)V
+ * Signature: (Lorg/jtext/curses/CellDescriptor;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
-  (JNIEnv *, jobject, jint, jobject);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    changeBackground
- * Signature: (ILorg/jtext/curses/CellDescriptor;)V
+ * Signature: (Lorg/jtext/curses/CellDescriptor;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
-  (JNIEnv *, jobject, jint, jobject);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    drawBox
- * Signature: (ILorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;Lorg/jtext/curses/CellDescriptor;)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ILorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2
-  (JNIEnv *, jobject, jint, jobject, jobject, jobject, jobject, jobject, jobject, jobject, jobject);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    drawBox
- * Signature: (ICCCCCCCC)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ICCCCCCCC
-  (JNIEnv *, jobject, jint, jchar, jchar, jchar, jchar, jchar, jchar, jchar, jchar);
+  (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus
 }

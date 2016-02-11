@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 bool no_current_refresh = true;
-WINDOW** __WINDOWS;
 const int MAX_WINDOW = 501;
 WINDOW* screen;
 WINDOW* pad;
@@ -32,12 +31,8 @@ void configure_signal_handling()
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
  (JNIEnv * env, jobject obj)
 {
-    __WINDOWS = malloc(MAX_WINDOW*sizeof(WINDOW*));
-    memset(__WINDOWS, 0, MAX_WINDOW*sizeof(WINDOW*));
-
     setlocale(LC_ALL, "");
     screen = initscr();
-    __WINDOWS[0] = screen;
     pad = newpad(1, 1);
     nodelay(pad, TRUE);
     set_escdelay(0);
@@ -65,129 +60,111 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenHeight
     return LINES;
 }
 
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_createWindow
-  (JNIEnv * env, jobject self, jint x, jint y, jint width, jint height)
-{
-   WINDOW* win = newwin(height, width, y, x);
-   int i;
-   for(i = 1; i < MAX_WINDOW; i++) {
-        if(__WINDOWS[i] == NULL) {
-          __WINDOWS[i] = win;
-           return i;
-        }
-   }
-}
-
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_shutdown
  (JNIEnv * env, jobject obj)
 {
-    int i;
-    for(i = 1; i < MAX_WINDOW; i++) {
-        if(__WINDOWS[i] != NULL) {
-           delwin(__WINDOWS[i]);
-        }
-    }
+    delwin(screen);
     delwin(pad);
     endwin();
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
-  (JNIEnv * env, jobject self, jint window_id, jobject fg, jobject bg)
+  (JNIEnv * env, jobject self, jobject fg, jobject bg)
 {
     attr_t attr = get_color_pair(env, fg, bg);
-    wattron(__WINDOWS[window_id], attr);
+    wattron(screen, attr);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackgroundColor
-  (JNIEnv * env, jobject self, jint window_id, jobject color)
+  (JNIEnv * env, jobject self, jobject color)
 {
 
     attr_t attr;
     short pair_id;
-    wattr_get(__WINDOWS[window_id], &attr, &pair_id, NULL);
+    wattr_get(screen, &attr, &pair_id, NULL);
 
     jint fgId = pair_id >> 3;
     jint bgId = get_color_id(env, color);
 
-    wattron(__WINDOWS[window_id], COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
+    wattron(screen, COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
 
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
-  (JNIEnv * env, jobject self, jint window_id, jobject color)
+  (JNIEnv * env, jobject self, jobject color)
 {
 
     attr_t attr;
     short pair_id;
-    wattr_get(__WINDOWS[window_id], &attr, &pair_id, NULL);
+    wattr_get(screen, &attr, &pair_id, NULL);
 
     jint fgId = get_color_id(env, color);
     jint bgId = pair_id % 8;
 
-    wattron(__WINDOWS[window_id], COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
+    wattron(screen, COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
 
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttributes
-  (JNIEnv *env, jobject self, jint window_id, jobject attr_array)
+  (JNIEnv *env, jobject self, jobject attr_array)
 {
     attr_t attr = get_attribute(env, attr_array);
-    wattron(__WINDOWS[window_id], attr);
+    wattron(screen, attr);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttribute
-  (JNIEnv * env, jobject self, jint window_id, jobject attribute)
+  (JNIEnv * env, jobject self, jobject attribute)
 {
     attr_t attr = get_attribute_value(env, attribute);
-    wattron(__WINDOWS[window_id], attr);
+    wattron(screen, attr);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_offAttribute
-  (JNIEnv * env, jobject self, jint window_id, jobject attribute)
+  (JNIEnv * env, jobject self, jobject attribute)
 {
     attr_t attr = get_attribute_value(env, attribute);
-    wattroff(__WINDOWS[window_id], attr);
+    wattroff(screen, attr);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLineAt
-  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jchar ch, jint length)
+  (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-    mvwhline_set(__WINDOWS[window_id], y, x, cch, length);
+    mvwhline_set(screen, y, x, cch, length);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLineAt
-  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jchar ch, jint length)
+  (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-    mvwvline_set(__WINDOWS[window_id], y, x, cch, length);
+    mvwvline_set(screen, y, x, cch, length);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printStringAt
-  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jstring text)
+  (JNIEnv * env, jobject self, jint x, jint y, jstring text)
 {
      wchar_t* buff = convert_string(env, text);
-     mvwaddwstr(__WINDOWS[window_id], y, x, buff);
+     mvwaddwstr(screen, y, x, buff);
      free(buff);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putCharAt
-  (JNIEnv * env, jobject self, jint window_id, jint x, jint y, jchar ch)
+  (JNIEnv * env, jobject self, jint x, jint y, jchar ch)
 {
     const cchar_t* cch = convert_jchar(ch);
-    mvwvline_set(__WINDOWS[window_id], y, x, cch, 1);
+    mvwvline_set(screen, y, x, cch, 1);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
-  (JNIEnv * env, jobject self, jint window_id, jint x, jint y,
+  (JNIEnv * env, jobject self, jint x, jint y,
     jint length, jobject fg, jobject bg, jobjectArray attributes)
 {
     attr_t attr = get_attribute(env, attributes);
     short color = get_color_pair(env, fg, bg);
-    mvwchgat(__WINDOWS[window_id], y, x, length, attr, color, NULL);
+    mvwchgat(screen, y, x, length, attr, color, NULL);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_bell
@@ -197,40 +174,40 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_bell
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_moveCursor
-  (JNIEnv * env, jobject self, jint window_id, jint x, jint y)
+  (JNIEnv * env, jobject self, jint x, jint y)
 {
-    wmove(__WINDOWS[window_id], y, x);
+    wmove(screen, y, x);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLine
-  (JNIEnv * env, jobject self, jint window_id, jchar ch, jint length)
+  (JNIEnv * env, jobject self, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-    wvline(__WINDOWS[window_id], cch, (int) length);
+    wvline(screen, cch, (int) length);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLine
-  (JNIEnv * env, jobject self, jint window_id, jchar ch, jint length)
+  (JNIEnv * env, jobject self, jchar ch, jint length)
 {
     const cchar_t* cch = convert_jchar(ch);
-    whline(__WINDOWS[window_id], cch, (int) length);
+    whline(screen, cch, (int) length);
     free(cch);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printString
-(JNIEnv * env, jobject self, jint window_id, jstring text)
+(JNIEnv * env, jobject self, jstring text)
  {
     wchar_t* buff = convert_string(env, text);
-    waddwstr(__WINDOWS[window_id], buff);
+    waddwstr(screen, buff);
     free(buff);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putChar
-  (JNIEnv * env, jobject self, jint window_id, jchar ch)
+  (JNIEnv * env, jobject self, jchar ch)
 {
     const cchar_t* cch = convert_jchar(ch);
-    wins_wch(__WINDOWS[window_id], cch);
+    wins_wch(screen, cch);
     free(cch);
 }
 
@@ -263,20 +240,14 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearScreen
 (JNIEnv * env, jobject obj)
 {
-    clear();
+    wclear(screen);
 }
 
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clear
-  (JNIEnv *env, jobject self, jint window_id)
-{
-    wclear(__WINDOWS[window_id]);
-}
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
-  (JNIEnv * env, jobject self, jint window_id)
+  (JNIEnv * env, jobject self)
 {
-    wnoutrefresh(__WINDOWS[window_id]);
+    wnoutrefresh(screen);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_doUpdate
@@ -286,131 +257,43 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_doUpdate
 }
 
   JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearStyle
-    (JNIEnv * env, jobject self, jint window_id)
+    (JNIEnv * env, jobject self)
 {
-    wstandend(__WINDOWS[window_id]);
+    wstandend(screen);
 }
 
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorX
-  (JNIEnv * env, jobject self, jint window_id)
+  (JNIEnv * env, jobject self)
 {
     int x;
     int y;
-    getyx(__WINDOWS[window_id], y, x);
+    getyx(screen, y, x);
     return x;
 }
 
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
-  (JNIEnv * env, jobject self, jint window_id)
+  (JNIEnv * env, jobject self)
 {
     int x;
     int y;
-    getyx(__WINDOWS[window_id], y, x);
+    getyx(screen, y, x);
     return y;
 }
 
-JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_moveWindow
-  (JNIEnv * env, jobject self, jint window_id, jint x, jint y)
-{
-    int result;
-    result = mvwin(__WINDOWS[window_id], y, x);
-    return result == ERR ? JNI_FALSE : JNI_TRUE;
-}
-
-JNIEXPORT jboolean JNICALL Java_org_jtext_curses_CursesDriver_resizeWindow
-  (JNIEnv * env, jobject self, jint window_id, jint width, jint height)
-{
-    int result;
-    result = wresize(__WINDOWS[window_id], height, width);
-    return result == ERR ? JNI_FALSE : JNI_TRUE;
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_deleteWindow
-  (JNIEnv * env, jobject self, jint window_id)
-{
-    delwin(__WINDOWS[window_id]);
-}
-
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
-  (JNIEnv * env, jobject self, jint window_id, jobject cell_descriptor)
+  (JNIEnv * env, jobject self, jobject cell_descriptor)
 {
     const cchar_t* bg = convert_cell_descriptor(env, cell_descriptor);
-    wbkgrnd(__WINDOWS[window_id], bg);
+    wbkgrnd(screen, bg);
     free(bg);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
-  (JNIEnv * env, jobject self, jint window_id, jobject cell_descriptor)
+  (JNIEnv * env, jobject self, jobject cell_descriptor)
 {
 
     const cchar_t* bg = convert_cell_descriptor(env, cell_descriptor);
-    wbkgrndset(__WINDOWS[window_id], bg);
+    wbkgrndset(screen, bg);
     free(bg);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ILorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2Lorg_jtext_curses_CellDescriptor_2
-  (JNIEnv * env, jobject self, jint window_id,
-  jobject top_left,
-  jobject top,
-  jobject top_right,
-  jobject right,
-  jobject bottom_right,
-  jobject bottom,
-  jobject bottom_left,
-  jobject left)
-{
-
-    const cchar_t* top_left_c = convert_cell_descriptor(env, top_left);
-    const cchar_t* top_c = convert_cell_descriptor(env, top);
-    const cchar_t* top_right_c = convert_cell_descriptor(env, top_right);
-    const cchar_t* right_c = convert_cell_descriptor(env, right);
-    const cchar_t* bottom_right_c = convert_cell_descriptor(env, bottom_right);
-    const cchar_t* bottom_c = convert_cell_descriptor(env, bottom);
-    const cchar_t* bottom_left_c = convert_cell_descriptor(env, bottom_left);
-    const cchar_t* left_c = convert_cell_descriptor(env, left);
-
-    wborder_set(__WINDOWS[window_id], left_c, right_c, top_c, bottom_c, top_left_c, top_right_c, bottom_left_c, bottom_right_c);
-
-    free(top_left_c);
-    free(top_c);
-    free(top_right_c);
-    free(right_c);
-    free(bottom_right_c);
-    free(bottom_c);
-    free(bottom_left_c);
-    free(left_c);
-
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawBox__ICCCCCCCC
-  (JNIEnv * env, jobject self, jint window_id,
-  jchar top_left,
-  jchar top,
-  jchar top_right,
-  jchar right,
-  jchar bottom_right,
-  jchar bottom,
-  jchar bottom_left,
-  jchar left)
-{
-
-    const cchar_t* top_left_c = convert_jchar(top_left);
-    const cchar_t* top_c = convert_jchar(top);
-    const cchar_t* top_right_c = convert_jchar(top_right);
-    const cchar_t* right_c = convert_jchar(right);
-    const cchar_t* bottom_right_c = convert_jchar(bottom_right);
-    const cchar_t* bottom_c = convert_jchar(bottom);
-    const cchar_t* bottom_left_c = convert_jchar(bottom_left);
-    const cchar_t* left_c = convert_jchar(left);
-
-    wborder_set(__WINDOWS[window_id], left_c, right_c, top_c, bottom_c, top_left_c, top_right_c, bottom_left_c, bottom_right_c);
-
-    free(top_left_c);
-    free(top_c);
-    free(top_right_c);
-    free(right_c);
-    free(bottom_right_c);
-    free(bottom_c);
-    free(bottom_left_c);
-    free(left_c);
-}
