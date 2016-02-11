@@ -9,8 +9,7 @@ public class Container extends Widget {
     private Set<Widget> widgets;
     private LayoutManager layoutManager;
 
-    public Container(final int id, final LayoutManager layoutManager) {
-        super(id);
+    public Container(final LayoutManager layoutManager) {
         this.layoutManager = layoutManager;
     }
 

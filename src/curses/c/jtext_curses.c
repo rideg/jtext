@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 bool no_current_refresh = true;
-const int MAX_WINDOW = 501;
 WINDOW* screen;
 WINDOW* pad;
 
@@ -173,44 +172,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_bell
     beep();
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_moveCursor
-  (JNIEnv * env, jobject self, jint x, jint y)
-{
-    wmove(screen, y, x);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLine
-  (JNIEnv * env, jobject self, jchar ch, jint length)
-{
-    const cchar_t* cch = convert_jchar(ch);
-    wvline(screen, cch, (int) length);
-    free(cch);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLine
-  (JNIEnv * env, jobject self, jchar ch, jint length)
-{
-    const cchar_t* cch = convert_jchar(ch);
-    whline(screen, cch, (int) length);
-    free(cch);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printString
-(JNIEnv * env, jobject self, jstring text)
- {
-    wchar_t* buff = convert_string(env, text);
-    waddwstr(screen, buff);
-    free(buff);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putChar
-  (JNIEnv * env, jobject self, jchar ch)
-{
-    const cchar_t* cch = convert_jchar(ch);
-    wins_wch(screen, cch);
-    free(cch);
-}
-
 JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
  (JNIEnv * env, jobject obj)
 {
@@ -247,13 +208,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearScreen
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
   (JNIEnv * env, jobject self)
 {
-    wnoutrefresh(screen);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_doUpdate
-  (JNIEnv *env, jobject self)
-{
-    doupdate();
+    wrefresh(screen);
 }
 
   JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearStyle
@@ -278,22 +233,5 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
     int y;
     getyx(screen, y, x);
     return y;
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
-  (JNIEnv * env, jobject self, jobject cell_descriptor)
-{
-    const cchar_t* bg = convert_cell_descriptor(env, cell_descriptor);
-    wbkgrnd(screen, bg);
-    free(bg);
-}
-
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
-  (JNIEnv * env, jobject self, jobject cell_descriptor)
-{
-
-    const cchar_t* bg = convert_cell_descriptor(env, cell_descriptor);
-    wbkgrndset(screen, bg);
-    free(bg);
 }
 

@@ -2,6 +2,8 @@ package org.jtext.ui.attribute;
 
 import org.jtext.ui.graphics.Rectangle;
 
+import java.util.Optional;
+
 public class Padding {
 
     public final int top;
@@ -32,5 +34,9 @@ public class Padding {
 
     public Rectangle shrink(final Rectangle area) {
         return Rectangle.of(area.x + left, area.y + top, area.width - left - right, area.height - top - bottom);
+    }
+
+    public Padding apply(final Optional<Border> border) {
+        return border.isPresent() ? this : this;
     }
 }

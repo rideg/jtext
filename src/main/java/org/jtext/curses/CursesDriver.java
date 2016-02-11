@@ -52,24 +52,6 @@ public class CursesDriver implements Driver {
                                          final CharacterAttribute[] attributes);
 
     @Override
-    public native void moveCursor(final int x, final int y);
-
-    @Override
-    public native void drawVerticalLine(final char character, final int length);
-
-    @Override
-    public native void drawHorizontalLine(final char character, final int length);
-
-    @Override
-    public native void printString(final String string);
-
-    @Override
-    public native void putChar(final char character);
-
-    @Override
-    public native void changeAttribute(final CharacterAttribute[] attributes);
-
-    @Override
     public native void bell();
 
     @Override
@@ -80,9 +62,6 @@ public class CursesDriver implements Driver {
 
     @Override
     public native void refresh();
-
-    @Override
-    public native void doUpdate();
 
     @Override
     public native void clearScreen();
@@ -97,9 +76,4 @@ public class CursesDriver implements Driver {
     @Override
     public native int getCursorY();
 
-    @Override
-    public native void setBackground(final CellDescriptor descriptor);
-
-    @Override
-    public native void changeBackground(final CellDescriptor descriptor);
 }

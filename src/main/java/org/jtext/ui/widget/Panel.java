@@ -19,11 +19,10 @@ public class Panel extends Container {
     private final OccupationType preferredWith;
     private final OccupationType preferredHeight;
 
-    public Panel(final int id,
-                 final LayoutManager layoutManager,
+    public Panel(final LayoutManager layoutManager,
                  final OccupationType preferredWith,
                  final OccupationType preferredHeight) {
-        super(id, layoutManager);
+        super(layoutManager);
         this.preferredWith = preferredWith;
         this.preferredHeight = preferredHeight;
     }
@@ -34,9 +33,7 @@ public class Panel extends Container {
         background.ifPresent(graphics::fillBackground);
         border.ifPresent(graphics::drawBorder);
         if (padding.isPresent()) {
-            // todo if the borders are now equal?
-            final Padding pad = border.isPresent() ? padding.get().inc() : padding.get();
-            graphics = new Graphics(pad.shrink(graphics.getArea()), graphics);
+            graphics = new Graphics(padding.get().apply(border).shrink(graphics.getArea()), graphics);
         }
         super.draw(graphics);
     }

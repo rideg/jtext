@@ -122,54 +122,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
 
 /*
  * Class:     org_jtext_curses_CursesDriver
- * Method:    moveCursor
- * Signature: (II)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_moveCursor
-  (JNIEnv *, jobject, jint, jint);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    drawVerticalLine
- * Signature: (CI)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLine
-  (JNIEnv *, jobject, jchar, jint);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    drawHorizontalLine
- * Signature: (CI)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLine
-  (JNIEnv *, jobject, jchar, jint);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    printString
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printString
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    putChar
- * Signature: (C)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putChar
-  (JNIEnv *, jobject, jchar);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    changeAttribute
- * Signature: ([Lorg/jtext/curses/CharacterAttribute;)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttribute
-  (JNIEnv *, jobject, jobjectArray);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
  * Method:    bell
  * Signature: ()V
  */
@@ -203,14 +155,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
 
 /*
  * Class:     org_jtext_curses_CursesDriver
- * Method:    doUpdate
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_doUpdate
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
  * Method:    clearScreen
  * Signature: ()V
  */
@@ -240,22 +184,6 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorX
  */
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
   (JNIEnv *, jobject);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    setBackground
- * Signature: (Lorg/jtext/curses/CellDescriptor;)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackground
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    changeBackground
- * Signature: (Lorg/jtext/curses/CellDescriptor;)V
- */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeBackground
-  (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus
 }

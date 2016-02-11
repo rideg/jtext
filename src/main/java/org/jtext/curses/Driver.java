@@ -28,20 +28,12 @@ public interface Driver {
 
     void putCharAt(int x, int y, char character);
 
-    void changeAttributeAt(int x, int y, int length, final CharacterColor foregroundColor,
-                           final CharacterColor backgroundColor, CharacterAttribute[] attributes);
-
-    void moveCursor(int x, int y);
-
-    void drawVerticalLine(char character, int length);
-
-    void drawHorizontalLine(char character, int length);
-
-    void printString(String string);
-
-    void putChar(char character);
-
-    void changeAttribute(CharacterAttribute[] attributes);
+    void changeAttributeAt(int x,
+                           int y,
+                           int length,
+                           CharacterColor foregroundColor,
+                           CharacterColor backgroundColor,
+                           CharacterAttribute[] attributes);
 
     void clearScreen();
 
@@ -53,16 +45,10 @@ public interface Driver {
 
     void refresh();
 
-    void doUpdate();
-
     void clearStyle();
 
     int getCursorX();
 
     int getCursorY();
-
-    void setBackground(CellDescriptor descriptor);
-
-    void changeBackground(CellDescriptor descriptor);
 
 }

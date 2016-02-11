@@ -55,24 +55,3 @@ wchar_t* convert_string(JNIEnv* env, jobject text)
         return other_buffer;
     }
 }
-
-const cchar_t* convert_cell_descriptor(JNIEnv* env, jobject cell_descriptor)
-{
-    jclass cd_class = (*env)->GetObjectClass(env, cell_descriptor);
-    jmethodID get_character_method = (*env)->GetMethodID(env, cd_class, "getCharacter", "()C");
-
-    jchar ch = (jchar) (*env)->CallObjectMethod(env, cell_descriptor, get_character_method);
-
-    jmethodID get_foreground_color_method = (*env)->GetMethodID(env, cd_class, "getForegroundColor", "()Lorg/jtext/curses/CharacterColor;");
-    jmethodID get_background_color_method = (*env)->GetMethodID(env, cd_class, "getBackgroundColor", "()Lorg/jtext/curses/CharacterColor;");
-
-    jobject fg = (*env)->CallObjectMethod(env, cell_descriptor, get_foreground_color_method);
-    jobject bg = (*env)->CallObjectMethod(env, cell_descriptor, get_background_color_method);
-
-    jmethodID get_attributes_method = (*env)->GetMethodID(env, cd_class, "getAttributes", "()[Lorg/jtext/curses/CharacterAttribute;");
-    jobject attrs = (*env)->CallObjectMethod(env, cell_descriptor, get_attributes_method);
-
-     attr_t attributes =  get_attribute(env, attrs) | get_color_pair(env, fg, bg);
-
-     return convert_jchar_with_attributes(ch, attributes);
-}

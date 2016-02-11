@@ -8,8 +8,8 @@ public abstract class WidgetContainer extends Widget {
     private final List<Widget> elements = new LinkedList<>();
     private final LayoutManager layoutManager;
 
-    public WidgetContainer(int id, Widget parent, LayoutManager layoutManager) {
-        super(id, parent);
+    public WidgetContainer(final Widget parent, final LayoutManager layoutManager) {
+        super(parent);
         this.layoutManager = layoutManager;
     }
 

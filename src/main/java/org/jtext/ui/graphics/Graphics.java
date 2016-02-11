@@ -17,7 +17,6 @@ public class Graphics {
     public Graphics(final Rectangle area, final Driver driver) {
         this.area = area;
         this.driver = driver;
-        moveCursor(area.topLeft());
     }
 
     public Graphics(final Rectangle area, final Graphics graphics) {
@@ -72,11 +71,6 @@ public class Graphics {
         driver.putCharAt(p.x, p.y, ch);
     }
 
-    private void moveCursor(final Point point) {
-        final Point p = toReal(point);
-        driver.moveCursor(p.x, p.y);
-    }
-
     private Point toReal(final Point point) {
         return isRelative ? Point.at(point.x + area.x, point.y + area.y) : point;
     }
@@ -94,7 +88,12 @@ public class Graphics {
     }
 
     public void fillBackground(final CharacterColor characterColor) {
-
+        driver.setBackgroundColor(characterColor);
+        Point point = area.topLeft();
+        for (int i = 0; i < area.height; i++) {
+            driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
+            point = point.incY();
+        }
     }
 
     public void drawBorder(final Border border) {
