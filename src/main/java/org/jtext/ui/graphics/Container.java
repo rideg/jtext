@@ -15,7 +15,7 @@ public class Container extends Widget {
 
     @Override
     public void draw(Graphics graphics) {
-        widgets.forEach(widget -> widget.draw(new Graphics(layoutManager.getAreaFor(widget), graphics)));
+        widgets.forEach(widget -> widget.draw(graphics.restrict(layoutManager.getAreaFor(widget))));
     }
 
     @Override

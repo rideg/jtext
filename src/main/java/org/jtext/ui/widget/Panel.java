@@ -14,8 +14,8 @@ import java.util.Optional;
 public class Panel extends Container {
 
     private final Optional<CharacterColor> background = Optional.empty();
-    private final Optional<Border> border = Optional.empty();
-    private final Optional<Padding> padding = Optional.empty();
+    private final Border border = Border.NO_BORDER;
+    private final Padding padding = Padding.NO_PADDING;
     private final OccupationType preferredWith;
     private final OccupationType preferredHeight;
 
@@ -31,11 +31,8 @@ public class Panel extends Container {
     @Override
     public void draw(Graphics graphics) {
         background.ifPresent(graphics::fillBackground);
-        border.ifPresent(graphics::drawBorder);
-        if (padding.isPresent()) {
-            graphics = new Graphics(padding.get().apply(border).shrink(graphics.getArea()), graphics);
-        }
-        super.draw(graphics);
+        graphics.drawBorder(border);
+        super.draw(graphics.restrict(padding.apply(border).shrink(graphics.getArea())));
     }
 
     @Override

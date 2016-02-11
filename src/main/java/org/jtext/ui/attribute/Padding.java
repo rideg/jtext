@@ -2,9 +2,9 @@ package org.jtext.ui.attribute;
 
 import org.jtext.ui.graphics.Rectangle;
 
-import java.util.Optional;
-
 public class Padding {
+
+    public static final Padding NO_PADDING = Padding.of(0, 0, 0, 0);
 
     public final int top;
     public final int right;
@@ -36,7 +36,11 @@ public class Padding {
         return Rectangle.of(area.x + left, area.y + top, area.width - left - right, area.height - top - bottom);
     }
 
-    public Padding apply(final Optional<Border> border) {
-        return border.isPresent() ? this : this;
+    public Padding apply(final Border border) {
+        return Padding.of(top + border.getTopThickness(),
+                          right + border.getRightThickness(),
+                          bottom + border.getBottomThickness(),
+                          left + border.getLeftThickness()
+                         );
     }
 }

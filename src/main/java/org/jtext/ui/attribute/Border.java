@@ -1,9 +1,14 @@
 package org.jtext.ui.attribute;
 
 import org.jtext.curses.CellDescriptor;
-import org.jtext.curses.CharacterColor;
+
+import java.util.Optional;
 
 public class Border {
+
+    public static final Border NO_BORDER = new Border(Optional.empty(), Optional.empty(), Optional.empty(),
+                                                      Optional.empty(), Optional.empty(), Optional.empty(),
+                                                      Optional.empty(), Optional.empty());
 
     public static final Border SINGLE = new Border(CellDescriptor.builder().create(),
                                                    '┌', '─', '┐', '│', '┘', '─', '└', '│'
@@ -17,14 +22,14 @@ public class Border {
                                                            '╭', '─', '╮', '│', '╯', '─', '╰', '│'
     );
 
-    public final CellDescriptor topLeft;
-    public final CellDescriptor top;
-    public final CellDescriptor topRight;
-    public final CellDescriptor right;
-    public final CellDescriptor bottomRight;
-    public final CellDescriptor bottom;
-    public final CellDescriptor bottomLeft;
-    public final CellDescriptor left;
+    public final Optional<CellDescriptor> topLeft;
+    public final Optional<CellDescriptor> top;
+    public final Optional<CellDescriptor> topRight;
+    public final Optional<CellDescriptor> right;
+    public final Optional<CellDescriptor> bottomRight;
+    public final Optional<CellDescriptor> bottom;
+    public final Optional<CellDescriptor> bottomLeft;
+    public final Optional<CellDescriptor> left;
 
 
     public Border(final CellDescriptor descriptor,
@@ -32,21 +37,26 @@ public class Border {
                   final char bottomRight, final char bottom, final char bottomLeft, final char left) {
 
         this(
-                descriptor.ch(topLeft),
-                descriptor.ch(top),
-                descriptor.ch(topRight),
-                descriptor.ch(right),
-                descriptor.ch(bottomRight),
-                descriptor.ch(bottom),
-                descriptor.ch(bottomLeft),
-                descriptor.ch(left)
+                Optional.of(descriptor.ch(topLeft)),
+                Optional.of(descriptor.ch(top)),
+                Optional.of(descriptor.ch(topRight)),
+                Optional.of(descriptor.ch(right)),
+                Optional.of(descriptor.ch(bottomRight)),
+                Optional.of(descriptor.ch(bottom)),
+                Optional.of(descriptor.ch(bottomLeft)),
+                Optional.of(descriptor.ch(left))
             );
 
     }
 
-    public Border(final CellDescriptor topLeft, final CellDescriptor top, final CellDescriptor topRight,
-                  final CellDescriptor right, final CellDescriptor bottomRight, final CellDescriptor bottom,
-                  final CellDescriptor bottomLeft, final CellDescriptor left) {
+    public Border(final Optional<CellDescriptor> topLeft,
+                  final Optional<CellDescriptor> top,
+                  final Optional<CellDescriptor> topRight,
+                  final Optional<CellDescriptor> right,
+                  final Optional<CellDescriptor> bottomRight,
+                  final Optional<CellDescriptor> bottom,
+                  final Optional<CellDescriptor> bottomLeft,
+                  final Optional<CellDescriptor> left) {
 
 
         this.topLeft = topLeft;
@@ -60,19 +70,39 @@ public class Border {
     }
 
     public Border changeCell(final CellDescriptor descriptor) {
-        return new Border(descriptor,
-                          topLeft.getCharacter(),
-                          top.getCharacter(),
-                          topRight.getCharacter(),
-                          right.getCharacter(),
-                          bottomRight.getCharacter(),
-                          bottom.getCharacter(),
-                          bottomLeft.getCharacter(),
-                          left.getCharacter());
+        return new Border(topLeft.map(v -> descriptor.ch(v.getCharacter())),
+                          top.map(v -> descriptor.ch(v.getCharacter())),
+                          topRight.map(v -> descriptor.ch(v.getCharacter())),
+                          right.map(v -> descriptor.ch(v.getCharacter())),
+                          bottomRight.map(v -> descriptor.ch(v.getCharacter())),
+                          bottom.map(v -> descriptor.ch(v.getCharacter())),
+                          bottomLeft.map(v -> descriptor.ch(v.getCharacter())),
+                          left.map(v -> descriptor.ch(v.getCharacter())));
     }
 
 
-    public Border backgroundColor(final CharacterColor color) {
-        return changeCell(CellDescriptor.copy(topLeft).bg(color).create());
+    public int getTopThickness() {
+        return top.isPresent() ||
+               (!left.isPresent() && topLeft.isPresent()) ||
+               (!right.isPresent() && topRight.isPresent()) ? 1 : 0;
     }
+
+    public int getLeftThickness() {
+        return left.isPresent() ||
+               (!top.isPresent() && topLeft.isPresent()) ||
+               (!bottom.isPresent() && bottomLeft.isPresent()) ? 1 : 0;
+    }
+
+    public int getRightThickness() {
+        return right.isPresent() ||
+               (!top.isPresent() && topRight.isPresent()) ||
+               (!bottom.isPresent() && bottomRight.isPresent()) ? 1 : 0;
+    }
+
+    public int getBottomThickness() {
+        return bottom.isPresent() ||
+               (!left.isPresent() && bottomLeft.isPresent()) ||
+               (!right.isPresent() && bottomRight.isPresent()) ? 1 : 0;
+    }
+
 }

@@ -19,8 +19,8 @@ public class Graphics {
         this.driver = driver;
     }
 
-    public Graphics(final Rectangle area, final Graphics graphics) {
-        this(area.relativeTo(graphics.getTopLeft()), graphics.driver);
+    public Graphics restrict(final Rectangle area) {
+        return new Graphics(area.move(this.area.topLeft()), driver);
     }
 
     public void setAbsoluteMode() {
