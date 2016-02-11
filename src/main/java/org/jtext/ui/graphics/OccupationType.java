@@ -24,7 +24,7 @@ public class OccupationType {
         return new Fill();
     }
 
-    public static class Fixed {
+    public static class Fixed extends OccupationType {
         private final int size;
 
 
@@ -37,7 +37,7 @@ public class OccupationType {
         }
     }
 
-    public static class Proportional {
+    public static class Proportional extends OccupationType {
         private final int percentage;
 
         private Proportional(int percentage) {
@@ -49,7 +49,7 @@ public class OccupationType {
         }
     }
 
-    public static class Fill {
+    public static class Fill extends OccupationType {
         private Fill() {
 
         }

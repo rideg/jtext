@@ -6,22 +6,16 @@ import java.util.Optional;
 
 public abstract class Widget {
 
-    private final int id;
     private Optional<Widget> parent;
 
-    public Widget(final int id) {
-        this.id = id;
+    public Widget() {
         this.parent = Optional.empty();
     }
 
-    public Widget(final int id, final Widget widget) {
-        this.id = id;
+    public Widget(final Widget widget) {
         this.parent = Optional.of(widget);
     }
 
-    public int getId() {
-        return id;
-    }
 
     public abstract void draw(Graphics graphics);
 
@@ -46,6 +40,8 @@ public abstract class Widget {
         }
     }
 
-    protected abstract void handleEvent(final UIEvent event);
+    protected void handleEvent(final UIEvent event) {
+
+    }
 
 }
