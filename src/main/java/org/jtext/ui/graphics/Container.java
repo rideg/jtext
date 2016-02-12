@@ -1,6 +1,7 @@
 package org.jtext.ui.graphics;
 
 import org.jtext.ui.event.UIEvent;
+import org.jtext.ui.layout.LayoutManager;
 
 import java.util.Set;
 

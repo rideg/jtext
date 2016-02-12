@@ -36,7 +36,7 @@ public class KeyboardHandler implements Component {
             while (shouldRun.get()) {
                 ReadKey readKey = driver.getCh();
                 if (readKey.key() != ControlKey.ERR) {
-                    bus.publish(TOPIC, new KeyEvent(readKey.key(), readKey.getValue()));
+                    bus.publish(TOPIC, new KeyEvent(readKey));
                 } else {
                     try {
                         TimeUnit.MILLISECONDS.sleep(1);

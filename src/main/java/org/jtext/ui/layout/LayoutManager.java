@@ -1,4 +1,8 @@
-package org.jtext.ui.graphics;
+package org.jtext.ui.layout;
+
+import org.jtext.ui.graphics.OccupationType;
+import org.jtext.ui.graphics.Rectangle;
+import org.jtext.ui.graphics.Widget;
 
 public class LayoutManager {
     public OccupationType getPreferredWidth() {

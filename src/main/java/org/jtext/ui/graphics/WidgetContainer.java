@@ -1,5 +1,7 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.ui.layout.LayoutManager;
+
 import java.util.LinkedList;
 import java.util.List;
 

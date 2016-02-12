@@ -6,7 +6,7 @@ import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.event.UIEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Graphics;
-import org.jtext.ui.graphics.LayoutManager;
+import org.jtext.ui.layout.LayoutManager;
 import org.jtext.ui.graphics.OccupationType;
 
 import java.util.Optional;

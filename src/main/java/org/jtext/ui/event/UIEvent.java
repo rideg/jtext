@@ -4,7 +4,6 @@ public class UIEvent {
 
     private boolean bubbling = true;
 
-
     public void stopBubbling() {
         bubbling = false;
     }
