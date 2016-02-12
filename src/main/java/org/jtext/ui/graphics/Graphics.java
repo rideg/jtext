@@ -1,5 +1,6 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.CharacterColor;
 import org.jtext.curses.Driver;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 public class Graphics {
 
-    private final Rectangle area;
+    public final Rectangle area;
     private final Driver driver;
     private boolean isRelative = true;
 
@@ -79,28 +80,58 @@ public class Graphics {
         return area.topLeft();
     }
 
-    public Rectangle getArea() {
-        return area;
-    }
-
     public Point getCursor() {
         return Point.at(driver.getCursorX(), driver.getCursorY());
     }
 
     public void fillBackground(final CharacterColor characterColor) {
-        driver.setBackgroundColor(characterColor);
-        Point point = area.topLeft();
-        for (int i = 0; i < area.height; i++) {
-            driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
-            point = point.incY();
+        driver.lock();
+        try {
+            driver.setBackgroundColor(characterColor);
+            Point point = area.topLeft();
+            for (int i = 0; i < area.height; i++) {
+                driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
+                point = point.incY();
+            }
+        } finally {
+            driver.unlock();
         }
     }
 
     public void drawBorder(final Border border) {
-
+        driver.lock();
+        try {
+            border.topLeft.ifPresent(d -> putCharAt(area.topLeft(), d));
+            border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d));
+            border.topRight.ifPresent(d -> putCharAt(area.topRight(), d));
+            border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.height - 2, d));
+            border.bottomRight.ifPresent(d -> putCharAt(area.bottomRight(), d));
+            border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d));
+            border.bottomLeft.ifPresent(d -> putCharAt(area.bottomLeft(), d));
+            border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d));
+        } finally {
+            driver.unlock();
+        }
     }
 
-    public void clear() {
-
+    private void drawVerticalLine(Point point, int length, CellDescriptor descriptor) {
+        setColorsAndAttributes(descriptor);
+        driver.drawVerticalLineAt(point.x, point.y, descriptor.getCharacter(), length);
     }
+
+    private void drawHorizontalLine(Point point, int length, CellDescriptor descriptor) {
+        setColorsAndAttributes(descriptor);
+        driver.drawHorizontalLineAt(point.x, point.y, descriptor.getCharacter(), length);
+    }
+
+    public void putCharAt(final Point point, final CellDescriptor descriptor) {
+        setColorsAndAttributes(descriptor);
+        driver.putCharAt(point.x, point.y, descriptor.getCharacter());
+    }
+
+    private void setColorsAndAttributes(CellDescriptor descriptor) {
+        driver.setColor(descriptor.getForegroundColor(), descriptor.getBackgroundColor());
+        driver.onAttributes(descriptor.getAttributes());
+    }
+
 }

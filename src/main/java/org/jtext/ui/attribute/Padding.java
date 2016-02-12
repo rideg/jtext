@@ -32,11 +32,11 @@ public class Padding {
         return Padding.of(top + 1, right + 1, bottom + 1, left + 1);
     }
 
-    public Rectangle shrink(final Rectangle area) {
+    public Rectangle apply(final Rectangle area) {
         return Rectangle.of(area.x + left, area.y + top, area.width - left - right, area.height - top - bottom);
     }
 
-    public Padding apply(final Border border) {
+    public Padding consider(final Border border) {
         return Padding.of(top + border.getTopThickness(),
                           right + border.getRightThickness(),
                           bottom + border.getBottomThickness(),

@@ -2,6 +2,10 @@ package org.jtext.curses;
 
 public interface Driver {
 
+    void lock();
+
+    void unlock();
+
     void init();
 
     int getScreenWidth();

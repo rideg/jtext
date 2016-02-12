@@ -1,23 +1,40 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.Component;
 import org.jtext.curses.Driver;
+import org.jtext.event.EventBus;
+import org.jtext.event.Topic;
 import org.jtext.keyboard.KeyEvent;
+import org.jtext.keyboard.KeyboardHandler;
 import org.jtext.ui.event.*;
 
-public class Scene extends Container {
+public class Scene extends Container implements Component {
+
+    public static final Topic<RepaintEvent> REPAINT_EVENT_TOPIC = new Topic<>();
+    public static final Topic<FocusMovedEvent> FOCUS_MOVED_EVENT_TOPIC = new Topic<>();
 
     private final Driver driver;
+    private final EventBus eventBus;
     private Widget activeWidget;
 
-    public Scene(final Driver driver) {
+    public Scene(final Driver driver, EventBus eventBus) {
         super(null);
         this.driver = driver;
+        this.eventBus = eventBus;
+        eventBus.registerTopic(REPAINT_EVENT_TOPIC);
+        eventBus.registerTopic(FOCUS_MOVED_EVENT_TOPIC);
     }
 
-    public void onRepaint(final RepaintEvent repaintEvent) {
-        final Rectangle area = Rectangle.of(0, 0, driver.getScreenWidth(), driver.getScreenHeight());
+    public synchronized void onRepaint(final RepaintEvent repaintEvent) {
+        driver.clearScreen();
+        final Rectangle area = calculateArea();
         setArea(area);
         draw(new Graphics(area, driver));
+        driver.refresh();
+    }
+
+    private Rectangle calculateArea() {
+        return Rectangle.of(0, 0, driver.getScreenWidth(), driver.getScreenHeight());
     }
 
     public void onKeyBoardEvent(final KeyEvent event) {
@@ -35,4 +52,15 @@ public class Scene extends Container {
     }
 
 
+    @Override
+    public void start() {
+        eventBus.subscribe(KeyboardHandler.TOPIC, this::onKeyBoardEvent);
+        eventBus.subscribe(FOCUS_MOVED_EVENT_TOPIC, this::onFocusMoved);
+        eventBus.subscribe(REPAINT_EVENT_TOPIC, this::onRepaint);
+    }
+
+    @Override
+    public void stop() {
+        // todo unsubscribe
+    }
 }
