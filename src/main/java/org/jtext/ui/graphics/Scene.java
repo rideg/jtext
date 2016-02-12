@@ -3,22 +3,22 @@ package org.jtext.ui.graphics;
 import org.jtext.curses.Driver;
 import org.jtext.keyboard.KeyEvent;
 import org.jtext.ui.event.*;
-import org.jtext.ui.layout.LayoutManager;
+import org.jtext.ui.layout.Layout;
 
 public class Scene extends Container {
-
-    private static final Rectangle UNITY = Rectangle.of(0, 0, 1, 1);
 
     private Widget activeWidget;
     private final Driver driver;
 
     public Scene(final Driver driver) {
-        super(new LayoutManager());
+        super(null);
         this.driver = driver;
     }
 
     public void onRepaint(final RepaintEvent repaintEvent) {
-        draw(new Graphics(UNITY.resize(driver.getScreenWidth(), driver.getScreenHeight()), driver));
+        final Rectangle area = Rectangle.of(0, 0, driver.getScreenWidth(), driver.getScreenHeight());
+        setArea(area);
+        draw(new Graphics(area, driver));
     }
 
     public void onKeyBoardEvent(final KeyEvent event) {

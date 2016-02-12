@@ -1,32 +1,32 @@
 package org.jtext.ui.graphics;
 
 import org.jtext.ui.event.UIEvent;
-import org.jtext.ui.layout.LayoutManager;
+import org.jtext.ui.layout.Layout;
 
 import java.util.Set;
 
 public class Container extends Widget {
 
     private Set<Widget> widgets;
-    private LayoutManager layoutManager;
+    private Layout layout;
 
-    public Container(final LayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+    public Container(final Layout layout) {
+        this.layout = layout;
     }
 
     @Override
     public void draw(Graphics graphics) {
-        widgets.forEach(widget -> widget.draw(graphics.restrict(layoutManager.getAreaFor(widget))));
+        widgets.forEach(widget -> widget.draw(graphics.restrict(layout.getAreaFor(widget))));
     }
 
     @Override
     public OccupationType getPreferredWidth() {
-        return layoutManager.getPreferredWidth();
+        return OccupationType.fill();
     }
 
     @Override
     public OccupationType getPreferredHeight() {
-        return layoutManager.getPreferredHeight();
+        return OccupationType.fill();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Container extends Widget {
     }
 
     public void setArea(Rectangle area) {
-        layoutManager.setArea(area);
+        layout.setArea(area);
     }
 
     @Override

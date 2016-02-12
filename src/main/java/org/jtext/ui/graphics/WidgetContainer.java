@@ -1,6 +1,6 @@
 package org.jtext.ui.graphics;
 
-import org.jtext.ui.layout.LayoutManager;
+import org.jtext.ui.layout.Layout;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public abstract class WidgetContainer extends Widget {
 
     private final List<Widget> elements = new LinkedList<>();
-    private final LayoutManager layoutManager;
+    private final Layout layout;
 
-    public WidgetContainer(final Widget parent, final LayoutManager layoutManager) {
+    public WidgetContainer(final Widget parent, final Layout layout) {
         super(parent);
-        this.layoutManager = layoutManager;
+        this.layout = layout;
     }
 
 

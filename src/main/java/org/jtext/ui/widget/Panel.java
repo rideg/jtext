@@ -6,7 +6,7 @@ import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.event.UIEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Graphics;
-import org.jtext.ui.layout.LayoutManager;
+import org.jtext.ui.layout.Layout;
 import org.jtext.ui.graphics.OccupationType;
 
 import java.util.Optional;
@@ -19,10 +19,10 @@ public class Panel extends Container {
     private final OccupationType preferredWith;
     private final OccupationType preferredHeight;
 
-    public Panel(final LayoutManager layoutManager,
+    public Panel(final Layout layout,
                  final OccupationType preferredWith,
                  final OccupationType preferredHeight) {
-        super(layoutManager);
+        super(layout);
         this.preferredWith = preferredWith;
         this.preferredHeight = preferredHeight;
     }
