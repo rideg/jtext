@@ -3,12 +3,11 @@ package org.jtext.ui.graphics;
 import org.jtext.curses.Driver;
 import org.jtext.keyboard.KeyEvent;
 import org.jtext.ui.event.*;
-import org.jtext.ui.layout.Layout;
 
 public class Scene extends Container {
 
-    private Widget activeWidget;
     private final Driver driver;
+    private Widget activeWidget;
 
     public Scene(final Driver driver) {
         super(null);

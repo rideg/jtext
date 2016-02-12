@@ -7,6 +7,7 @@ public class KeyPressedEvent extends UIEvent {
     public final ReadKey key;
 
     public KeyPressedEvent(final ReadKey key) {
-        this.key = key;}
+        this.key = key;
+    }
 
 }
