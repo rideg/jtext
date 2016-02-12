@@ -36,7 +36,7 @@ public abstract class Widget {
     public final void onEvent(final UIEvent event) {
         handleEvent(event);
         if (event.isBubbling()) {
-            parent.ifPresent(p -> p.handleEvent(event));
+            parent.ifPresent(p -> p.onEvent(event));
         }
     }
 
