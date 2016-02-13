@@ -16,7 +16,7 @@ public abstract class Layout {
 
     public void addWidget(final Widget widget) {
         widgetOrder.add(widget);
-        widgets.put(widget, Rectangle.unity());
+        widgets.put(widget, Rectangle.empty());
     }
 
     public void removeWidget(final Widget widget) {

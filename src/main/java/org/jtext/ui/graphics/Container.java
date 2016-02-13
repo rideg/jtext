@@ -32,12 +32,12 @@ public class Container extends Widget {
 
     @Override
     public Occupation getMinWidth() {
-        return null;
+        return Occupation.fill();
     }
 
     @Override
     public Occupation getMinHeight() {
-        return null;
+        return Occupation.fill();
     }
 
     @Override

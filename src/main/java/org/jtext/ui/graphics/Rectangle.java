@@ -2,7 +2,7 @@ package org.jtext.ui.graphics;
 
 public class Rectangle {
 
-    private static final Rectangle UNITY = Rectangle.of(0, 0, 1, 1);
+    private static final Rectangle EMPTY = Rectangle.of(0, 0, 0, 0);
 
 
     public final int x;
@@ -11,7 +11,7 @@ public class Rectangle {
     public final int height;
 
     private Rectangle(final int x, final int y, final int width, final int height) {
-        if (width <= 0 || height <= 0) {
+        if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Dimension cannot be negative!");
         }
         this.x = x;
@@ -20,8 +20,8 @@ public class Rectangle {
         this.height = height;
     }
 
-    public static Rectangle unity() {
-        return UNITY;
+    public static Rectangle empty() {
+        return EMPTY;
     }
 
     public Dimension dimension() {
