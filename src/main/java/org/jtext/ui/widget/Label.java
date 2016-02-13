@@ -25,13 +25,23 @@ public class Label extends Widget {
     }
 
     @Override
-    public OccupationType getPreferredWidth() {
-        return OccupationType.fixed(text.length());
+    public Occupation getPreferredWidth() {
+        return Occupation.fixed(text.length());
     }
 
     @Override
-    public OccupationType getPreferredHeight() {
-        return OccupationType.fixed(1);
+    public Occupation getPreferredHeight() {
+        return Occupation.fixed(1);
+    }
+
+    @Override
+    public Occupation getMinWidth() {
+        return null;
+    }
+
+    @Override
+    public Occupation getMinHeight() {
+        return null;
     }
 
     @Override

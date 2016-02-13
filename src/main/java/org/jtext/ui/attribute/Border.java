@@ -6,21 +6,38 @@ import java.util.Optional;
 
 public class Border {
 
-    public static final Border NO_BORDER = new Border(Optional.empty(), Optional.empty(), Optional.empty(),
+    private static final Border NO_BORDER = new Border(Optional.empty(), Optional.empty(), Optional.empty(),
                                                       Optional.empty(), Optional.empty(), Optional.empty(),
                                                       Optional.empty(), Optional.empty());
 
-    public static final Border SINGLE = new Border(CellDescriptor.builder().create(),
+    private static final Border SINGLE = new Border(CellDescriptor.builder().create(),
                                                    '┌', '─', '┐', '│', '┘', '─', '└', '│'
     );
 
-    public static final Border DOUBLE = new Border(CellDescriptor.builder().create(),
+    private static final Border DUAL = new Border(CellDescriptor.builder().create(),
                                                    '╔', '═', '╗', '║', '╝', '═', '╚', '║'
     );
 
-    public static final Border ROUNDED_SINGLE = new Border(CellDescriptor.builder().create(),
+    private static final Border ROUNDED_SINGLE = new Border(CellDescriptor.builder().create(),
                                                            '╭', '─', '╮', '│', '╯', '─', '╰', '│'
     );
+
+
+    public static Border no() {
+        return NO_BORDER;
+    }
+
+    public static Border single() {
+        return SINGLE;
+    }
+
+    public static Border dual() {
+        return DUAL;
+    }
+
+    public static Border rounded() {
+        return ROUNDED_SINGLE;
+    }
 
     public final Optional<CellDescriptor> topLeft;
     public final Optional<CellDescriptor> top;

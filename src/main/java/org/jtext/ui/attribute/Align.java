@@ -1,5 +1,10 @@
 package org.jtext.ui.attribute;
 
 public enum Align {
-    LEFT, RIGHT, TOP
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM,
+    CENTER,
+    MIDDLE
 }

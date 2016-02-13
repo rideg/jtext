@@ -4,7 +4,7 @@ import org.jtext.ui.graphics.Rectangle;
 
 public class Padding {
 
-    public static final Padding NO_PADDING = Padding.of(0, 0, 0, 0);
+    private static final Padding NO_PADDING = Padding.of(0, 0, 0, 0);
 
     public final int top;
     public final int right;
@@ -24,12 +24,40 @@ public class Padding {
     }
 
 
+    public static Padding no() {
+        return NO_PADDING;
+    }
+
     public static Padding of(final int top, final int right, final int bottom, final int left) {
         return new Padding(top, right, bottom, left);
     }
 
-    public static Padding of(final int value) {
+    public static Padding full(final int value) {
         return new Padding(value, value, value, value);
+    }
+
+    public static Padding horizontal(final int value) {
+        return new Padding(0, value, 0, value);
+    }
+
+    public static Padding vertical(final int value) {
+        return new Padding(value, 0, value, 0);
+    }
+
+    public static Padding top(final int value) {
+        return new Padding(value, 0, 0, 0);
+    }
+
+    public static Padding bottom(final int value) {
+        return new Padding(0, 0, value, 0);
+    }
+
+    public static Padding left(final int value) {
+        return new Padding(0, 0, 0, value);
+    }
+
+    public static Padding right(final int value) {
+        return new Padding(0, value, 0, 0);
     }
 
     public Padding inc() {

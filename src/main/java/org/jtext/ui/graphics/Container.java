@@ -21,13 +21,23 @@ public class Container extends Widget {
     }
 
     @Override
-    public OccupationType getPreferredWidth() {
-        return OccupationType.fill();
+    public Occupation getPreferredWidth() {
+        return Occupation.fill();
     }
 
     @Override
-    public OccupationType getPreferredHeight() {
-        return OccupationType.fill();
+    public Occupation getPreferredHeight() {
+        return Occupation.fill();
+    }
+
+    @Override
+    public Occupation getMinWidth() {
+        return null;
+    }
+
+    @Override
+    public Occupation getMinHeight() {
+        return null;
     }
 
     @Override

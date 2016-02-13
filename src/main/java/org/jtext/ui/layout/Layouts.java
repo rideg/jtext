@@ -5,7 +5,6 @@ import org.jtext.ui.attribute.Direction;
 
 public class Layouts {
 
-
     public static LinearLayout vertical(final Align align) {
         return new LinearLayout(Direction.VERTICAL, align);
     }

@@ -1,8 +1,8 @@
 package org.jtext.ui.graphics;
 
-public class OccupationType {
+public class Occupation {
 
-    private OccupationType() {
+    private Occupation() {
 
     }
 
@@ -13,7 +13,7 @@ public class OccupationType {
         return new Fixed(size);
     }
 
-    public static Proportional proportional(final int percentage) {
+    public static Proportional precent(final int percentage) {
         if (percentage <= 0 || percentage > 100) {
             throw new IllegalArgumentException("Portion must be between 0 and 100");
         }
@@ -24,7 +24,7 @@ public class OccupationType {
         return new Fill();
     }
 
-    public static class Fixed extends OccupationType {
+    public static class Fixed extends Occupation {
         private final int size;
 
 
@@ -37,7 +37,7 @@ public class OccupationType {
         }
     }
 
-    public static class Proportional extends OccupationType {
+    public static class Proportional extends Occupation {
         private final int percentage;
 
         private Proportional(int percentage) {
@@ -49,7 +49,7 @@ public class OccupationType {
         }
     }
 
-    public static class Fill extends OccupationType {
+    public static class Fill extends Occupation {
         private Fill() {
 
         }

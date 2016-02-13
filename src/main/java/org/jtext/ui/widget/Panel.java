@@ -6,7 +6,7 @@ import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.event.UIEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Graphics;
-import org.jtext.ui.graphics.OccupationType;
+import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.layout.Layout;
 
 import java.util.Optional;
@@ -16,19 +16,19 @@ public class Panel extends Container {
     private final Optional<CharacterColor> background;
     private final Border border;
     private final Padding padding;
-    private final OccupationType preferredWith;
-    private final OccupationType preferredHeight;
+    private final Occupation preferredWith;
+    private final Occupation preferredHeight;
 
     public Panel(final Layout layout,
-                 final OccupationType preferredWith,
-                 final OccupationType preferredHeight) {
-        this(layout, preferredWith, preferredHeight, Border.NO_BORDER, Padding.NO_PADDING, Optional.empty());
+                 final Occupation preferredWith,
+                 final Occupation preferredHeight) {
+        this(layout, preferredWith, preferredHeight, Border.no(), Padding.no(), Optional.empty());
 
     }
 
     private Panel(final Layout layout,
-                  final OccupationType preferredWith,
-                  final OccupationType preferredHeight,
+                  final Occupation preferredWith,
+                  final Occupation preferredHeight,
                   final Border border,
                   final Padding padding,
                   final Optional<CharacterColor> backgroundColor
@@ -43,12 +43,20 @@ public class Panel extends Container {
     }
 
     public Panel(final Layout layout,
-                 final OccupationType preferredWith,
-                 final OccupationType preferredHeight,
+                 final Occupation preferredWith,
+                 final Occupation preferredHeight,
                  final Border border,
                  final Padding padding,
                  final CharacterColor backgroundColor) {
         this(layout, preferredWith, preferredHeight, border, padding, Optional.of(backgroundColor));
+    }
+
+    public Panel(final Layout layout,
+                 final Occupation preferredWidth,
+                 final Occupation preferredHeight,
+                 final Border border,
+                 final Padding padding) {
+        this(layout, preferredWidth, preferredHeight, border, padding, Optional.empty());
     }
 
 
@@ -60,12 +68,12 @@ public class Panel extends Container {
     }
 
     @Override
-    public OccupationType getPreferredWidth() {
+    public Occupation getPreferredWidth() {
         return preferredWith;
     }
 
     @Override
-    public OccupationType getPreferredHeight() {
+    public Occupation getPreferredHeight() {
         return preferredHeight;
     }
 

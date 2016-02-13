@@ -1,5 +1,6 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.event.UIEvent;
 
 import java.util.Optional;
@@ -7,6 +8,8 @@ import java.util.Optional;
 public abstract class Widget {
 
     private Optional<Widget> parent;
+    private Margin margin = Margin.no();
+    private boolean visible = true;
 
     public Widget() {
         this.parent = Optional.empty();
@@ -16,14 +19,30 @@ public abstract class Widget {
         this.parent = Optional.of(widget);
     }
 
-
     public abstract void draw(Graphics graphics);
 
-    public abstract OccupationType getPreferredWidth();
+    public abstract Occupation getPreferredWidth();
 
-    public abstract OccupationType getPreferredHeight();
+    public abstract Occupation getPreferredHeight();
+
+    public abstract Occupation getMinWidth();
+
+    public abstract Occupation getMinHeight();
+
+    public Occupation getMaxWidth() {
+        return Occupation.fill();
+    }
+
+    public Occupation getMaxHeight() {
+       return
+               Occupation.fill();
+    }
 
     public abstract Position getPosition();
+
+    public Margin getMargin() {
+        return margin;
+    }
 
     public void clearParent() {
         parent = Optional.empty();
@@ -38,6 +57,18 @@ public abstract class Widget {
         if (event.isBubbling()) {
             parent.ifPresent(p -> p.onEvent(event));
         }
+    }
+
+    public void hide() {
+        visible = false;
+    }
+
+    public void show() {
+        visible = true;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 
     protected void handleEvent(final UIEvent event) {

@@ -7,11 +7,13 @@ import org.jtext.ui.attribute.Align;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.graphics.Container;
-import org.jtext.ui.graphics.OccupationType;
+import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Scene;
 import org.jtext.ui.layout.Layouts;
 import org.jtext.ui.widget.Label;
 import org.jtext.ui.widget.Panel;
+
+import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
@@ -29,17 +31,19 @@ public class Main {
 
         final Panel top = new Panel(
                 Layouts.horizontal(Align.LEFT),
-                OccupationType.fill(),
-                OccupationType.fixed(1));
+                Occupation.fill(),
+                Occupation.fixed(1),
+                Border.no(),
+                Padding.horizontal(1));
 
         final Container center = new Container(Layouts.horizontal(Align.TOP));
 
         final Panel left = new Panel(
                 Layouts.vertical(Align.LEFT),
-                OccupationType.proportional(30),
-                OccupationType.fill(),
-                Border.SINGLE,
-                Padding.of(1),
+                Occupation.precent(30),
+                Occupation.fill(),
+                Border.single(),
+                Padding.full(1),
                 CharacterColor.BLUE
         );
 
@@ -55,14 +59,14 @@ public class Main {
 
         final Panel right = new Panel(
                 Layouts.vertical(Align.RIGHT),
-                OccupationType.fill(),
-                OccupationType.fill(),
-                Border.NO_BORDER,
-                Padding.of(1),
+                Occupation.fill(),
+                Occupation.fill(),
+                Border.no(),
+                Padding.full(1),
                 CharacterColor.CYAN
         );
 
-        final Label labelRigth = new Label(
+        final Label labelRight = new Label(
                 CellDescriptor.builder()
                         .fg(CharacterColor.WHITE)
                         .bg(CharacterColor.CYAN)
@@ -70,15 +74,15 @@ public class Main {
                         .create(),
                 "Right Panel!");
 
-        left.add(labelRigth);
+        left.add(labelRight);
 
         center.add(left);
         center.add(right);
 
         final Panel bottom = new Panel(
                 Layouts.vertical(Align.LEFT),
-                OccupationType.fill(),
-                OccupationType.fixed(1)
+                Occupation.fill(),
+                Occupation.fixed(1)
         );
 
 
@@ -91,6 +95,9 @@ public class Main {
         scene.start();
         keyboardHandler.start();
 
+        TimeUnit.SECONDS.sleep(5);
+
+        driver.shutdown();
     }
 
 }
