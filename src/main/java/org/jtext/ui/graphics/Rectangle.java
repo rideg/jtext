@@ -2,6 +2,7 @@ package org.jtext.ui.graphics;
 
 public class Rectangle {
 
+    public static final Rectangle UNITY = Rectangle.of(0, 0, 1, 1);
     public final int x;
     public final int y;
     public final int width;

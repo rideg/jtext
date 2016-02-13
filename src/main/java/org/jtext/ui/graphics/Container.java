@@ -3,11 +3,12 @@ package org.jtext.ui.graphics;
 import org.jtext.ui.event.UIEvent;
 import org.jtext.ui.layout.Layout;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Container extends Widget {
 
-    private Set<Widget> widgets;
+    private Set<Widget> widgets = new HashSet<>();
     private Layout layout;
 
     public Container(final Layout layout) {
@@ -41,5 +42,14 @@ public class Container extends Widget {
     @Override
     protected void handleEvent(UIEvent event) {
 
+    }
+
+    public Container add(final Widget widget) {
+        widgets.add(widget);
+        return this;
+    }
+
+    public void remove(final Widget widget) {
+        widgets.remove(widget);
     }
 }

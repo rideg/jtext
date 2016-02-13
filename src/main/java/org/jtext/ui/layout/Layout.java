@@ -8,12 +8,11 @@ import java.util.Map;
 
 public abstract class Layout {
 
-    private static final Object PLACEHOLDER = new Object();
-    private final Map<Widget, Object> widgets = new IdentityHashMap<>();
-    private Rectangle area;
+    protected final Map<Widget, Rectangle> widgets = new IdentityHashMap<>();
+    protected Rectangle area;
 
     public void addWidget(final Widget widget) {
-        widgets.put(widget, PLACEHOLDER);
+        widgets.put(widget, Rectangle.UNITY);
     }
 
     public void removeWidget(final Widget widget) {
@@ -22,7 +21,12 @@ public abstract class Layout {
 
     public void setArea(final Rectangle area) {
         this.area = area;
+        updateWidgetAreas();
     }
 
-    public abstract Rectangle getAreaFor(final Widget widget);
+    protected abstract void updateWidgetAreas();
+
+    public Rectangle getAreaFor(final Widget widget) {
+        return widgets.get(widget);
+    }
 }

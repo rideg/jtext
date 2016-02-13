@@ -13,18 +13,42 @@ import java.util.Optional;
 
 public class Panel extends Container {
 
-    private final Optional<CharacterColor> background = Optional.empty();
-    private final Border border = Border.NO_BORDER;
-    private final Padding padding = Padding.NO_PADDING;
+    private final Optional<CharacterColor> background;
+    private final Border border;
+    private final Padding padding;
     private final OccupationType preferredWith;
     private final OccupationType preferredHeight;
 
     public Panel(final Layout layout,
                  final OccupationType preferredWith,
                  final OccupationType preferredHeight) {
+        this(layout, preferredWith, preferredHeight, Border.NO_BORDER, Padding.NO_PADDING, Optional.empty());
+
+    }
+
+    private Panel(final Layout layout,
+                  final OccupationType preferredWith,
+                  final OccupationType preferredHeight,
+                  final Border border,
+                  final Padding padding,
+                  final Optional<CharacterColor> backgroundColor
+    ) {
         super(layout);
         this.preferredWith = preferredWith;
         this.preferredHeight = preferredHeight;
+        this.border = border;
+        this.padding = padding;
+        this.background = backgroundColor;
+
+    }
+
+    public Panel(final Layout layout,
+                 final OccupationType preferredWith,
+                 final OccupationType preferredHeight,
+                 final Border border,
+                 final Padding padding,
+                 final CharacterColor backgroundColor) {
+        this(layout, preferredWith, preferredHeight, border, padding, Optional.of(backgroundColor));
     }
 
 

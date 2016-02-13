@@ -28,6 +28,10 @@ public class Padding {
         return new Padding(top, right, bottom, left);
     }
 
+    public static Padding of(final int value) {
+        return new Padding(value, value, value, value);
+    }
+
     public Padding inc() {
         return Padding.of(top + 1, right + 1, bottom + 1, left + 1);
     }

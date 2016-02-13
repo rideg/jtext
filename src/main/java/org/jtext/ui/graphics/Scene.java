@@ -57,6 +57,8 @@ public class Scene extends Container implements Component {
         eventBus.subscribe(KeyboardHandler.TOPIC, this::onKeyBoardEvent);
         eventBus.subscribe(FOCUS_MOVED_EVENT_TOPIC, this::onFocusMoved);
         eventBus.subscribe(REPAINT_EVENT_TOPIC, this::onRepaint);
+
+        onRepaint(RepaintEvent.REPAINT_EVENT);
     }
 
     @Override
