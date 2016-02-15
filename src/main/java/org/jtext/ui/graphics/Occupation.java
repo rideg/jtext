@@ -1,6 +1,8 @@
 package org.jtext.ui.graphics;
 
-public class Occupation {
+import java.math.BigDecimal;
+
+public abstract class Occupation {
 
     private Occupation() {
 
@@ -36,6 +38,8 @@ public class Occupation {
         return new Fill();
     }
 
+    public abstract int toReal(final int available);
+
     public static class Fixed extends Occupation {
         private final int size;
 
@@ -44,26 +48,34 @@ public class Occupation {
             this.size = size;
         }
 
-        public int getSize() {
+
+        @Override
+        public int toReal(final int available) {
             return size;
         }
     }
-
     public static class Proportional extends Occupation {
-        private final int percentage;
+        public static final BigDecimal DIVISOR = new BigDecimal(100);
+        private final BigDecimal percentage;
 
         private Proportional(int percentage) {
-            this.percentage = percentage;
+            this.percentage = new BigDecimal(percentage);
         }
 
-        public int getPercentage() {
-            return percentage;
+        @Override
+        public int toReal(final int available) {
+            return new BigDecimal(available).multiply(percentage).divide(DIVISOR, BigDecimal.ROUND_FLOOR).intValue();
         }
     }
 
     public static class Fill extends Occupation {
         private Fill() {
 
+        }
+
+        @Override
+        public int toReal(final int available) {
+            return available;
         }
     }
 }

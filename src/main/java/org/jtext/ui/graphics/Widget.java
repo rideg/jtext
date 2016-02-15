@@ -39,7 +39,14 @@ public abstract class Widget {
 
     public Occupation getMaxHeight() {
         return getPreferredHeight();
+    }
 
+    public int getRealHeight(final int available) {
+        final int realHeight = Math.min(getPreferredHeight().toReal(available), getMaxHeight().toReal(available));
+        if (realHeight > available) {
+            return Math.max(available, getMinHeight().toReal(available));
+        }
+        return realHeight;
     }
 
     public abstract Position getPosition();
