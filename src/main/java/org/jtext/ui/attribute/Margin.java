@@ -24,4 +24,12 @@ public class Margin {
     public static Margin of(final int top, final int right, final int bottom, final int left) {
         return new Margin(top, right, bottom, left);
     }
+
+    public int horizontalSpacing() {
+        return right + left;
+    }
+
+    public int verticalSpacing() {
+        return top + bottom;
+    }
 }

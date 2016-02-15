@@ -6,6 +6,18 @@ public class Occupation {
 
     }
 
+    public static boolean isFilling(final Occupation occupation) {
+        return occupation.getClass() == Fill.class;
+    }
+
+    public static boolean isFixed(final Occupation occupation) {
+        return occupation.getClass() == Fixed.class;
+    }
+
+    public static boolean isProportional(final Occupation occupation) {
+        return occupation.getClass() == Proportional.class;
+    }
+
     public static Fixed fixed(final int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("Size must be a positive integer!");
@@ -13,7 +25,7 @@ public class Occupation {
         return new Fixed(size);
     }
 
-    public static Proportional precent(final int percentage) {
+    public static Proportional percent(final int percentage) {
         if (percentage <= 0 || percentage > 100) {
             throw new IllegalArgumentException("Portion must be between 0 and 100");
         }

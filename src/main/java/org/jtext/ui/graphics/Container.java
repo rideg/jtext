@@ -10,6 +10,7 @@ public class Container extends Widget {
 
     private Set<Widget> widgets = new HashSet<>();
     private Layout layout;
+    private Rectangle area;
 
     public Container(final Layout layout) {
         this.layout = layout;
@@ -45,8 +46,9 @@ public class Container extends Widget {
         return null;
     }
 
-    public void setArea(Rectangle area) {
-        layout.setArea(area);
+    public void setArea(final Rectangle area) {
+        this.area = area;
+        layout.setDimension(area.dimension());
     }
 
     @Override

@@ -25,23 +25,31 @@ public abstract class Widget {
 
     public abstract Occupation getPreferredHeight();
 
-    public abstract Occupation getMinWidth();
+    public Occupation getMinWidth() {
+        return getPreferredWidth();
+    }
 
-    public abstract Occupation getMinHeight();
+    public Occupation getMinHeight() {
+        return getPreferredHeight();
+    }
 
     public Occupation getMaxWidth() {
-        return Occupation.fill();
+        return getPreferredWidth();
     }
 
     public Occupation getMaxHeight() {
-       return
-               Occupation.fill();
+        return getPreferredHeight();
+
     }
 
     public abstract Position getPosition();
 
     public Margin getMargin() {
         return margin;
+    }
+
+    public void setMargin(final Margin margin) {
+        this.margin = margin == null ? Margin.no() : margin;
     }
 
     public void clearParent() {

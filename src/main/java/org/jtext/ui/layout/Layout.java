@@ -1,5 +1,6 @@
 package org.jtext.ui.layout;
 
+import org.jtext.ui.graphics.Dimension;
 import org.jtext.ui.graphics.Rectangle;
 import org.jtext.ui.graphics.Widget;
 
@@ -12,7 +13,7 @@ public abstract class Layout {
 
     protected final List<Widget> widgetOrder = new LinkedList<>();
     protected final Map<Widget, Rectangle> widgets = new IdentityHashMap<>();
-    protected Rectangle area;
+    protected Dimension dimension;
 
     public void addWidget(final Widget widget) {
         widgetOrder.add(widget);
@@ -24,8 +25,8 @@ public abstract class Layout {
         widgetOrder.remove(widget);
     }
 
-    public void setArea(final Rectangle area) {
-        this.area = area;
+    public void setDimension(final Dimension dimension) {
+        this.dimension = dimension;
         updateWidgetAreas();
     }
 

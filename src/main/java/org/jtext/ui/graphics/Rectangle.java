@@ -24,6 +24,14 @@ public class Rectangle {
         return EMPTY;
     }
 
+    public static Rectangle of(final int x, final int y, final int width, final int height) {
+        return new Rectangle(x, y, width, height);
+    }
+
+    public static Rectangle of(final Point point, final Dimension dimension) {
+        return new Rectangle(point.x, point.y, dimension.width, dimension.height);
+    }
+
     public Dimension dimension() {
         return Dimension.of(width, height);
     }
@@ -48,12 +56,12 @@ public class Rectangle {
         return Rectangle.of(p.x + x, p.y + y, width, height);
     }
 
-    public static Rectangle of(final int x, final int y, final int width, final int height) {
-        return new Rectangle(x, y, width, height);
+    public Rectangle shiftX(final int shift) {
+        return Rectangle.of(x + shift, y, width, height);
     }
 
-    public static Rectangle of(final Point point, final Dimension dimension) {
-        return new Rectangle(point.x, point.y, dimension.width, dimension.height);
+    public Rectangle shiftY(final int shift) {
+        return Rectangle.of(x, y + shift, width, height);
     }
 
     public Rectangle move(final Point point) {
@@ -71,4 +79,38 @@ public class Rectangle {
     public Rectangle copy() {
         return Rectangle.of(x, y, width, height);
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+
+        final Rectangle rectangle = (Rectangle) o;
+
+        if (x != rectangle.x) { return false; }
+        if (y != rectangle.y) { return false; }
+        if (width != rectangle.width) { return false; }
+        return height == rectangle.height;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + width;
+        result = 31 * result + height;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle{" +
+               "x=" + x +
+               ", y=" + y +
+               ", width=" + width +
+               ", height=" + height +
+               '}';
+    }
+
 }
