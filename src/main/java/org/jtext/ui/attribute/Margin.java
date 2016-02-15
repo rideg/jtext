@@ -32,4 +32,14 @@ public class Margin {
     public int verticalSpacing() {
         return top + bottom;
     }
+
+    @Override
+    public String toString() {
+        return "Margin{" +
+               "top=" + top +
+               ", right=" + right +
+               ", bottom=" + bottom +
+               ", left=" + left +
+               '}';
+    }
 }

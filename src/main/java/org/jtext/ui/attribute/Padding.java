@@ -75,4 +75,14 @@ public class Padding {
                           left + border.getLeftThickness()
                          );
     }
+
+    @Override
+    public String toString() {
+        return "Padding{" +
+               "top=" + top +
+               ", right=" + right +
+               ", bottom=" + bottom +
+               ", left=" + left +
+               '}';
+    }
 }

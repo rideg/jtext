@@ -11,6 +11,10 @@ public class Dimension {
         this.height = height;
     }
 
+    public static Dimension of(final int width, final int height) {
+        return new Dimension(width, height);
+    }
+
     public Dimension incWidth() {
         return of(width + 1, height);
     }
@@ -27,9 +31,12 @@ public class Dimension {
         return of(width, height - 1);
     }
 
-
-    public static Dimension of(final int width, final int height) {
-        return new Dimension(width, height);
+    @Override
+    public String toString() {
+        return "Dimension{" +
+               "width=" + width +
+               ", height=" + height +
+               '}';
     }
 
 
