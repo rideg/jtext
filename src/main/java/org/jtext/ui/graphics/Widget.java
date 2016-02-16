@@ -1,9 +1,12 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.ui.attribute.Direction;
 import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.event.UIEvent;
 
 import java.util.Optional;
+
+import static org.jtext.ui.graphics.Occupation.isFilling;
 
 public abstract class Widget {
 
@@ -90,4 +93,36 @@ public abstract class Widget {
 
     }
 
+    public WidgetDescriptor getDescriptor(final int availableSpace, final Direction direction) {
+        if (direction == Direction.HORIZONTAL) {
+            int pref = (isFilling(getPreferredWidth()) ? getMinWidth() : getPreferredWidth()).toReal(availableSpace);
+            return new WidgetDescriptor(pref, getMinWidth().toReal(availableSpace),
+                                        getMaxWidth().toReal(availableSpace));
+        } else {
+            int pref = (isFilling(getPreferredHeight()) ? getMinHeight() : getPreferredHeight()).toReal(availableSpace);
+            return new WidgetDescriptor(pref, getMinHeight().toReal(availableSpace),
+                                        getMaxHeight().toReal(availableSpace));
+        }
+    }
+
+    public static class WidgetDescriptor implements Comparable<WidgetDescriptor> {
+
+        public int toUse = -1;
+        public int pref;
+        public int min;
+        public int opt;
+        public int max;
+
+        public WidgetDescriptor(final int pref, final int min, final int max) {
+            this.pref = pref;
+            this.min = min;
+            this.opt = pref - min;
+            this.max = max;
+        }
+
+        @Override
+        public int compareTo(final WidgetDescriptor o) {
+            return Integer.compare(o.opt, opt);
+        }
+    }
 }
