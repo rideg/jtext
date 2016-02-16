@@ -47,10 +47,10 @@ public class CellDescriptor {
 
     public static Builder copy(final CellDescriptor descriptor) {
         return new Builder()
-                       .ch(descriptor.getCharacter())
-                       .bg(descriptor.getBackgroundColor())
-                       .fg(descriptor.getForegroundColor())
-                       .attr(descriptor.getAttributes());
+                .ch(descriptor.getCharacter())
+                .bg(descriptor.getBackgroundColor())
+                .fg(descriptor.getForegroundColor())
+                .attr(descriptor.getAttributes());
     }
 
     public static class Builder {

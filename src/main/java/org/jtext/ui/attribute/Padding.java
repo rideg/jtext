@@ -70,19 +70,19 @@ public class Padding {
 
     public Padding consider(final Border border) {
         return Padding.of(top + border.getTopThickness(),
-                          right + border.getRightThickness(),
-                          bottom + border.getBottomThickness(),
-                          left + border.getLeftThickness()
-                         );
+                right + border.getRightThickness(),
+                bottom + border.getBottomThickness(),
+                left + border.getLeftThickness()
+        );
     }
 
     @Override
     public String toString() {
         return "Padding{" +
-               "top=" + top +
-               ", right=" + right +
-               ", bottom=" + bottom +
-               ", left=" + left +
-               '}';
+                "top=" + top +
+                ", right=" + right +
+                ", bottom=" + bottom +
+                ", left=" + left +
+                '}';
     }
 }

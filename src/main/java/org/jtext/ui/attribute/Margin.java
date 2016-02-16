@@ -36,10 +36,10 @@ public class Margin {
     @Override
     public String toString() {
         return "Margin{" +
-               "top=" + top +
-               ", right=" + right +
-               ", bottom=" + bottom +
-               ", left=" + left +
-               '}';
+                "top=" + top +
+                ", right=" + right +
+                ", bottom=" + bottom +
+                ", left=" + left +
+                '}';
     }
 }

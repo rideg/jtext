@@ -31,46 +31,46 @@ public class Main {
         final Container mainContainer = new Container(Layouts.vertical(VerticalAlign.TOP));
 
         final Panel top = new Panel(
-                                           Layouts.horizontal(HorizontalAlign.LEFT),
-                                           Occupation.fill(),
-                                           Occupation.fixed(1),
-                                           Border.no(),
-                                           Padding.horizontal(1));
+                Layouts.horizontal(HorizontalAlign.LEFT),
+                Occupation.fill(),
+                Occupation.fixed(1),
+                Border.no(),
+                Padding.horizontal(1));
 
         final Container center = new Container(Layouts.horizontal(VerticalAlign.TOP));
 
         final Panel left = new Panel(Layouts.vertical(HorizontalAlign.LEFT),
-                                     Occupation.percent(30),
-                                     Occupation.fill(),
-                                     Border.single(),
-                                     Padding.full(1),
-                                     CharacterColor.BLUE);
+                Occupation.percent(30),
+                Occupation.fill(),
+                Border.single(),
+                Padding.full(1),
+                CharacterColor.BLUE);
 
         final Label labelLeft = new Label(CellDescriptor.builder()
-                                                  .fg(CharacterColor.WHITE)
-                                                  .bg(CharacterColor.BLUE)
-                                                  .attr(CharacterAttribute.BOLD)
-                                                  .create(),
-                                          "Left Panel!");
+                .fg(CharacterColor.WHITE)
+                .bg(CharacterColor.BLUE)
+                .attr(CharacterAttribute.BOLD)
+                .create(),
+                "Left Panel!");
 
         left.add(labelLeft);
 
         final Panel right = new Panel(
-                                             Layouts.vertical(HorizontalAlign.RIGHT),
-                                             Occupation.fill(),
-                                             Occupation.fill(),
-                                             Border.no(),
-                                             Padding.full(1),
-                                             CharacterColor.CYAN
+                Layouts.vertical(HorizontalAlign.RIGHT),
+                Occupation.fill(),
+                Occupation.fill(),
+                Border.no(),
+                Padding.full(1),
+                CharacterColor.CYAN
         );
 
         final Label labelRight = new Label(
-                                                  CellDescriptor.builder()
-                                                          .fg(CharacterColor.WHITE)
-                                                          .bg(CharacterColor.CYAN)
-                                                          .attr(CharacterAttribute.BOLD)
-                                                          .create(),
-                                                  "Right Panel!");
+                CellDescriptor.builder()
+                        .fg(CharacterColor.WHITE)
+                        .bg(CharacterColor.CYAN)
+                        .attr(CharacterAttribute.BOLD)
+                        .create(),
+                "Right Panel!");
 
         left.add(labelRight);
 
@@ -78,9 +78,9 @@ public class Main {
         center.add(right);
 
         final Panel bottom = new Panel(
-                                              Layouts.vertical(HorizontalAlign.LEFT),
-                                              Occupation.fill(),
-                                              Occupation.fixed(1)
+                Layouts.vertical(HorizontalAlign.LEFT),
+                Occupation.fill(),
+                Occupation.fixed(1)
         );
 
 

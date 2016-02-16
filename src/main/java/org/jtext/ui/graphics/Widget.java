@@ -97,11 +97,11 @@ public abstract class Widget {
         if (direction == Direction.HORIZONTAL) {
             int pref = (isFilling(getPreferredWidth()) ? getMinWidth() : getPreferredWidth()).toReal(availableSpace);
             return new WidgetDescriptor(pref, getMinWidth().toReal(availableSpace),
-                                        getMaxWidth().toReal(availableSpace));
+                    getMaxWidth().toReal(availableSpace));
         } else {
             int pref = (isFilling(getPreferredHeight()) ? getMinHeight() : getPreferredHeight()).toReal(availableSpace);
             return new WidgetDescriptor(pref, getMinHeight().toReal(availableSpace),
-                                        getMaxHeight().toReal(availableSpace));
+                    getMaxHeight().toReal(availableSpace));
         }
     }
 

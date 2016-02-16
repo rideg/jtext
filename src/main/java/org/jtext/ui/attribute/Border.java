@@ -7,19 +7,19 @@ import java.util.Optional;
 public class Border {
 
     private static final Border NO_BORDER = new Border(Optional.empty(), Optional.empty(), Optional.empty(),
-                                                      Optional.empty(), Optional.empty(), Optional.empty(),
-                                                      Optional.empty(), Optional.empty());
+            Optional.empty(), Optional.empty(), Optional.empty(),
+            Optional.empty(), Optional.empty());
 
     private static final Border SINGLE = new Border(CellDescriptor.builder().create(),
-                                                   '┌', '─', '┐', '│', '┘', '─', '└', '│'
+            '┌', '─', '┐', '│', '┘', '─', '└', '│'
     );
 
     private static final Border DUAL = new Border(CellDescriptor.builder().create(),
-                                                   '╔', '═', '╗', '║', '╝', '═', '╚', '║'
+            '╔', '═', '╗', '║', '╝', '═', '╚', '║'
     );
 
     private static final Border ROUNDED_SINGLE = new Border(CellDescriptor.builder().create(),
-                                                           '╭', '─', '╮', '│', '╯', '─', '╰', '│'
+            '╭', '─', '╮', '│', '╯', '─', '╰', '│'
     );
 
 
@@ -62,7 +62,7 @@ public class Border {
                 Optional.of(descriptor.ch(bottom)),
                 Optional.of(descriptor.ch(bottomLeft)),
                 Optional.of(descriptor.ch(left))
-            );
+        );
 
     }
 
@@ -88,38 +88,38 @@ public class Border {
 
     public Border changeCell(final CellDescriptor descriptor) {
         return new Border(topLeft.map(v -> descriptor.ch(v.getCharacter())),
-                          top.map(v -> descriptor.ch(v.getCharacter())),
-                          topRight.map(v -> descriptor.ch(v.getCharacter())),
-                          right.map(v -> descriptor.ch(v.getCharacter())),
-                          bottomRight.map(v -> descriptor.ch(v.getCharacter())),
-                          bottom.map(v -> descriptor.ch(v.getCharacter())),
-                          bottomLeft.map(v -> descriptor.ch(v.getCharacter())),
-                          left.map(v -> descriptor.ch(v.getCharacter())));
+                top.map(v -> descriptor.ch(v.getCharacter())),
+                topRight.map(v -> descriptor.ch(v.getCharacter())),
+                right.map(v -> descriptor.ch(v.getCharacter())),
+                bottomRight.map(v -> descriptor.ch(v.getCharacter())),
+                bottom.map(v -> descriptor.ch(v.getCharacter())),
+                bottomLeft.map(v -> descriptor.ch(v.getCharacter())),
+                left.map(v -> descriptor.ch(v.getCharacter())));
     }
 
 
     public int getTopThickness() {
         return top.isPresent() ||
-               (!left.isPresent() && topLeft.isPresent()) ||
-               (!right.isPresent() && topRight.isPresent()) ? 1 : 0;
+                (!left.isPresent() && topLeft.isPresent()) ||
+                (!right.isPresent() && topRight.isPresent()) ? 1 : 0;
     }
 
     public int getLeftThickness() {
         return left.isPresent() ||
-               (!top.isPresent() && topLeft.isPresent()) ||
-               (!bottom.isPresent() && bottomLeft.isPresent()) ? 1 : 0;
+                (!top.isPresent() && topLeft.isPresent()) ||
+                (!bottom.isPresent() && bottomLeft.isPresent()) ? 1 : 0;
     }
 
     public int getRightThickness() {
         return right.isPresent() ||
-               (!top.isPresent() && topRight.isPresent()) ||
-               (!bottom.isPresent() && bottomRight.isPresent()) ? 1 : 0;
+                (!top.isPresent() && topRight.isPresent()) ||
+                (!bottom.isPresent() && bottomRight.isPresent()) ? 1 : 0;
     }
 
     public int getBottomThickness() {
         return bottom.isPresent() ||
-               (!left.isPresent() && bottomLeft.isPresent()) ||
-               (!right.isPresent() && bottomRight.isPresent()) ? 1 : 0;
+                (!left.isPresent() && bottomLeft.isPresent()) ||
+                (!right.isPresent() && bottomRight.isPresent()) ? 1 : 0;
     }
 
 }

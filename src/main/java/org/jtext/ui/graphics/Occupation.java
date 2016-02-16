@@ -54,6 +54,7 @@ public abstract class Occupation {
             return size;
         }
     }
+
     public static class Proportional extends Occupation {
         public static final BigDecimal DIVISOR = new BigDecimal(100);
         private final BigDecimal percentage;

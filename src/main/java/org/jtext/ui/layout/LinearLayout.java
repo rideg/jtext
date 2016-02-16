@@ -127,8 +127,8 @@ public class LinearLayout extends Layout {
             if (target != 0) {
                 final WidgetDescriptor d = processedWidgets.get(w);
                 int reduction = min(max((target * d.optional + (preProcessingResults.optionalSpace >> 1)) /
-                                        preProcessingResults.optionalSpace, 1),
-                                    min(target, d.optional));
+                                preProcessingResults.optionalSpace, 1),
+                        min(target, d.optional));
                 d.toUse = d.preferred - reduction;
                 d.optional = d.toUse - d.minimum;
                 preProcessingResults.requiredSpace -= reduction;
@@ -149,7 +149,7 @@ public class LinearLayout extends Layout {
             final int realHeight = w.getRealHeight(dimension.height);
             final int realWidth = d.toUse == -1 ? sizeFun.apply(d) : d.toUse;
             widgets.put(w, Rectangle.of(x + max(margin.left, shift), getStartY(realHeight, margin),
-                                        realWidth, realHeight));
+                    realWidth, realHeight));
             x += max(margin.left, shift) + realWidth + margin.right;
             shift = 0;
         }

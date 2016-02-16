@@ -1,7 +1,5 @@
 package org.jtext.ui.graphics;
 
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -12,7 +10,7 @@ public class RectangleTest {
 
     @Test
     public void shouldResize() throws Exception {
-        assertThat(Rectangle.of(0,0,5,5).resize(Dimension.of(10, 10)), is(Rectangle.of(0, 0, 10, 10)));
+        assertThat(Rectangle.of(0, 0, 5, 5).resize(Dimension.of(10, 10)), is(Rectangle.of(0, 0, 10, 10)));
     }
 
     @Test

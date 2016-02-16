@@ -82,14 +82,24 @@ public class Rectangle {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         final Rectangle rectangle = (Rectangle) o;
 
-        if (x != rectangle.x) { return false; }
-        if (y != rectangle.y) { return false; }
-        if (width != rectangle.width) { return false; }
+        if (x != rectangle.x) {
+            return false;
+        }
+        if (y != rectangle.y) {
+            return false;
+        }
+        if (width != rectangle.width) {
+            return false;
+        }
         return height == rectangle.height;
 
     }
@@ -106,11 +116,11 @@ public class Rectangle {
     @Override
     public String toString() {
         return "Rectangle{" +
-               "x=" + x +
-               ", y=" + y +
-               ", width=" + width +
-               ", height=" + height +
-               '}';
+                "x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
     }
 
 }
