@@ -8,11 +8,15 @@ import org.jtext.ui.graphics.Rectangle;
 import org.jtext.ui.graphics.Widget;
 import org.jtext.ui.graphics.Widget.WidgetDescriptor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.util.Collections.sort;
 import static org.jtext.ui.graphics.Occupation.isFilling;
 
 public class LinearLayout extends Layout {
@@ -23,7 +27,7 @@ public class LinearLayout extends Layout {
 
     private final List<Widget> visibleWidgets = new ArrayList<>();
     private final Map<Widget, WidgetDescriptor> processedWidgets = new HashMap<>();
-    private final List<Widget> widgetsWithBuffer = new ArrayList<>();
+    private final List<Widget> widgetsWithOptionalSpace = new ArrayList<>();
     private final List<Widget> fillingWidgets = new ArrayList<>();
 
 
@@ -49,40 +53,21 @@ public class LinearLayout extends Layout {
         }
     }
 
-
-    private void placeWidgets(final PreProcessingResults preProcessingResults) {
-        final Function<WidgetDescriptor, Integer> sizeFunction =
-                preProcessingResults.requiredSpace - preProcessingResults.buffer > dimension.width ? d -> d.min
-                                                                                                   : d -> d.pref;
-        int shift = calculateInitialShift(preProcessingResults);
-        int x = 0;
-        for (final Widget w : visibleWidgets) {
-            final WidgetDescriptor d = processedWidgets.get(w);
-            final Margin margin = w.getMargin();
-            final int realHeight = w.getRealHeight(dimension.height);
-            final int realWidth = d.toUse == -1 ? sizeFunction.apply(d) : d.toUse;
-            widgets.put(w, Rectangle.of(x + max(margin.left, shift), getStartY(realHeight, margin),
-                                        realWidth, realHeight));
-            x += max(margin.left, shift) + realWidth + margin.right;
-            shift = 0;
-        }
-    }
-
     private PreProcessingResults preProcessWidgets() {
         final PreProcessingResults results = new PreProcessingResults();
-        for (final Widget widget : widgetOrder) {
+        for (final Widget widget : widgetsInOrder) {
             if (widget.isVisible()) {
                 final WidgetDescriptor descriptor = widget.getDescriptor(dimension.width, direction);
 
                 if (isFilling(widget.getPreferredWidth())) {
-                    results.nrOfFills++;
+                    results.numberOfFillingWidgets++;
                     fillingWidgets.add(widget);
                 }
 
-                results.requiredSpace += descriptor.pref + widget.getMargin().horizontalSpacing();
-                results.buffer += descriptor.opt;
-                if (descriptor.opt > 0) {
-                    widgetsWithBuffer.add(widget);
+                results.requiredSpace += descriptor.preferred + widget.getMargin().horizontalSpacing();
+                results.optionalSpace += descriptor.optional;
+                if (descriptor.optional > 0) {
+                    widgetsWithOptionalSpace.add(widget);
                 }
                 processedWidgets.put(widget, descriptor);
                 visibleWidgets.add(widget);
@@ -93,60 +78,81 @@ public class LinearLayout extends Layout {
         return results;
     }
 
+    private boolean shouldFillRemainingSpace(final PreProcessingResults preProcessingResults) {
+        return dimension.width > preProcessingResults.requiredSpace && preProcessingResults.numberOfFillingWidgets > 0;
+    }
+
     private void fillRemainingSpace(final PreProcessingResults preProcessingResults) {
         int remaining = dimension.width - preProcessingResults.requiredSpace;
-        while (true) {
-            int additional = remaining / preProcessingResults.nrOfFills;
-            int reminder = remaining % preProcessingResults.nrOfFills;
+        while (preProcessingResults.numberOfFillingWidgets > 0) {
+            int additional = remaining / preProcessingResults.numberOfFillingWidgets;
+            int reminder = remaining % preProcessingResults.numberOfFillingWidgets;
             final List<Widget> smallerWidgets = new ArrayList<>();
             for (final Widget w : fillingWidgets) {
                 final WidgetDescriptor d = processedWidgets.get(w);
-                int toUse = d.pref + additional + (reminder-- > 0 ? 1 : 0);
-                if (toUse > d.max) {
-                    d.toUse = d.max;
-                    remaining -= d.max - d.pref;
+                // maybe the reminder space could be
+                // distributed more equally
+                int toUse = d.preferred + additional + (reminder-- > 0 ? 1 : 0);
+                if (toUse > d.maximum) {
+                    d.toUse = d.maximum;
+                    remaining -= d.maximum - d.preferred;
                     smallerWidgets.add(w);
                 }
             }
             fillingWidgets.removeAll(smallerWidgets);
-            preProcessingResults.nrOfFills -= smallerWidgets.size();
-            if (smallerWidgets.isEmpty() || preProcessingResults.nrOfFills == 0) {
+            preProcessingResults.numberOfFillingWidgets -= smallerWidgets.size();
+            if (smallerWidgets.isEmpty()) {
                 for (final Widget w : fillingWidgets) {
                     final WidgetDescriptor d = processedWidgets.get(w);
-                    d.toUse = d.pref + additional + (reminder-- > 0 ? 1 : 0);
+                    d.toUse = d.preferred + additional + (reminder-- > 0 ? 1 : 0);
                 }
-                break;
+                preProcessingResults.numberOfFillingWidgets = 0;
             }
         }
         preProcessingResults.requiredSpace = dimension.width;
     }
 
-    private boolean shouldFillRemainingSpace(final PreProcessingResults preProcessingResults) {
-        return dimension.width > preProcessingResults.requiredSpace && preProcessingResults.nrOfFills > 0;
+    private boolean shouldShrinkWidgets(final PreProcessingResults preProcessingResults) {
+        return dimension.width < preProcessingResults.requiredSpace && optionalSpaceRemains(preProcessingResults);
+    }
+
+    private boolean optionalSpaceRemains(final PreProcessingResults preProcessingResults) {
+        return preProcessingResults.requiredSpace <= dimension.width + preProcessingResults.optionalSpace;
     }
 
     private void shrinkWidgets(final PreProcessingResults preProcessingResults) {
-        Collections.sort(widgetsWithBuffer, (a, b) -> processedWidgets.get(a).compareTo(processedWidgets.get(b)));
-        for (final Widget w : widgetsWithBuffer) {
+        sort(widgetsWithOptionalSpace, (a, b) -> processedWidgets.get(a).compareTo(processedWidgets.get(b)));
+        for (final Widget w : widgetsWithOptionalSpace) {
             final int target = preProcessingResults.requiredSpace - dimension.width;
             if (target != 0) {
                 final WidgetDescriptor d = processedWidgets.get(w);
-                int reduction =
-                        min(max((target * d.opt + (preProcessingResults.buffer >> 1)) / preProcessingResults.buffer, 1),
-                            min(target, d.opt));
-                d.toUse = d.pref - reduction;
-                d.opt = d.toUse - d.min;
+                int reduction = min(max((target * d.optional + (preProcessingResults.optionalSpace >> 1)) /
+                                        preProcessingResults.optionalSpace, 1),
+                                    min(target, d.optional));
+                d.toUse = d.preferred - reduction;
+                d.optional = d.toUse - d.minimum;
                 preProcessingResults.requiredSpace -= reduction;
-                preProcessingResults.buffer -= reduction;
+                preProcessingResults.optionalSpace -= reduction;
             } else {
                 break;
             }
         }
     }
 
-    private boolean shouldShrinkWidgets(final PreProcessingResults preProcessingResults) {
-        return dimension.width < preProcessingResults.requiredSpace &&
-               preProcessingResults.requiredSpace <= dimension.width + preProcessingResults.buffer;
+    private void placeWidgets(final PreProcessingResults results) {
+        Function<WidgetDescriptor, Integer> sizeFun = optionalSpaceRemains(results) ? d -> d.preferred : d -> d.minimum;
+        int shift = calculateInitialShift(results);
+        int x = 0;
+        for (final Widget w : visibleWidgets) {
+            final WidgetDescriptor d = processedWidgets.get(w);
+            final Margin margin = w.getMargin();
+            final int realHeight = w.getRealHeight(dimension.height);
+            final int realWidth = d.toUse == -1 ? sizeFun.apply(d) : d.toUse;
+            widgets.put(w, Rectangle.of(x + max(margin.left, shift), getStartY(realHeight, margin),
+                                        realWidth, realHeight));
+            x += max(margin.left, shift) + realWidth + margin.right;
+            shift = 0;
+        }
     }
 
     private int calculateInitialShift(final PreProcessingResults results) {
@@ -156,10 +162,11 @@ public class LinearLayout extends Layout {
                 shift = dimension.width - results.requiredSpace;
             }
             if (horizontalAlign == HorizontalAlign.CENTER) {
-                int left = visibleWidgets.get(0).getMargin().left;
-                int right = visibleWidgets.get(visibleWidgets.size() - 1).getMargin().right;
+                final Widget firstWidget = visibleWidgets.get(0);
+                final Widget lastWidget = visibleWidgets.get(visibleWidgets.size() - 1);
+                int left = firstWidget.getMargin().left;
+                int right = lastWidget.getMargin().right;
                 int withoutMargin = dimension.width - results.requiredSpace + left + right;
-
                 shift = withoutMargin / 2;
                 int reminder = withoutMargin % 2;
 
@@ -176,7 +183,7 @@ public class LinearLayout extends Layout {
     private void clearAuxiliaries() {
         visibleWidgets.clear();
         processedWidgets.clear();
-        widgetsWithBuffer.clear();
+        widgetsWithOptionalSpace.clear();
         fillingWidgets.clear();
     }
 
@@ -198,8 +205,8 @@ public class LinearLayout extends Layout {
 
     private static class PreProcessingResults {
         int requiredSpace;
-        int buffer;
-        int nrOfFills;
+        int optionalSpace;
+        int numberOfFillingWidgets;
     }
 
 }

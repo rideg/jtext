@@ -108,21 +108,21 @@ public abstract class Widget {
     public static class WidgetDescriptor implements Comparable<WidgetDescriptor> {
 
         public int toUse = -1;
-        public int pref;
-        public int min;
-        public int opt;
-        public int max;
+        public int preferred;
+        public int minimum;
+        public int optional;
+        public int maximum;
 
-        public WidgetDescriptor(final int pref, final int min, final int max) {
-            this.pref = pref;
-            this.min = min;
-            this.opt = pref - min;
-            this.max = max;
+        public WidgetDescriptor(final int preferred, final int minimum, final int maximum) {
+            this.preferred = preferred;
+            this.minimum = minimum;
+            this.optional = preferred - minimum;
+            this.maximum = maximum;
         }
 
         @Override
         public int compareTo(final WidgetDescriptor o) {
-            return Integer.compare(o.opt, opt);
+            return Integer.compare(o.optional, optional);
         }
     }
 }

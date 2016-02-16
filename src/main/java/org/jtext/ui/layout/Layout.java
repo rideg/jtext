@@ -11,18 +11,18 @@ import java.util.Map;
 
 public abstract class Layout {
 
-    protected final List<Widget> widgetOrder = new LinkedList<>();
+    protected final List<Widget> widgetsInOrder = new LinkedList<>();
     protected final Map<Widget, Rectangle> widgets = new IdentityHashMap<>();
     protected Dimension dimension;
 
     public void addWidget(final Widget widget) {
-        widgetOrder.add(widget);
+        widgetsInOrder.add(widget);
         widgets.put(widget, Rectangle.empty());
     }
 
     public void removeWidget(final Widget widget) {
         widgets.remove(widget);
-        widgetOrder.remove(widget);
+        widgetsInOrder.remove(widget);
     }
 
     public void setDimension(final Dimension dimension) {
