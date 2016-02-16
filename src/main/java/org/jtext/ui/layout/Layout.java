@@ -16,25 +16,8 @@ public abstract class Layout {
     protected Dimension dimension;
 
     public void addWidget(final Widget widget) {
-        validate(widget);
         widgetOrder.add(widget);
         widgets.put(widget, Rectangle.empty());
-    }
-
-    private void validate(final Widget widget) {
-        if (widget.getPreferredWidth().toReal(Integer.MAX_VALUE) > widget.getMaxWidth().toReal(Integer.MAX_VALUE)) {
-            throw new IllegalArgumentException("Preferred width must be smaller or equal to maximum width");
-        }
-        if (widget.getPreferredWidth().toReal(Integer.MAX_VALUE) < widget.getMinWidth().toReal(Integer.MAX_VALUE)) {
-            throw new IllegalArgumentException("Preferred width must be greater or equal to minimum width");
-        }
-
-        if (widget.getPreferredHeight().toReal(Integer.MAX_VALUE) > widget.getMaxHeight().toReal(Integer.MAX_VALUE)) {
-            throw new IllegalArgumentException("Preferred height must be smaller or equal to maximum width");
-        }
-        if (widget.getPreferredHeight().toReal(Integer.MAX_VALUE) < widget.getMinHeight().toReal(Integer.MAX_VALUE)) {
-            throw new IllegalArgumentException("Preferred height must be greater or equal to minimum width");
-        }
     }
 
     public void removeWidget(final Widget widget) {

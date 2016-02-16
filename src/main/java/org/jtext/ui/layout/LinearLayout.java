@@ -7,9 +7,11 @@ import org.jtext.ui.attribute.VerticalAlign;
 import org.jtext.ui.graphics.Rectangle;
 import org.jtext.ui.graphics.Widget;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
 
+import static java.math.RoundingMode.HALF_UP;
 import static org.jtext.ui.graphics.Occupation.isFilling;
 
 public class LinearLayout extends Layout {
@@ -28,78 +30,128 @@ public class LinearLayout extends Layout {
 
     @Override
     protected void updateWidgetAreas() {
-        final List<Widget> visibleWidgets = widgetOrder.stream().filter(Widget::isVisible).collect(Collectors.toList());
-        widgetOrder.stream().filter(w -> !w.isVisible()).forEach(w -> widgets.put(w, Rectangle.empty()));
 
-        if (visibleWidgets.isEmpty()) {
+        final List<Widget> visibleWidgets = new ArrayList<>();
+        final Map<Widget, Descriptor> processedWidgets = new HashMap<>();
+        final List<Widget> widgetsWithBuffer = new ArrayList<>();
+        final List<Widget> fillingWidgets = new ArrayList<>();
+
+        int requiredSpace = 0;
+        int buffer = 0;
+        int nrOfFills = 0;
+        for (final Widget w : widgetOrder) {
+            if (w.isVisible()) {
+                final Descriptor d = Descriptor.from(w, dimension.width);
+                if (isFilling(w.getPreferredWidth())) {
+                    nrOfFills++;
+                    fillingWidgets.add(w);
+                }
+                requiredSpace += d.pref + w.getMargin().horizontalSpacing();
+                buffer += d.opt;
+                if (d.opt > 0) {
+                    widgetsWithBuffer.add(w);
+                }
+                processedWidgets.put(w, d);
+                visibleWidgets.add(w);
+            } else {
+                widgets.put(w, Rectangle.empty());
+            }
+        }
+
+        if (processedWidgets.isEmpty()) {
             return;
         }
 
-        int remaining = dimension.width;
-        int startX = 0;
-        int numberOfFillingWidgets = 0;
-
-        for (final Widget widget : visibleWidgets) {
-            if (!isFilling(widget.getPreferredWidth())) {
-                final Margin margin = widget.getMargin();
-                int realWidth = widget.getPreferredWidth().toReal(dimension.width);
-                int realHeight = widget.getRealHeight(dimension.height);
-
-                int startY = getStartY(realHeight, margin);
-
-                widgets.put(widget, Rectangle.of(startX + margin.left, startY, realWidth, realHeight));
-                remaining -= realWidth + margin.horizontalSpacing();
-                startX += realWidth + margin.horizontalSpacing();
-            } else {
-                numberOfFillingWidgets++;
+        if (nrOfFills > 0) {
+            if (dimension.width > requiredSpace) {
+                int remaining = dimension.width - requiredSpace;
+                while (true) {
+                    int additional = remaining / nrOfFills;
+                    int reminder = remaining % nrOfFills;
+                    final List<Widget> smallerWidgets = new ArrayList<>();
+                    for (final Widget w : fillingWidgets) {
+                        final Descriptor d = processedWidgets.get(w);
+                        int toUse = d.pref + additional + (reminder-- > 0 ? 1 : 0);
+                        if (toUse > d.max) {
+                            d.toUse = d.max;
+                            remaining -= d.max - d.pref;
+                            smallerWidgets.add(w);
+                        }
+                    }
+                    fillingWidgets.removeAll(smallerWidgets);
+                    nrOfFills -= smallerWidgets.size();
+                    if (smallerWidgets.isEmpty() || nrOfFills == 0) {
+                        for (final Widget w : fillingWidgets) {
+                            final Descriptor d = processedWidgets.get(w);
+                            d.toUse = d.pref + additional + (reminder-- > 0 ? 1 : 0);
+                        }
+                        break;
+                    }
+                }
+                requiredSpace = dimension.width;
             }
         }
 
-        if (numberOfFillingWidgets > 0) {
-            int shift = 0;
-            startX = 0;
-            int fillingWidth = remaining / numberOfFillingWidgets;
-            int remainder = remaining % numberOfFillingWidgets;
-            for (Widget widget : visibleWidgets) {
-                if (isFilling(widget.getPreferredWidth())) {
-                    final int widthCandidate = fillingWidth + (remainder > 0 ? 1 : 0);
-                    final int width = Math.min(widthCandidate, widget.getMaxWidth().toReal(dimension.width));
-                    if (width == widthCandidate) {
-                        remainder--;
-                    }
-                    int realHeight = widget.getRealHeight(dimension.height);
-                    final Margin margin = widget.getMargin();
-                    int startY = getStartY(realHeight, margin);
-                    widgets.put(widget, Rectangle.of(startX + margin.left, startY, width, realHeight));
-                    startX += width + margin.horizontalSpacing();
-                    shift += width + margin.horizontalSpacing();
-                } else {
-                    Rectangle shifted = widgets.get(widget).shiftX(shift);
-                    widgets.put(widget, shifted);
-                    startX += shifted.x + shifted.width + widget.getMargin().right;
+        final Function<Descriptor, Integer> sizeFunction =
+                requiredSpace - buffer > dimension.width ? d -> d.min : d -> d.pref;
+
+        if (dimension.width < requiredSpace && requiredSpace <= dimension.width + buffer) {
+            Collections.sort(widgetsWithBuffer, (a, b) -> processedWidgets.get(a).compareTo(processedWidgets.get(b)));
+
+
+            for (final Widget w : widgetsWithBuffer) {
+                final BigDecimal target = new BigDecimal(requiredSpace - dimension.width);
+                if (target.equals(BigDecimal.ZERO)) {
+                    break;
+                }
+                final Descriptor d = processedWidgets.get(w);
+                int reduction = Math.max(
+                        target.multiply(new BigDecimal(d.opt).divide(new BigDecimal(buffer), 2, HALF_UP))
+                                .setScale(0, HALF_UP)
+                                .intValue(), 1);
+
+                reduction = Math.min(reduction, target.intValue());
+                reduction = Math.min(reduction, d.opt);
+
+                d.toUse = d.pref - reduction;
+                d.opt = d.toUse - d.min;
+                requiredSpace -= reduction;
+                buffer -= reduction;
+            }
+        }
+
+        int x = 0;
+        int shift = 0;
+        if (requiredSpace < dimension.width) {
+            if (horizontalAlign == HorizontalAlign.RIGHT) {
+                shift = dimension.width - requiredSpace;
+            }
+            if (horizontalAlign == HorizontalAlign.CENTER) {
+                int left = visibleWidgets.get(0).getMargin().left;
+                int right = visibleWidgets.get(visibleWidgets.size() - 1).getMargin().right;
+                int withoutMargin = dimension.width - requiredSpace + left + right;
+
+                shift = withoutMargin / 2;
+                int reminder = withoutMargin % 2;
+
+                if (left > shift) {
+                    shift = left;
+                } else if (right > shift + reminder) {
+                    shift -= right - shift - reminder;
                 }
             }
-        } else if (horizontalAlign != HorizontalAlign.LEFT && remaining > 0) {
-            final Widget firstWidget = visibleWidgets.get(0);
-            final Widget lastWidget = visibleWidgets.get(visibleWidgets.size() - 1);
+        }
 
-            remaining += firstWidget.getMargin().left;
-            remaining += lastWidget.getMargin().right;
-
-            int shift = horizontalAlign == HorizontalAlign.CENTER ? remaining / 2 : remaining;
-
-            if (shift < firstWidget.getMargin().left && horizontalAlign == HorizontalAlign.CENTER) {
-                shift = firstWidget.getMargin().left;
-            }
-
-            if (horizontalAlign == HorizontalAlign.RIGHT) {
-                shift -= lastWidget.getMargin().right;
-            }
-
-            for (final Widget widget : visibleWidgets) {
-                final int tmpShift = widget == firstWidget ? shift - widget.getMargin().left : shift;
-                widgets.put(widget, widgets.get(widget).shiftX(tmpShift));
-            }
+        for (final Widget w : visibleWidgets) {
+            final Descriptor d = processedWidgets.get(w);
+            final Margin margin = w.getMargin();
+            final int realHeight = w.getRealHeight(dimension.height);
+            final int realWidth = d.toUse == -1 ? sizeFunction.apply(d) : d.toUse;
+            widgets.put(w, Rectangle.of(x + Math.max(margin.left, shift),
+                                        getStartY(realHeight, margin),
+                                        realWidth, realHeight));
+            x += Math.max(margin.left, shift) + realWidth + margin.right;
+            shift = 0;
         }
     }
 
@@ -117,5 +169,34 @@ public class LinearLayout extends Layout {
             }
         }
         return ret;
+    }
+
+    private static class Descriptor implements Comparable<Descriptor> {
+
+        public int toUse = -1;
+        public int pref;
+        public int min;
+        public int opt;
+        public int max;
+
+        public Descriptor(final int pref, final int min, final int max) {
+            this.pref = pref;
+            this.min = min;
+            this.opt = pref - min;
+            this.max = max;
+        }
+
+        public static Descriptor from(final Widget widget, int available) {
+            int pref = (isFilling(widget.getPreferredWidth()) ?
+                        widget.getMinWidth() :
+                        widget.getPreferredWidth()).toReal(available);
+            return new Descriptor(pref, widget.getMinWidth().toReal(available), widget.getMaxWidth().toReal(available));
+        }
+
+
+        @Override
+        public int compareTo(final Descriptor o) {
+            return Integer.compare(o.opt, opt);
+        }
     }
 }

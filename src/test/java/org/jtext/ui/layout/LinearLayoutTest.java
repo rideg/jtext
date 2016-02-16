@@ -1,6 +1,5 @@
 package org.jtext.ui.layout;
 
-import org.hamcrest.core.Is;
 import org.jtext.testsupport.DummyWidget;
 import org.jtext.ui.attribute.HorizontalAlign;
 import org.jtext.ui.attribute.Margin;
@@ -8,11 +7,12 @@ import org.jtext.ui.attribute.VerticalAlign;
 import org.jtext.ui.graphics.Dimension;
 import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Rectangle;
-import org.junit.Assert;
-import org.junit.Ignore;
+import org.jtext.ui.graphics.Widget;
 import org.junit.Test;
 
+import static org.hamcrest.core.Is.is;
 import static org.jtext.ui.graphics.Occupation.*;
+import static org.junit.Assert.assertThat;
 
 public class LinearLayoutTest {
 
@@ -52,9 +52,9 @@ public class LinearLayoutTest {
 
 
     private static final DummyWidget FIXED_SMALL_WIDGET_MARGIN = new DummyWidget(fixed(1), fixed(1), fixed(1),
-                                                                           fixed(1), fixed(1), fixed(1),
-                                                                           Margin.of(0, 3, 0, 1),
-                                                                           Position.RELATIVE);
+                                                                                 fixed(1), fixed(1), fixed(1),
+                                                                                 Margin.of(0, 3, 0, 1),
+                                                                                 Position.RELATIVE);
 
 
     private static final DummyWidget FIXED_SMALL_WIDGET_MARGIN_MIN_SIZE = new DummyWidget(fixed(2), fixed(1), fixed(1),
@@ -75,7 +75,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FIXED_WIDGET);
-        Assert.assertThat(area, Is.is(Rectangle.of(0, 0, 6, 6)));
+        assertThat(area, is(Rectangle.of(0, 0, 6, 6)));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class LinearLayoutTest {
         // then
         final Rectangle area = layout.getAreaFor(FIXED_WIDGET);
 
-        Assert.assertThat(area, Is.is(Rectangle.of(44, 0, 6, 6)));
+        assertThat(area, is(Rectangle.of(44, 0, 6, 6)));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FIXED_WIDGET);
-        Assert.assertThat(area, Is.is(Rectangle.of(22, 0, 6, 6)));
+        assertThat(area, is(Rectangle.of(22, 0, 6, 6)));
     }
 
 
@@ -122,8 +122,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(0, 0, 6, 6)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(6, 0, 4, 4)));
+        assertThat(area1, is(Rectangle.of(0, 0, 6, 6)));
+        assertThat(area2, is(Rectangle.of(6, 0, 4, 4)));
     }
 
     @Test
@@ -140,8 +140,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(40, 0, 6, 6)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(46, 0, 4, 4)));
+        assertThat(area1, is(Rectangle.of(40, 0, 6, 6)));
+        assertThat(area2, is(Rectangle.of(46, 0, 4, 4)));
     }
 
     @Test
@@ -158,11 +158,10 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(20, 0, 6, 6)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(26, 0, 4, 4)));
+        assertThat(area1, is(Rectangle.of(20, 0, 6, 6)));
+        assertThat(area2, is(Rectangle.of(26, 0, 4, 4)));
     }
 
-    @Ignore
     @Test
     public void shouldConsiderMinWidth() throws Exception {
 
@@ -175,12 +174,11 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FIXED_WIDGET);
-        Assert.assertThat(area, Is.is(Rectangle.of(0, 0, 4, 6)));
+        assertThat(area, is(Rectangle.of(0, 0, 4, 6)));
     }
 
-    @Ignore
     @Test
-    public void shouldUseMinWidthIfAvailableSpaceIsLess() throws Exception {
+    public void shouldUseMinWidthIfLessSpaceIsAvailable() throws Exception {
 
         // given
         layout = Layouts.horizontal(HorizontalAlign.LEFT);
@@ -191,7 +189,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FIXED_WIDGET);
-        Assert.assertThat(area, Is.is(Rectangle.of(0, 0, 3, 6)));
+        assertThat(area, is(Rectangle.of(0, 0, 3, 6)));
     }
 
     @Test
@@ -208,8 +206,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET_MARGIN);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
         final Margin margin = FIXED_WIDGET_MARGIN.getMargin();
-        Assert.assertThat(area1, Is.is(Rectangle.of(margin.left, 19 - margin.bottom, 6, 6)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(6 + margin.left + margin.right, 21, 4, 4)));
+        assertThat(area1, is(Rectangle.of(margin.left, 19 - margin.bottom, 6, 6)));
+        assertThat(area2, is(Rectangle.of(6 + margin.left + margin.right, 21, 4, 4)));
     }
 
     @Test
@@ -223,7 +221,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FIXED_WIDGET);
-        Assert.assertThat(area, Is.is(Rectangle.of(22, 0, 6, 3)));
+        assertThat(area, is(Rectangle.of(22, 0, 6, 3)));
     }
 
     @Test
@@ -237,7 +235,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FILLING_WIDGET);
-        Assert.assertThat(area, Is.is(Rectangle.of(0, 0, 50, 10)));
+        assertThat(area, is(Rectangle.of(0, 0, 50, 10)));
     }
 
     @Test
@@ -252,7 +250,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(PROPORTIONAL_WIDGET);
-        Assert.assertThat(area, Is.is(Rectangle.of(0, 0, 15, 5)));
+        assertThat(area, is(Rectangle.of(0, 0, 15, 5)));
 
     }
 
@@ -270,8 +268,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET_MARGIN);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
         final Margin margin = FIXED_WIDGET_MARGIN.getMargin();
-        Assert.assertThat(area1, Is.is(Rectangle.of(margin.left, margin.top, 6, 6)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(6 + margin.left + margin.right, 0, 4, 4)));
+        assertThat(area1, is(Rectangle.of(margin.left, margin.top, 6, 6)));
+        assertThat(area2, is(Rectangle.of(6 + margin.left + margin.right, 0, 4, 4)));
     }
 
     @Test
@@ -285,10 +283,9 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FIXED_SMALL_WIDGET_MARGIN);
-        Assert.assertThat(area, Is.is(Rectangle.of(3, 0, 1, 1)));
+        assertThat(area, is(Rectangle.of(3, 0, 1, 1)));
     }
 
-    @Ignore
     @Test
     public void shouldConsiderGiveLessSpaceForWidgetWithMarginToFulfillMarginRequirements() throws Exception {
         // given
@@ -300,7 +297,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FIXED_SMALL_WIDGET_MARGIN_MIN_SIZE);
-        Assert.assertThat(area, Is.is(Rectangle.of(0, 0, 1, 1)));
+        assertThat(area, is(Rectangle.of(1, 0, 1, 1)));
     }
 
     @Test
@@ -314,7 +311,7 @@ public class LinearLayoutTest {
 
         // then
         final Rectangle area = layout.getAreaFor(FILLING_WIDGET_WITH_MAX_SIZE);
-        Assert.assertThat(area, Is.is(Rectangle.of(0, 0, 30, 20)));
+        assertThat(area, is(Rectangle.of(0, 0, 30, 20)));
     }
 
     @Test
@@ -331,8 +328,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FILLING_WIDGET);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(0, 0, 6, 6)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(6, 0, 44, 25)));
+        assertThat(area1, is(Rectangle.of(0, 0, 6, 6)));
+        assertThat(area2, is(Rectangle.of(6, 0, 44, 25)));
     }
 
     @Test
@@ -349,8 +346,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(PROPORTIONAL_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FILLING_WIDGET);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(0, 0, 15, 12)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(15, 0, 35, 24)));
+        assertThat(area1, is(Rectangle.of(0, 0, 15, 12)));
+        assertThat(area2, is(Rectangle.of(15, 0, 35, 24)));
     }
 
     @Test
@@ -367,8 +364,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(PROPORTIONAL_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(0, 0, 15, 12)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(15, 0, 6, 6)));
+        assertThat(area1, is(Rectangle.of(0, 0, 15, 12)));
+        assertThat(area2, is(Rectangle.of(15, 0, 6, 6)));
     }
 
     @Test
@@ -385,8 +382,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FILLING_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FILLING_WIDGET_2);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(0, 0, 25, 10)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(25, 0, 25, 10)));
+        assertThat(area1, is(Rectangle.of(0, 0, 25, 10)));
+        assertThat(area2, is(Rectangle.of(25, 0, 25, 10)));
     }
 
     @Test
@@ -404,8 +401,49 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
 
-        Assert.assertThat(area1, Is.is(Rectangle.of(20, 0, 6, 6)));
-        Assert.assertThat(area2, Is.is(Rectangle.of(26, 0, 4, 4)));
+        assertThat(area1, is(Rectangle.of(20, 0, 6, 6)));
+        assertThat(area2, is(Rectangle.of(26, 0, 4, 4)));
     }
 
+    @Test
+    public void shouldSqueezeMultipleWidgets() throws Exception {
+
+        // given
+        layout = Layouts.horizontal(HorizontalAlign.LEFT);
+
+        final Widget widget1 = fixedWidget(4, 2);
+        final Widget widget2 = fixedWidget(3, 2);
+        final Widget widget3 = fixedWidget(5, 1);
+
+        // when
+        layout.addWidget(widget1);
+        layout.addWidget(widget2);
+        layout.addWidget(widget3);
+
+        // then
+        layout.setDimension(Dimension.of(9, 1));
+
+        assertThat(layout.getAreaFor(widget1), is(Rectangle.of(0, 0, 3, 1)));
+        assertThat(layout.getAreaFor(widget2), is(Rectangle.of(3, 0, 3, 1)));
+        assertThat(layout.getAreaFor(widget3), is(Rectangle.of(6, 0, 3, 1)));
+
+        // and
+        layout.setDimension(Dimension.of(6, 1));
+
+        assertThat(layout.getAreaFor(widget1), is(Rectangle.of(0, 0, 2, 1)));
+        assertThat(layout.getAreaFor(widget2), is(Rectangle.of(2, 0, 2, 1)));
+        assertThat(layout.getAreaFor(widget3), is(Rectangle.of(4, 0, 2, 1)));
+
+        // and
+        layout.setDimension(Dimension.of(4, 1));
+
+        assertThat(layout.getAreaFor(widget1), is(Rectangle.of(0, 0, 2, 1)));
+        assertThat(layout.getAreaFor(widget2), is(Rectangle.of(2, 0, 2, 1)));
+        assertThat(layout.getAreaFor(widget3), is(Rectangle.of(4, 0, 1, 1)));
+    }
+
+    private Widget fixedWidget(final int preferredWidth, final int minWidth) {
+        return new DummyWidget(fixed(preferredWidth), fixed(1), fixed(minWidth),
+                               fixed(1), fixed(preferredWidth), fixed(1), Position.RELATIVE, true);
+    }
 }
