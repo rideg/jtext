@@ -4,10 +4,7 @@ import org.jtext.testsupport.DummyWidget;
 import org.jtext.ui.attribute.HorizontalAlign;
 import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.attribute.VerticalAlign;
-import org.jtext.ui.graphics.Dimension;
-import org.jtext.ui.graphics.Position;
-import org.jtext.ui.graphics.Rectangle;
-import org.jtext.ui.graphics.Widget;
+import org.jtext.ui.graphics.*;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -477,6 +474,54 @@ public class LinearLayoutTest {
         assertThat(layout.getAreaFor(widget1), is(Rectangle.of(0, 0, 5, 2)));
         assertThat(layout.getAreaFor(widget2), is(Rectangle.of(0, 2, 5, 2)));
         assertThat(layout.getAreaFor(widget3), is(Rectangle.of(0, 4, 5, 1)));
+    }
+
+    @Test
+    public void shouldGiveAllAvailableVerticalSpaceForOneFillingWidget() throws Exception {
+
+        // given
+        layout = Layouts.vertical();
+
+        final Widget widget = new DummyWidget(Occupation.percent(30),
+                                              Occupation.fill(),
+                                              Occupation.percent(30),
+                                              Occupation.fixed(3),
+                                              Occupation.percent(30),
+                                              Occupation.fill(),
+                                              Margin.no(),
+                                              Position.RELATIVE);
+
+        layout.addWidget(widget);
+
+        // when
+        layout.setDimension(Dimension.of(80, 25));
+
+        // then
+        assertThat(layout.getAreaFor(widget), is(Rectangle.of(0, 0, 24, 25)));
+    }
+
+    @Test
+    public void shouldGiveAllAvailableHorizontallySpaceForOneFillingWidget() throws Exception {
+
+        // given
+        layout = Layouts.horizontal();
+
+        final Widget widget = new DummyWidget(Occupation.fill(),
+                                              Occupation.percent(30),
+                                              Occupation.fixed(3),
+                                              Occupation.percent(30),
+                                              Occupation.fill(),
+                                              Occupation.percent(30),
+                                              Margin.no(),
+                                              Position.RELATIVE);
+
+        layout.addWidget(widget);
+
+        // when
+        layout.setDimension(Dimension.of(25, 80));
+
+        // then
+        assertThat(layout.getAreaFor(widget), is(Rectangle.of(0, 0, 25, 24)));
     }
 
     private Widget fixedWidget(final int preferredWidth, final int minWidth) {

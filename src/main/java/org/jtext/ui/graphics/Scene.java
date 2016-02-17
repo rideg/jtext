@@ -6,7 +6,6 @@ import org.jtext.event.EventBus;
 import org.jtext.event.Topic;
 import org.jtext.keyboard.KeyEvent;
 import org.jtext.keyboard.KeyboardHandler;
-import org.jtext.ui.attribute.VerticalAlign;
 import org.jtext.ui.event.*;
 import org.jtext.ui.layout.Layouts;
 
@@ -20,7 +19,7 @@ public class Scene extends Container implements Component {
     private Widget activeWidget;
 
     public Scene(final Driver driver, EventBus eventBus) {
-        super(Layouts.vertical(VerticalAlign.TOP));
+        super(Layouts.vertical());
         this.driver = driver;
         this.eventBus = eventBus;
         eventBus.registerTopic(REPAINT_EVENT_TOPIC);

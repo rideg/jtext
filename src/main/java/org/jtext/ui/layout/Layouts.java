@@ -6,6 +6,14 @@ import org.jtext.ui.attribute.VerticalAlign;
 
 public class Layouts {
 
+    public static LinearLayout vertical() {
+        return new LinearLayout(Direction.VERTICAL, HorizontalAlign.LEFT, VerticalAlign.TOP);
+    }
+
+    public static LinearLayout horizontal() {
+        return new LinearLayout(Direction.HORIZONTAL, HorizontalAlign.LEFT, VerticalAlign.TOP);
+    }
+
     public static LinearLayout vertical(final VerticalAlign verticalAlign) {
         return new LinearLayout(Direction.VERTICAL, HorizontalAlign.LEFT, verticalAlign);
     }

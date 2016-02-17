@@ -74,7 +74,7 @@ public class LinearLayout extends Layout {
             if (widget.isVisible()) {
                 final WidgetDescriptor descriptor = getDescriptor(widget);
 
-                if (isFilling(widget.getPreferredWidth())) {
+                if (isFilling(isHorizontal() ? widget.getPreferredWidth() : widget.getPreferredHeight())) {
                     results.numberOfFillingWidgets++;
                     fillingWidgets.add(widget);
                 }

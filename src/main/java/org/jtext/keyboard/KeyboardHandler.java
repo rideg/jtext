@@ -6,6 +6,8 @@ import org.jtext.curses.Driver;
 import org.jtext.curses.ReadKey;
 import org.jtext.event.EventBus;
 import org.jtext.event.Topic;
+import org.jtext.ui.event.RepaintEvent;
+import org.jtext.ui.graphics.Scene;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +37,8 @@ public class KeyboardHandler implements Component {
                 ReadKey readKey = driver.getCh();
                 if (readKey.key() != ControlKey.ERR) {
                     bus.publish(KEY_EVENT_TOPIC, new KeyEvent(readKey));
+                } else if (readKey.key() == ControlKey.RESIZE) {
+                    bus.publish(Scene.REPAINT_EVENT_TOPIC, RepaintEvent.REPAINT_EVENT);
                 } else {
                     try {
                         TimeUnit.MILLISECONDS.sleep(1);
