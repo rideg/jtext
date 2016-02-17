@@ -65,8 +65,12 @@ public class Padding {
         return Padding.of(top + 1, right + 1, bottom + 1, left + 1);
     }
 
-    public Rectangle apply(final Dimension area) {
-        return Rectangle.of(left, top, area.width - left - right, area.height - top - bottom);
+    public Rectangle apply(final Dimension dimension) {
+        return Rectangle.of(left, top, dimension.width - left - right, dimension.height - top - bottom);
+    }
+
+    public Rectangle apply(final Rectangle area) {
+        return Rectangle.of(area.x + left, area.y + top, area.width - left - right, area.height - top - bottom);
     }
 
     public Padding consider(final Border border) {

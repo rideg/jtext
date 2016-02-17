@@ -7,6 +7,7 @@ import org.jtext.ui.event.UIEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Graphics;
 import org.jtext.ui.graphics.Occupation;
+import org.jtext.ui.graphics.Rectangle;
 import org.jtext.ui.layout.Layout;
 
 import java.util.Optional;
@@ -80,5 +81,10 @@ public class Panel extends Container {
     @Override
     protected void handleEvent(UIEvent event) {
 
+    }
+
+    @Override
+    public void setArea(Rectangle area) {
+        super.setArea(padding.consider(border).apply(area));
     }
 }
