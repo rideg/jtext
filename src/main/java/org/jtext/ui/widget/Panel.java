@@ -64,7 +64,7 @@ public class Panel extends Container {
     public void draw(Graphics graphics) {
         background.ifPresent(graphics::fillBackground);
         graphics.drawBorder(border);
-        super.draw(graphics.restrict(padding.consider(border).apply(graphics.area)));
+        super.draw(graphics.restrict(padding.consider(border).apply(graphics.area.dimension())));
     }
 
     @Override
