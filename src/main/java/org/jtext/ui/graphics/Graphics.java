@@ -14,14 +14,13 @@ public class Graphics {
     private final Driver driver;
     private boolean isRelative = true;
 
-
     public Graphics(final Rectangle area, final Driver driver) {
         this.area = area;
         this.driver = driver;
     }
 
     public Graphics restrict(final Rectangle area) {
-        return new Graphics(area.move(this.area.topLeft()), driver);
+        return new Graphics(area.relativeTo(this.area.topLeft()), driver);
     }
 
     public void setAbsoluteMode() {

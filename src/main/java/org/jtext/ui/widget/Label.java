@@ -36,12 +36,12 @@ public class Label extends Widget {
 
     @Override
     public Occupation getMinWidth() {
-        return null;
+        return Occupation.fixed(3);
     }
 
     @Override
     public Occupation getMinHeight() {
-        return null;
+        return Occupation.fixed(1);
     }
 
     @Override

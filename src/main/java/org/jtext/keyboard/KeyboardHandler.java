@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class KeyboardHandler implements Component {
 
-    public static final Topic<KeyEvent> TOPIC = new Topic<>();
+    public static final Topic<KeyEvent> KEY_EVENT_TOPIC = new Topic<>();
 
     private final Driver driver;
     private final ExecutorService executorService;
@@ -24,19 +24,17 @@ public class KeyboardHandler implements Component {
         this.driver = driver;
         this.executorService = executorService;
         this.bus = bus;
+        bus.registerTopic(KEY_EVENT_TOPIC);
     }
 
 
     @Override
     public void start() {
-
-        bus.registerTopic(TOPIC);
-
         executorService.execute(() -> {
             while (shouldRun.get()) {
                 ReadKey readKey = driver.getCh();
                 if (readKey.key() != ControlKey.ERR) {
-                    bus.publish(TOPIC, new KeyEvent(readKey));
+                    bus.publish(KEY_EVENT_TOPIC, new KeyEvent(readKey));
                 } else {
                     try {
                         TimeUnit.MILLISECONDS.sleep(1);

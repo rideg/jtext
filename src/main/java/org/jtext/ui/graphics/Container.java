@@ -33,12 +33,12 @@ public class Container extends Widget {
 
     @Override
     public Occupation getMinWidth() {
-        return Occupation.fill();
+        return Occupation.fixed(1);
     }
 
     @Override
     public Occupation getMinHeight() {
-        return Occupation.fill();
+        return Occupation.fixed(1);
     }
 
     @Override
@@ -49,6 +49,13 @@ public class Container extends Widget {
     public void setArea(final Rectangle area) {
         this.area = area;
         layout.setDimension(area.dimension());
+
+        for (Widget w : widgets) {
+            if (w instanceof Container) {
+                ((Container) w).setArea(layout.getAreaFor(w));
+            }
+        }
+
     }
 
     @Override
@@ -57,11 +64,13 @@ public class Container extends Widget {
     }
 
     public Container add(final Widget widget) {
+        layout.addWidget(widget);
         widgets.add(widget);
         return this;
     }
 
     public void remove(final Widget widget) {
+        layout.addWidget(widget);
         widgets.remove(widget);
     }
 }

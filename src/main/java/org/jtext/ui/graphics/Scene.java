@@ -6,7 +6,9 @@ import org.jtext.event.EventBus;
 import org.jtext.event.Topic;
 import org.jtext.keyboard.KeyEvent;
 import org.jtext.keyboard.KeyboardHandler;
+import org.jtext.ui.attribute.VerticalAlign;
 import org.jtext.ui.event.*;
+import org.jtext.ui.layout.Layouts;
 
 public class Scene extends Container implements Component {
 
@@ -18,7 +20,7 @@ public class Scene extends Container implements Component {
     private Widget activeWidget;
 
     public Scene(final Driver driver, EventBus eventBus) {
-        super(null);
+        super(Layouts.vertical(VerticalAlign.TOP));
         this.driver = driver;
         this.eventBus = eventBus;
         eventBus.registerTopic(REPAINT_EVENT_TOPIC);
@@ -54,7 +56,7 @@ public class Scene extends Container implements Component {
 
     @Override
     public void start() {
-        eventBus.subscribe(KeyboardHandler.TOPIC, this::onKeyBoardEvent);
+        eventBus.subscribe(KeyboardHandler.KEY_EVENT_TOPIC, this::onKeyBoardEvent);
         eventBus.subscribe(FOCUS_MOVED_EVENT_TOPIC, this::onFocusMoved);
         eventBus.subscribe(REPAINT_EVENT_TOPIC, this::onRepaint);
 
