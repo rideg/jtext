@@ -35,10 +35,10 @@ public class KeyboardHandler implements Component {
         executorService.execute(() -> {
             while (shouldRun.get()) {
                 ReadKey readKey = driver.getCh();
-                if (readKey.key() != ControlKey.ERR) {
-                    bus.publish(KEY_EVENT_TOPIC, new KeyEvent(readKey));
-                } else if (readKey.key() == ControlKey.RESIZE) {
+                if (readKey.key() == ControlKey.RESIZE) {
                     bus.publish(Scene.REPAINT_EVENT_TOPIC, RepaintEvent.REPAINT_EVENT);
+                } else if (readKey.key() != ControlKey.ERR) {
+                    bus.publish(KEY_EVENT_TOPIC, new KeyEvent(readKey));
                 } else {
                     try {
                         TimeUnit.MILLISECONDS.sleep(1);
