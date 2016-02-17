@@ -104,6 +104,10 @@ public class Rectangle {
 
     }
 
+    public Rectangle flip() {
+        return Rectangle.of(y, x, height, width);
+    }
+
     @Override
     public int hashCode() {
         int result = x;
@@ -122,5 +126,4 @@ public class Rectangle {
                 ", height=" + height +
                 '}';
     }
-
 }

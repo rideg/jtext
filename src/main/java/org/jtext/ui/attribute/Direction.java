@@ -2,5 +2,14 @@ package org.jtext.ui.attribute;
 
 public enum Direction {
     HORIZONTAL,
-    VERTICAL
+    VERTICAL;
+
+
+    public Direction opposite() {
+        if (this == HORIZONTAL) {
+            return VERTICAL;
+        } else {
+            return VERTICAL;
+        }
+    }
 }

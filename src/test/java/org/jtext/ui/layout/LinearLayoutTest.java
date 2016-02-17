@@ -442,8 +442,53 @@ public class LinearLayoutTest {
         assertThat(layout.getAreaFor(widget3), is(Rectangle.of(4, 0, 1, 1)));
     }
 
+    @Test
+    public void shouldSqueezeMultipleWidgetsVertically() throws Exception {
+
+        // given
+        layout = Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER);
+
+        final Widget widget1 = fixedVerticalWidget(4, 2);
+        final Widget widget2 = fixedVerticalWidget(3, 2);
+        final Widget widget3 = fixedVerticalWidget(5, 1);
+
+        // when
+        layout.addWidget(widget1);
+        layout.addWidget(widget2);
+        layout.addWidget(widget3);
+
+        // then
+        layout.setDimension(Dimension.of(9, 16));
+
+        assertThat(layout.getAreaFor(widget1), is(Rectangle.of(2, 2, 5, 4)));
+        assertThat(layout.getAreaFor(widget2), is(Rectangle.of(2, 6, 5, 3)));
+        assertThat(layout.getAreaFor(widget3), is(Rectangle.of(2, 9, 5, 5)));
+
+        // and
+        layout.setDimension(Dimension.of(9, 9));
+
+        assertThat(layout.getAreaFor(widget1), is(Rectangle.of(2, 0, 5, 3)));
+        assertThat(layout.getAreaFor(widget2), is(Rectangle.of(2, 3, 5, 3)));
+        assertThat(layout.getAreaFor(widget3), is(Rectangle.of(2, 6, 5, 3)));
+
+        // and
+        layout.setDimension(Dimension.of(5, 4));
+
+        assertThat(layout.getAreaFor(widget1), is(Rectangle.of(0, 0, 5, 2)));
+        assertThat(layout.getAreaFor(widget2), is(Rectangle.of(0, 2, 5, 2)));
+        assertThat(layout.getAreaFor(widget3), is(Rectangle.of(0, 4, 5, 1)));
+    }
+
     private Widget fixedWidget(final int preferredWidth, final int minWidth) {
         return new DummyWidget(fixed(preferredWidth), fixed(1), fixed(minWidth),
                                fixed(1), fixed(preferredWidth), fixed(1), Position.RELATIVE, true);
     }
+
+    private Widget fixedVerticalWidget(final int preferredHeight, final int minHeight) {
+        return new DummyWidget(fixed(5), fixed(preferredHeight),
+                               fixed(5), fixed(minHeight),
+                               fixed(5), fixed(preferredHeight),
+                               Position.RELATIVE, true);
+    }
+
 }

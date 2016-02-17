@@ -42,4 +42,22 @@ public class Margin {
                 ", left=" + left +
                 '}';
     }
+
+    public Slice getSlice(final Direction direction) {
+        return direction == Direction.HORIZONTAL ? new Slice(left, right) : new Slice(top, bottom);
+    }
+
+    public static class Slice {
+        public final int begin;
+        public final int end;
+
+        private Slice(final int begin, final int end) {
+            this.begin = begin;
+            this.end = end;
+        }
+
+        public int getSpacing() {
+            return begin + end;
+        }
+    }
 }

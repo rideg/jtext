@@ -1,12 +1,9 @@
 package org.jtext.ui.graphics;
 
-import org.jtext.ui.attribute.Direction;
 import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.event.UIEvent;
 
 import java.util.Optional;
-
-import static org.jtext.ui.graphics.Occupation.isFilling;
 
 public abstract class Widget {
 
@@ -42,14 +39,6 @@ public abstract class Widget {
 
     public Occupation getMaxHeight() {
         return getPreferredHeight();
-    }
-
-    public int getRealHeight(final int available) {
-        final int realHeight = Math.min(getPreferredHeight().toReal(available), getMaxHeight().toReal(available));
-        if (realHeight > available) {
-            return Math.max(available, getMinHeight().toReal(available));
-        }
-        return realHeight;
     }
 
     public abstract Position getPosition();
@@ -91,38 +80,5 @@ public abstract class Widget {
 
     protected void handleEvent(final UIEvent event) {
 
-    }
-
-    public WidgetDescriptor getDescriptor(final int availableSpace, final Direction direction) {
-        if (direction == Direction.HORIZONTAL) {
-            int pref = (isFilling(getPreferredWidth()) ? getMinWidth() : getPreferredWidth()).toReal(availableSpace);
-            return new WidgetDescriptor(pref, getMinWidth().toReal(availableSpace),
-                    getMaxWidth().toReal(availableSpace));
-        } else {
-            int pref = (isFilling(getPreferredHeight()) ? getMinHeight() : getPreferredHeight()).toReal(availableSpace);
-            return new WidgetDescriptor(pref, getMinHeight().toReal(availableSpace),
-                    getMaxHeight().toReal(availableSpace));
-        }
-    }
-
-    public static class WidgetDescriptor implements Comparable<WidgetDescriptor> {
-
-        public int toUse = -1;
-        public int preferred;
-        public int minimum;
-        public int optional;
-        public int maximum;
-
-        public WidgetDescriptor(final int preferred, final int minimum, final int maximum) {
-            this.preferred = preferred;
-            this.minimum = minimum;
-            this.optional = preferred - minimum;
-            this.maximum = maximum;
-        }
-
-        @Override
-        public int compareTo(final WidgetDescriptor o) {
-            return Integer.compare(o.optional, optional);
-        }
     }
 }

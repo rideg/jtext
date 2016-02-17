@@ -6,7 +6,6 @@ import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.attribute.VerticalAlign;
 import org.jtext.ui.graphics.Rectangle;
 import org.jtext.ui.graphics.Widget;
-import org.jtext.ui.graphics.Widget.WidgetDescriptor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,20 +21,28 @@ import static org.jtext.ui.graphics.Occupation.isFilling;
 public class LinearLayout extends Layout {
 
     private final Direction direction;
-    private final HorizontalAlign horizontalAlign;
-    private final VerticalAlign verticalAlign;
+    private final Alignment primaryAlignment;
+    private final Alignment secondaryAlignment;
 
     private final List<Widget> visibleWidgets = new ArrayList<>();
     private final Map<Widget, WidgetDescriptor> processedWidgets = new HashMap<>();
     private final List<Widget> widgetsWithOptionalSpace = new ArrayList<>();
     private final List<Widget> fillingWidgets = new ArrayList<>();
 
-
     public LinearLayout(final Direction direction, final HorizontalAlign horizontalAlign,
                         final VerticalAlign verticalAlign) {
         this.direction = direction;
-        this.horizontalAlign = horizontalAlign;
-        this.verticalAlign = verticalAlign;
+        if (isHorizontal()) {
+            this.primaryAlignment = Alignment.map(horizontalAlign);
+            this.secondaryAlignment = Alignment.map(verticalAlign);
+        } else {
+            this.primaryAlignment = Alignment.map(verticalAlign);
+            this.secondaryAlignment = Alignment.map(horizontalAlign);
+        }
+    }
+
+    private boolean isHorizontal() {
+        return direction == Direction.HORIZONTAL;
     }
 
     @Override
@@ -53,18 +60,26 @@ public class LinearLayout extends Layout {
         }
     }
 
+    private int getAvailableSpace() {
+        return isHorizontal() ? dimension.width : dimension.height;
+    }
+
+    private int getAvailableSecondarySpace() {
+        return isHorizontal() ? dimension.height : dimension.width;
+    }
+
     private PreProcessingResults preProcessWidgets() {
         final PreProcessingResults results = new PreProcessingResults();
         for (final Widget widget : widgetsInOrder) {
             if (widget.isVisible()) {
-                final WidgetDescriptor descriptor = widget.getDescriptor(dimension.width, direction);
+                final WidgetDescriptor descriptor = getDescriptor(widget);
 
                 if (isFilling(widget.getPreferredWidth())) {
                     results.numberOfFillingWidgets++;
                     fillingWidgets.add(widget);
                 }
 
-                results.requiredSpace += descriptor.preferred + widget.getMargin().horizontalSpacing();
+                results.requiredSpace += descriptor.preferred + widget.getMargin().getSlice(direction).getSpacing();
                 results.optionalSpace += descriptor.optional;
                 if (descriptor.optional > 0) {
                     widgetsWithOptionalSpace.add(widget);
@@ -79,11 +94,12 @@ public class LinearLayout extends Layout {
     }
 
     private boolean shouldFillRemainingSpace(final PreProcessingResults preProcessingResults) {
-        return dimension.width > preProcessingResults.requiredSpace && preProcessingResults.numberOfFillingWidgets > 0;
+        return getAvailableSpace() > preProcessingResults.requiredSpace &&
+               preProcessingResults.numberOfFillingWidgets > 0;
     }
 
     private void fillRemainingSpace(final PreProcessingResults preProcessingResults) {
-        int remaining = dimension.width - preProcessingResults.requiredSpace;
+        int remaining = getAvailableSpace() - preProcessingResults.requiredSpace;
         while (preProcessingResults.numberOfFillingWidgets > 0) {
             int additional = remaining / preProcessingResults.numberOfFillingWidgets;
             int reminder = remaining % preProcessingResults.numberOfFillingWidgets;
@@ -109,21 +125,23 @@ public class LinearLayout extends Layout {
                 preProcessingResults.numberOfFillingWidgets = 0;
             }
         }
-        preProcessingResults.requiredSpace = dimension.width;
+        preProcessingResults.requiredSpace = getAvailableSpace();
     }
 
     private boolean shouldShrinkWidgets(final PreProcessingResults preProcessingResults) {
-        return dimension.width < preProcessingResults.requiredSpace && optionalSpaceRemains(preProcessingResults);
+        return getAvailableSpace() < preProcessingResults.requiredSpace &&
+               optionalSpaceRemains(preProcessingResults);
     }
 
     private boolean optionalSpaceRemains(final PreProcessingResults preProcessingResults) {
-        return preProcessingResults.requiredSpace <= dimension.width + preProcessingResults.optionalSpace;
+        return preProcessingResults.requiredSpace <=
+               getAvailableSpace() + preProcessingResults.optionalSpace;
     }
 
     private void shrinkWidgets(final PreProcessingResults preProcessingResults) {
         sort(widgetsWithOptionalSpace, (a, b) -> processedWidgets.get(a).compareTo(processedWidgets.get(b)));
         for (final Widget w : widgetsWithOptionalSpace) {
-            final int target = preProcessingResults.requiredSpace - dimension.width;
+            final int target = preProcessingResults.requiredSpace - getAvailableSpace();
             if (target != 0) {
                 final WidgetDescriptor d = processedWidgets.get(w);
                 int reduction = min(max((target * d.optional + (preProcessingResults.optionalSpace >> 1)) /
@@ -141,39 +159,42 @@ public class LinearLayout extends Layout {
 
     private void placeWidgets(final PreProcessingResults results) {
         Function<WidgetDescriptor, Integer> sizeFun = optionalSpaceRemains(results) ? d -> d.preferred : d -> d.minimum;
-        int shift = calculateInitialShift(results);
-        int x = 0;
-        for (final Widget w : visibleWidgets) {
-            final WidgetDescriptor d = processedWidgets.get(w);
-            final Margin margin = w.getMargin();
-            final int realHeight = w.getRealHeight(dimension.height);
-            final int realWidth = d.toUse == -1 ? sizeFun.apply(d) : d.toUse;
-            widgets.put(w, Rectangle.of(x + max(margin.left, shift), getStartY(realHeight, margin),
-                    realWidth, realHeight));
-            x += max(margin.left, shift) + realWidth + margin.right;
+        int shift = getPrimaryShift(results);
+        int startPosition = 0;
+        for (final Widget widget : visibleWidgets) {
+            final WidgetDescriptor d = processedWidgets.get(widget);
+            final Margin margin = widget.getMargin();
+            final Margin.Slice slice = widget.getMargin().getSlice(direction);
+            final int secondarySize = getRealSecondarySize(widget);
+            final int primarySize = d.toUse == -1 ? sizeFun.apply(d) : d.toUse;
+            final Rectangle area = Rectangle.of(startPosition + max(slice.begin, shift),
+                                                getStartSecondary(secondarySize, margin.getSlice(direction.opposite())),
+                                                primarySize, secondarySize);
+            widgets.put(widget, isHorizontal() ? area : area.flip());
+            startPosition += max(slice.begin, shift) + primarySize + slice.end;
             shift = 0;
         }
     }
 
-    private int calculateInitialShift(final PreProcessingResults results) {
+    private int getPrimaryShift(final PreProcessingResults results) {
         int shift = 0;
-        if (results.requiredSpace < dimension.width) {
-            if (horizontalAlign == HorizontalAlign.RIGHT) {
-                shift = dimension.width - results.requiredSpace;
+        if (results.requiredSpace < getAvailableSpace()) {
+            if (primaryAlignment == Alignment.END) {
+                shift = getAvailableSpace() - results.requiredSpace;
             }
-            if (horizontalAlign == HorizontalAlign.CENTER) {
+            if (primaryAlignment == Alignment.CENTER) {
                 final Widget firstWidget = visibleWidgets.get(0);
                 final Widget lastWidget = visibleWidgets.get(visibleWidgets.size() - 1);
-                int left = firstWidget.getMargin().left;
-                int right = lastWidget.getMargin().right;
-                int withoutMargin = dimension.width - results.requiredSpace + left + right;
+                int begin = firstWidget.getMargin().getSlice(direction).begin;
+                int end = lastWidget.getMargin().getSlice(direction).end;
+                int withoutMargin = getAvailableSpace() - results.requiredSpace + begin + end;
                 shift = withoutMargin / 2;
                 int reminder = withoutMargin % 2;
 
-                if (left > shift) {
-                    shift = left;
-                } else if (right > shift + reminder) {
-                    shift -= right - shift - reminder;
+                if (begin > shift) {
+                    shift = begin;
+                } else if (end > shift + reminder) {
+                    shift -= end - shift - reminder;
                 }
             }
         }
@@ -187,26 +208,114 @@ public class LinearLayout extends Layout {
         fillingWidgets.clear();
     }
 
-    private int getStartY(final int height, final Margin margin) {
-        int ret = margin.top;
-        if (verticalAlign != VerticalAlign.TOP) {
-            int remaining = dimension.height - height;
-            ret = verticalAlign == VerticalAlign.CENTER ? remaining / 2 : remaining;
+    private int getStartSecondary(final int size, final Margin.Slice slice) {
+        int ret = slice.begin;
+        if (secondaryAlignment != Alignment.BEGIN) {
+            int remaining = getAvailableSecondarySpace() - size;
+            ret = secondaryAlignment == Alignment.CENTER ? remaining / 2 : remaining;
 
-            if (ret < margin.top && verticalAlign == VerticalAlign.CENTER) {
-                ret = margin.top;
+            if (ret < slice.begin && secondaryAlignment == Alignment.CENTER) {
+                ret = slice.begin;
             }
-            if (verticalAlign == VerticalAlign.BOTTOM) {
-                ret -= margin.bottom;
+            if (secondaryAlignment == Alignment.END) {
+                ret -= slice.end;
             }
         }
         return ret;
+    }
+
+    private WidgetDescriptor getDescriptor(final Widget widget) {
+        final int availableSpace = getAvailableSpace();
+        if (isHorizontal()) {
+            int pref = (isFilling(widget.getPreferredWidth()) ? widget.getMinWidth() : widget.getPreferredWidth())
+                               .toReal(availableSpace);
+            return new WidgetDescriptor(pref, widget.getMinWidth().toReal(availableSpace),
+                                        widget.getMaxWidth().toReal(availableSpace));
+        } else {
+            int pref = (isFilling(widget.getPreferredHeight()) ? widget.getMinHeight() : widget.getPreferredHeight())
+                               .toReal(availableSpace);
+            return new WidgetDescriptor(pref, widget.getMinHeight().toReal(availableSpace),
+                                        widget.getMaxHeight().toReal(availableSpace));
+        }
+    }
+
+    private int getRealSecondarySize(final Widget widget) {
+        int available = getAvailableSecondarySpace();
+        if (isHorizontal()) {
+            final int height = Math.min(widget.getPreferredHeight().toReal(available),
+                                        widget.getMaxHeight().toReal(available));
+            if (height > available) {
+                return Math.max(available, widget.getMinHeight().toReal(available));
+            }
+            return height;
+        } else {
+            final int width = Math.min(widget.getPreferredWidth().toReal(available),
+                                       widget.getMaxWidth().toReal(available));
+            if (width > available) {
+                return Math.max(available, widget.getMinWidth().toReal(available));
+            }
+            return width;
+        }
+    }
+
+    private enum Alignment {
+        BEGIN,
+        CENTER,
+        END;
+
+        public static Alignment map(final VerticalAlign align) {
+            switch (align) {
+                case TOP:
+                    return BEGIN;
+                case CENTER:
+                    return CENTER;
+                case BOTTOM:
+                    return END;
+                default:
+                    throw new IllegalArgumentException("Cannot map alignment: " + align);
+            }
+        }
+
+        public static Alignment map(final HorizontalAlign align) {
+            switch (align) {
+                case LEFT:
+                    return BEGIN;
+                case CENTER:
+                    return CENTER;
+                case RIGHT:
+                    return END;
+                default:
+                    throw new IllegalArgumentException("Cannot map alignment: " + align);
+            }
+        }
+
     }
 
     private static class PreProcessingResults {
         int requiredSpace;
         int optionalSpace;
         int numberOfFillingWidgets;
+    }
+
+    public static class WidgetDescriptor implements Comparable<WidgetDescriptor> {
+
+        public int toUse = -1;
+        public int preferred;
+        public int minimum;
+        public int optional;
+        public int maximum;
+
+        public WidgetDescriptor(final int preferred, final int minimum, final int maximum) {
+            this.preferred = preferred;
+            this.minimum = minimum;
+            this.optional = preferred - minimum;
+            this.maximum = maximum;
+        }
+
+        @Override
+        public int compareTo(final WidgetDescriptor o) {
+            return Integer.compare(o.optional, optional);
+        }
     }
 
 }
