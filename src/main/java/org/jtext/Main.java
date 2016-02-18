@@ -36,15 +36,28 @@ public class Main {
 
             final Container mainContainer = new Container(Layouts.vertical(VerticalAlign.TOP));
 
-            final Panel top = new Panel(Layouts.horizontal(HorizontalAlign.RIGHT),
-                                        Occupation.fill(),
-                                        Occupation.fixed(1),
-                                        Border.no(),
-                                        Padding.horizontal(1),
-                                        CharacterColor.BLACK);
+
+            final Panel topRight = new Panel(Layouts.horizontal(HorizontalAlign.RIGHT),
+                                             Occupation.fill(),
+                                             Occupation.fill(),
+                                             Border.no(),
+                                             Padding.horizontal(1),
+                                             CharacterColor.BLACK);
 
             CellDescriptor descriptor = CellDescriptor.builder().create();
-            top.add(new Label(descriptor, "JTextIDE - 0.0.3"));
+            topRight.add(new Label(descriptor, "JTextIDE - 0.0.3"));
+
+            Container top = new Panel(Layouts.horizontal(), Occupation.fill(), Occupation.fixed(2))
+                                    .add(new Panel(Layouts.horizontal(),
+                                                   Occupation.fill(),
+                                                   Occupation.fill(),
+                                                   Border.no(),
+                                                   Padding.horizontal(1),
+                                                   CharacterColor.BLACK)
+                                                 .add(new Label(descriptor, "For menu press Ctrl-P"))
+                                        );
+//                                    .add(topRight);
+
 
             final Container center = new Container(Layouts.horizontal(VerticalAlign.TOP));
 
@@ -98,8 +111,8 @@ public class Main {
             bottom.add(new Label(descriptor, "Hahocska"));
 
             mainContainer.add(top);
-            mainContainer.add(center);
-            mainContainer.add(bottom);
+//            mainContainer.add(center);
+//            mainContainer.add(bottom);
 
             scene.add(mainContainer);
 

@@ -19,6 +19,15 @@ public class Graphics {
         this.driver = driver;
     }
 
+    private void executeInLock(final Runnable runnable) {
+        driver.lock();
+        try {
+            runnable.run();
+        } finally {
+            driver.unlock();
+        }
+    }
+
     public Graphics restrict(final Rectangle area) {
         return new Graphics(area.relativeTo(this.area.topLeft()), driver);
     }
@@ -55,7 +64,7 @@ public class Graphics {
         final Line line = area.cropRelative(Line.vertical(point, length));
         if (line.length > 0) {
             final Point p = toReal(point);
-            driver.drawVerticalLineAt(p.x, p.y, ch, line.length);
+            executeInLock(() -> driver.drawVerticalLineAt(p.x, p.y, ch, line.length));
         }
     }
 
@@ -71,14 +80,14 @@ public class Graphics {
         final Line inside = area.cropRelative(Line.horizontal(point, string.length()));
         if (inside.length > 0) {
             final Point p = toReal(point);
-            driver.printStringAt(p.x, p.y, string.substring(0, inside.length));
+            executeInLock(() -> driver.printStringAt(p.x, p.y, string.substring(0, inside.length)));
         }
     }
 
     public void putChar(final Point point, final char ch) {
         if (area.has(point)) {
             final Point p = toReal(point);
-            driver.putCharAt(p.x, p.y, ch);
+            executeInLock(() -> driver.putCharAt(p.x, p.y, ch));
         }
     }
 
@@ -95,22 +104,19 @@ public class Graphics {
     }
 
     public void fillBackground(final CharacterColor characterColor) {
-        driver.lock();
-        try {
+        executeInLock(() -> {
             driver.setBackgroundColor(characterColor);
+            driver.setForegroundColor(CharacterColor.GREEN);
             Point point = area.topLeft();
             for (int i = 0; i < area.height; i++) {
                 driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
                 point = point.incY();
             }
-        } finally {
-            driver.unlock();
-        }
+        });
     }
 
     public void drawBorder(final Border border) {
-        driver.lock();
-        try {
+        executeInLock(() -> {
             border.topLeft.ifPresent(d -> putCharAt(area.topLeft(), d));
             border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d));
             border.topRight.ifPresent(d -> putCharAt(area.topRight(), d));
@@ -119,9 +125,7 @@ public class Graphics {
             border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d));
             border.bottomLeft.ifPresent(d -> putCharAt(area.bottomLeft(), d));
             border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d));
-        } finally {
-            driver.unlock();
-        }
+        });
     }
 
     private void drawVerticalLine(Point point, int length, CellDescriptor descriptor) {

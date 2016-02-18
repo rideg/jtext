@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <locale.h>
 #include <stdlib.h>
+#include <string.h>
 
 bool no_current_refresh = true;
 WINDOW* screen;
@@ -80,13 +81,14 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackgroundColor
 
     attr_t attr;
     short pair_id;
+    jint fgId;
+    jint bgId;
     wattr_get(screen, &attr, &pair_id, NULL);
 
-    jint fgId = pair_id >> 3;
-    jint bgId = get_color_id(env, color);
+    fgId = pair_id >> 3;
+    bgId = get_color_id(env, color);
 
-    wattron(screen, COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
-
+    wcolor_set(screen, __COLOR_PAIRS[fgId][bgId], NULL);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
@@ -95,48 +97,61 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
 
     attr_t attr;
     short pair_id;
+    jint fgId;
+    jint bgId;
+
     wattr_get(screen, &attr, &pair_id, NULL);
 
-    jint fgId = get_color_id(env, color);
-    jint bgId = pair_id % 8;
+    fgId = get_color_id(env, color);
+    bgId = pair_id % 8;
 
-    wattron(screen, COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]));
+     wcolor_set(screen, __COLOR_PAIRS[fgId][bgId], NULL);
 
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttributes
   (JNIEnv *env, jobject self, jobject attr_array)
 {
-    attr_t attr = get_attribute(env, attr_array);
+    attr_t attr;
+    attr = get_attribute(env, attr_array);
     wattron(screen, attr);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttribute
   (JNIEnv * env, jobject self, jobject attribute)
 {
-    attr_t attr = get_attribute_value(env, attribute);
+    attr_t attr;
+    attr = get_attribute_value(env, attribute);
     wattron(screen, attr);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_offAttribute
   (JNIEnv * env, jobject self, jobject attribute)
 {
-    attr_t attr = get_attribute_value(env, attribute);
+    attr_t attr;
+    attr = get_attribute_value(env, attribute);
     wattroff(screen, attr);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLineAt
   (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
 {
-    const cchar_t* cch = convert_jchar(ch);
-    mvwhline_set(screen, y, x, cch, length);
+    const cchar_t* cch;
+    cch = convert_jchar(ch);
+    int result;
+    result = mvwhline_set(screen, y, x, cch, length);
     free(cch);
+    if(result == ERR) {
+        throw_exception(env, "java/lang/IllegalStateException", "problem with drawing line!");
+    }
+
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLineAt
   (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
 {
-    const cchar_t* cch = convert_jchar(ch);
+    const cchar_t* cch;
+    cch = convert_jchar(ch);
     mvwvline_set(screen, y, x, cch, length);
     free(cch);
 }
@@ -144,7 +159,8 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawVerticalLineAt
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printStringAt
   (JNIEnv * env, jobject self, jint x, jint y, jstring text)
 {
-     wchar_t* buff = convert_string(env, text);
+     wchar_t* buff;
+     buff = convert_string(env, text);
      mvwaddwstr(screen, y, x, buff);
      free(buff);
 }
@@ -152,7 +168,8 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_printStringAt
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putCharAt
   (JNIEnv * env, jobject self, jint x, jint y, jchar ch)
 {
-    const cchar_t* cch = convert_jchar(ch);
+    const cchar_t* cch;
+    cch = convert_jchar(ch);
     mvwvline_set(screen, y, x, cch, 1);
     free(cch);
 }
@@ -161,8 +178,10 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
   (JNIEnv * env, jobject self, jint x, jint y,
     jint length, jobject fg, jobject bg, jobjectArray attributes)
 {
-    attr_t attr = get_attribute(env, attributes);
-    short color = get_color_pair(env, fg, bg);
+    attr_t attr;
+    attr = get_attribute(env, attributes);
+    short color;
+    color = get_color_pair(env, fg, bg);
     mvwchgat(screen, y, x, length, attr, color, NULL);
 }
 

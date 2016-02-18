@@ -10,7 +10,7 @@ extern "C" {
 
 char __COLOR_PAIRS[8][8];
 
-void init_color_pairs(); // creates all possible 256 color pairs
+void init_color_pairs(); /* creates all possible 256 color pairs */
 
 attr_t get_attribute(JNIEnv*, jobject /*attributes*/);
 

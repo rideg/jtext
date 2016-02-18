@@ -28,6 +28,7 @@ public class Scene extends Container implements Component {
 
     public synchronized void onRepaint(final RepaintEvent repaintEvent) {
         driver.clearScreen();
+        driver.clearStyle();
         final Rectangle area = calculateArea();
         setArea(area);
         draw(new Graphics(area, driver));
