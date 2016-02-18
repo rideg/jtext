@@ -53,7 +53,7 @@ public final class Main {
                     new Panel(Layouts.horizontal(HorizontalAlign.RIGHT), Occupation.fill(), Occupation.fill(),
                               Border.no(), Padding.horizontal(1), CharacterColor.BLACK);
 
-            CellDescriptor descriptor = CellDescriptor.builder().create();
+            CellDescriptor descriptor = CellDescriptor.empty();
             topRight.add(new Label(descriptor, "JTextIDE - 0.0.3"));
 
             Container top = new Panel(Layouts.horizontal(), Occupation.fill(), Occupation.fixed(2))
@@ -71,8 +71,8 @@ public final class Main {
                                          Border.single().right, Border.single().right, Optional.empty(),
                                          Optional.empty(), Optional.empty()), Padding.full(1), CharacterColor.BLUE);
 
-            final Label labelLeft = new Label(CellDescriptor.builder().fg(CharacterColor.WHITE).bg(CharacterColor.BLUE)
-                                                      .attr(CharacterAttribute.BOLD).create(), "Left Panel!");
+            final Label labelLeft = new Label(CellDescriptor.of(' ', CharacterColor.BLUE, CharacterColor.WHITE,
+                                                                CharacterAttribute.BOLD), "Left Panel!");
 
             left.add(labelLeft);
 
@@ -80,8 +80,8 @@ public final class Main {
                     new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
                               CharacterColor.CYAN);
 
-            final Label labelRight = new Label(CellDescriptor.builder().fg(CharacterColor.WHITE).bg(CharacterColor.CYAN)
-                                                       .attr(CharacterAttribute.BOLD).create(), "Right Panel!");
+            final Label labelRight = new Label(CellDescriptor.of(' ', CharacterColor.CYAN, CharacterColor.WHITE,
+                                                                 CharacterAttribute.BOLD), "Right Panel!");
 
             right.add(labelRight);
 

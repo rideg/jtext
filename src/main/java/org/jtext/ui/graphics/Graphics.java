@@ -6,8 +6,6 @@ import org.jtext.curses.CharacterColor;
 import org.jtext.curses.Driver;
 import org.jtext.ui.attribute.Border;
 
-import java.util.Set;
-
 public class Graphics {
 
     private final Rectangle area;
@@ -40,8 +38,8 @@ public class Graphics {
         isRelative = true;
     }
 
-    public void setAttributes(final Set<CharacterAttribute> attributes) {
-        driver.onAttributes(attributes.toArray(new CharacterAttribute[attributes.size()]));
+    public void setAttributes(final CharacterAttribute[] attributes) {
+        driver.onAttributes(attributes);
     }
 
     public void setAttribute(final CharacterAttribute attribute) {
@@ -106,7 +104,7 @@ public class Graphics {
     public void fillBackground(final CharacterColor characterColor) {
         executeInLock(() -> {
             driver.setBackgroundColor(characterColor);
-            driver.setForegroundColor(CharacterColor.GREEN);
+            driver.setForegroundColor(CharacterColor.WHITE);
             Point point = area.topLeft();
             for (int i = 0; i < area.height; i++) {
                 driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
@@ -129,23 +127,30 @@ public class Graphics {
     }
 
     private void drawVerticalLine(Point point, int length, CellDescriptor descriptor) {
-        setColorsAndAttributes(descriptor);
-        driver.drawVerticalLineAt(point.x, point.y, descriptor.getCharacter(), length);
+        descriptor.character.ifPresent(ch -> {
+            setColorsAndAttributes(descriptor);
+            driver.drawVerticalLineAt(point.x, point.y, ch, length);
+        });
     }
 
     private void drawHorizontalLine(Point point, int length, CellDescriptor descriptor) {
-        setColorsAndAttributes(descriptor);
-        driver.drawHorizontalLineAt(point.x, point.y, descriptor.getCharacter(), length);
+        descriptor.character.ifPresent(ch -> {
+            setColorsAndAttributes(descriptor);
+            driver.drawHorizontalLineAt(point.x, point.y, ch, length);
+        });
     }
 
     public void putCharAt(final Point point, final CellDescriptor descriptor) {
-        setColorsAndAttributes(descriptor);
-        driver.putCharAt(point.x, point.y, descriptor.getCharacter());
+        descriptor.character.ifPresent(ch -> {
+            setColorsAndAttributes(descriptor);
+            driver.putCharAt(point.x, point.y, ch);
+        });
     }
 
     private void setColorsAndAttributes(CellDescriptor descriptor) {
-        driver.setColor(descriptor.getForegroundColor(), descriptor.getBackgroundColor());
-        driver.onAttributes(descriptor.getAttributes());
+        descriptor.background.ifPresent(driver::setBackgroundColor);
+        descriptor.foreground.ifPresent(driver::setForegroundColor);
+        driver.onAttributes(descriptor.attributes);
     }
 
     public Rectangle getArea() {

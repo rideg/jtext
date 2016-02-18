@@ -7,9 +7,6 @@ import org.jtext.ui.graphics.Point;
 import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 public class Label extends Widget {
 
     private final CellDescriptor descriptor;
@@ -22,9 +19,9 @@ public class Label extends Widget {
 
     @Override
     public void draw(final Graphics graphics) {
-        graphics.setBackgroundColor(descriptor.getBackgroundColor());
-        graphics.setForegroundColor(descriptor.getForegroundColor());
-        graphics.setAttributes(new HashSet<>(Arrays.asList(descriptor.getAttributes())));
+        descriptor.background.ifPresent(graphics::setBackgroundColor);
+        descriptor.foreground.ifPresent(graphics::setForegroundColor);
+        graphics.setAttributes(descriptor.attributes);
         graphics.printString(Point.at(0, 0), text);
     }
 
