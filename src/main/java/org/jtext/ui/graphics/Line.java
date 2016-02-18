@@ -2,13 +2,13 @@ package org.jtext.ui.graphics;
 
 import org.jtext.ui.attribute.Direction;
 
-public class Line {
+@SuppressWarnings("checkstyle:visibilitymodifier")
+public final class Line {
 
     public final int x;
     public final int y;
     public final int length;
     public final Direction direction;
-
 
     public Line(final int x, final int y, final int length, final Direction direction) {
         if (length < 0) {
@@ -82,15 +82,16 @@ public class Line {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         final Line line = (Line) o;
 
-        if (x != line.x) return false;
-        if (y != line.y) return false;
-        if (length != line.length) return false;
-        return direction == line.direction;
+        return x == line.x && y == line.y && length == line.length && direction == line.direction;
 
     }
 

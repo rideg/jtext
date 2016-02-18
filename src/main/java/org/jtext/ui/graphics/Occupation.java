@@ -40,7 +40,7 @@ public abstract class Occupation {
 
     public abstract int toReal(final int available);
 
-    public static class Fixed extends Occupation {
+    public static final class Fixed extends Occupation {
         private final int size;
 
 
@@ -55,7 +55,7 @@ public abstract class Occupation {
         }
     }
 
-    public static class Proportional extends Occupation {
+    public static final class Proportional extends Occupation {
         public static final BigDecimal DIVISOR = new BigDecimal(100);
         private final BigDecimal percentage;
 
@@ -69,7 +69,7 @@ public abstract class Occupation {
         }
     }
 
-    public static class Fill extends Occupation {
+    public static final class Fill extends Occupation {
         private Fill() {
 
         }

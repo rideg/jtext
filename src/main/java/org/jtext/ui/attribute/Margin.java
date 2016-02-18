@@ -1,7 +1,7 @@
 package org.jtext.ui.attribute;
 
-public class Margin {
-
+@SuppressWarnings("checkstyle:visibilitymodifier")
+public final class Margin {
 
     private static final Margin NO_MARGIN = Margin.of(0, 0, 0, 0);
 
@@ -36,18 +36,19 @@ public class Margin {
     @Override
     public String toString() {
         return "Margin{" +
-                "top=" + top +
-                ", right=" + right +
-                ", bottom=" + bottom +
-                ", left=" + left +
-                '}';
+               "top=" + top +
+               ", right=" + right +
+               ", bottom=" + bottom +
+               ", left=" + left +
+               '}';
     }
 
     public Slice getSlice(final Direction direction) {
         return direction == Direction.HORIZONTAL ? new Slice(left, right) : new Slice(top, bottom);
     }
 
-    public static class Slice {
+    @SuppressWarnings("checkstyle:visibilitymodifier")
+    public static final class Slice {
         public final int begin;
         public final int end;
 

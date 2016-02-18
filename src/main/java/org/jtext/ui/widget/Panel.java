@@ -19,19 +19,13 @@ public class Panel extends Container {
     private final Occupation preferredWith;
     private final Occupation preferredHeight;
 
-    public Panel(final Layout layout,
-                 final Occupation preferredWith,
-                 final Occupation preferredHeight) {
+    public Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight) {
         this(layout, preferredWith, preferredHeight, Border.no(), Padding.no(), Optional.empty());
 
     }
 
-    private Panel(final Layout layout,
-                  final Occupation preferredWith,
-                  final Occupation preferredHeight,
-                  final Border border,
-                  final Padding padding,
-                  final Optional<CharacterColor> backgroundColor) {
+    private Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight,
+                  final Border border, final Padding padding, final Optional<CharacterColor> backgroundColor) {
         super(layout);
         this.preferredWith = preferredWith;
         this.preferredHeight = preferredHeight;
@@ -40,20 +34,13 @@ public class Panel extends Container {
         this.background = backgroundColor;
     }
 
-    public Panel(final Layout layout,
-                 final Occupation preferredWith,
-                 final Occupation preferredHeight,
-                 final Border border,
-                 final Padding padding,
-                 final CharacterColor backgroundColor) {
+    public Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight,
+                 final Border border, final Padding padding, final CharacterColor backgroundColor) {
         this(layout, preferredWith, preferredHeight, border, padding, Optional.of(backgroundColor));
     }
 
-    public Panel(final Layout layout,
-                 final Occupation preferredWidth,
-                 final Occupation preferredHeight,
-                 final Border border,
-                 final Padding padding) {
+    public Panel(final Layout layout, final Occupation preferredWidth, final Occupation preferredHeight,
+                 final Border border, final Padding padding) {
         this(layout, preferredWidth, preferredHeight, border, padding, Optional.empty());
     }
 
@@ -63,7 +50,7 @@ public class Panel extends Container {
             graphics.fillBackground(background.get());
         }
         graphics.drawBorder(border);
-        super.draw(graphics.restrict(padding.consider(border).apply(graphics.area.dimension())));
+        super.draw(graphics.restrict(padding.consider(border).apply(graphics.getArea().dimension())));
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Graphics {
 
-    public final Rectangle area;
+    private final Rectangle area;
     private final Driver driver;
     private boolean isRelative = true;
 
@@ -148,4 +148,7 @@ public class Graphics {
         driver.onAttributes(descriptor.getAttributes());
     }
 
+    public Rectangle getArea() {
+        return area;
+    }
 }

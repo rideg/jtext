@@ -44,12 +44,10 @@ public class CursesDriver implements Driver {
     public native void offAttribute(final CharacterAttribute attribute);
 
     @Override
-    public native void drawHorizontalLineAt(final int x, final int y, final char character,
-                                            final int length);
+    public native void drawHorizontalLineAt(final int x, final int y, final char character, final int length);
 
     @Override
-    public native void drawVerticalLineAt(final int x, final int y, final char character,
-                                          final int length);
+    public native void drawVerticalLineAt(final int x, final int y, final char character, final int length);
 
     @Override
     public native void printStringAt(final int x, final int y, final String string);
@@ -58,11 +56,8 @@ public class CursesDriver implements Driver {
     public native void putCharAt(final int x, final int y, final char character);
 
     @Override
-    public native void changeAttributeAt(final int x,
-                                         final int y,
-                                         final int length,
-                                         final CharacterColor foregroundColor,
-                                         final CharacterColor backgroundColor,
+    public native void changeAttributeAt(final int x, final int y, final int length,
+                                         final CharacterColor foregroundColor, final CharacterColor backgroundColor,
                                          final CharacterAttribute[] attributes);
 
     @Override

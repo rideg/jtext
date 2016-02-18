@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("checkstyle:visibilitymodifier")
 public abstract class Layout {
 
     protected final List<Widget> widgetsInOrder = new LinkedList<>();

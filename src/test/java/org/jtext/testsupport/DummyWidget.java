@@ -28,7 +28,9 @@ public class DummyWidget extends Widget {
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
         this.position = position;
-        if (!visible) hide();
+        if (!visible) {
+            hide();
+        }
     }
 
     public DummyWidget(final Occupation preferredWidth, final Occupation preferredHeight, final Occupation minWidth,

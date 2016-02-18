@@ -129,13 +129,11 @@ public class LinearLayout extends Layout {
     }
 
     private boolean shouldShrinkWidgets(final PreProcessingResults preProcessingResults) {
-        return getAvailableSpace() < preProcessingResults.requiredSpace &&
-               optionalSpaceRemains(preProcessingResults);
+        return getAvailableSpace() < preProcessingResults.requiredSpace && optionalSpaceRemains(preProcessingResults);
     }
 
     private boolean optionalSpaceRemains(final PreProcessingResults preProcessingResults) {
-        return preProcessingResults.requiredSpace <=
-               getAvailableSpace() + preProcessingResults.optionalSpace;
+        return preProcessingResults.requiredSpace <= getAvailableSpace() + preProcessingResults.optionalSpace;
     }
 
     private void shrinkWidgets(final PreProcessingResults preProcessingResults) {
@@ -145,8 +143,7 @@ public class LinearLayout extends Layout {
             if (target != 0) {
                 final WidgetDescriptor d = processedWidgets.get(w);
                 int reduction = min(max((target * d.optional + (preProcessingResults.optionalSpace >> 1)) /
-                                preProcessingResults.optionalSpace, 1),
-                        min(target, d.optional));
+                                        preProcessingResults.optionalSpace, 1), min(target, d.optional));
                 d.toUse = d.preferred - reduction;
                 d.optional = d.toUse - d.minimum;
                 preProcessingResults.requiredSpace -= reduction;
@@ -242,15 +239,15 @@ public class LinearLayout extends Layout {
     private int getRealSecondarySize(final Widget widget) {
         int available = getAvailableSecondarySpace();
         if (isHorizontal()) {
-            final int height = Math.min(widget.getPreferredHeight().toReal(available),
-                                        widget.getMaxHeight().toReal(available));
+            final int height =
+                    Math.min(widget.getPreferredHeight().toReal(available), widget.getMaxHeight().toReal(available));
             if (height > available) {
                 return Math.max(available, widget.getMinHeight().toReal(available));
             }
             return height;
         } else {
-            final int width = Math.min(widget.getPreferredWidth().toReal(available),
-                                       widget.getMaxWidth().toReal(available));
+            final int width =
+                    Math.min(widget.getPreferredWidth().toReal(available), widget.getMaxWidth().toReal(available));
             if (width > available) {
                 return Math.max(available, widget.getMinWidth().toReal(available));
             }
@@ -291,12 +288,14 @@ public class LinearLayout extends Layout {
 
     }
 
+    @SuppressWarnings("checkstyle:visibilitymodifier")
     private static class PreProcessingResults {
         int requiredSpace;
         int optionalSpace;
         int numberOfFillingWidgets;
     }
 
+    @SuppressWarnings("checkstyle:visibilitymodifier")
     public static class WidgetDescriptor implements Comparable<WidgetDescriptor> {
 
         public int toUse = -1;

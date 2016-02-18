@@ -1,6 +1,7 @@
 package org.jtext.ui.graphics;
 
-public class Rectangle {
+@SuppressWarnings("checkstyle:visibilitymodifier")
+public final class Rectangle {
 
     private static final Rectangle EMPTY = Rectangle.of(0, 0, 0, 0);
 
@@ -118,16 +119,7 @@ public class Rectangle {
 
         final Rectangle rectangle = (Rectangle) o;
 
-        if (x != rectangle.x) {
-            return false;
-        }
-        if (y != rectangle.y) {
-            return false;
-        }
-        if (width != rectangle.width) {
-            return false;
-        }
-        return height == rectangle.height;
+        return x == rectangle.x && y == rectangle.y && width == rectangle.width && height == rectangle.height;
 
     }
 

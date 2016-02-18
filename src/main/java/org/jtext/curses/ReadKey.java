@@ -1,5 +1,6 @@
 package org.jtext.curses;
 
+@SuppressWarnings("checkstyle:visibilitymodifier")
 public class ReadKey {
 
     final ControlKey controlKey;

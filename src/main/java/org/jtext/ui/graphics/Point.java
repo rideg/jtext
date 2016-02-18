@@ -1,6 +1,7 @@
 package org.jtext.ui.graphics;
 
-public class Point {
+@SuppressWarnings("checkstyle:visibilitymodifier")
+public final class Point {
 
     public final int x;
     public final int y;
@@ -53,8 +54,8 @@ public class Point {
     @Override
     public String toString() {
         return "Point{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+               "x=" + x +
+               ", y=" + y +
+               '}';
     }
 }

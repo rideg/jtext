@@ -1,6 +1,13 @@
 package org.jtext;
 
-import org.jtext.curses.*;
+import org.jtext.curses.CellDescriptor;
+import org.jtext.curses.CharacterAttribute;
+import org.jtext.curses.CharacterColor;
+import org.jtext.curses.ControlKey;
+import org.jtext.curses.CursesDriver;
+import org.jtext.curses.Driver;
+import org.jtext.curses.LibraryLoader;
+import org.jtext.curses.ReadKey;
 import org.jtext.event.EventBus;
 import org.jtext.keyboard.KeyboardHandler;
 import org.jtext.ui.attribute.Border;
@@ -23,7 +30,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static org.jtext.keyboard.KeyboardHandler.KEY_EVENT_TOPIC;
 
-public class Main {
+public final class Main {
+
+
+    private Main() {
+
+    }
 
     public static void main(String[] args) throws InterruptedException {
         LibraryLoader.load();
@@ -37,82 +49,54 @@ public class Main {
             final Container mainContainer = new Container(Layouts.vertical(VerticalAlign.TOP));
 
 
-            final Panel topRight = new Panel(Layouts.horizontal(HorizontalAlign.RIGHT),
-                                             Occupation.fill(),
-                                             Occupation.fill(),
-                                             Border.no(),
-                                             Padding.horizontal(1),
-                                             CharacterColor.BLACK);
+            final Panel topRight =
+                    new Panel(Layouts.horizontal(HorizontalAlign.RIGHT), Occupation.fill(), Occupation.fill(),
+                              Border.no(), Padding.horizontal(1), CharacterColor.BLACK);
 
             CellDescriptor descriptor = CellDescriptor.builder().create();
             topRight.add(new Label(descriptor, "JTextIDE - 0.0.3"));
 
             Container top = new Panel(Layouts.horizontal(), Occupation.fill(), Occupation.fixed(2))
-                                    .add(new Panel(Layouts.horizontal(),
-                                                   Occupation.fill(),
-                                                   Occupation.fill(),
-                                                   Border.no(),
-                                                   Padding.horizontal(1),
-                                                   CharacterColor.BLACK)
-                                                 .add(new Label(descriptor, "For menu press Ctrl-P"))
-                                        );
-//                                    .add(topRight);
+                                    .add(new Panel(Layouts.horizontal(), Occupation.fill(), Occupation.fill(),
+                                                   Border.no(), Padding.horizontal(1), CharacterColor.BLACK)
+                                                 .add(new Label(descriptor, "For menu press Ctrl-P")));
+            //                                    .add(topRight);
 
 
             final Container center = new Container(Layouts.horizontal(VerticalAlign.TOP));
 
-            final Panel left = new Panel(Layouts.vertical(HorizontalAlign.LEFT),
-                                         Occupation.percent(30),
-                                         Occupation.fill(),
-                                         new Border(Optional.empty(),
-                                                    Optional.empty(),
-                                                    Border.single().right,
-                                                    Border.single().right,
-                                                    Border.single().right,
-                                                    Optional.empty(),
-                                                    Optional.empty(),
-                                                    Optional.empty()),
-                                         Padding.full(1),
-                                         CharacterColor.BLUE);
+            final Panel left =
+                    new Panel(Layouts.vertical(HorizontalAlign.LEFT), Occupation.percent(30), Occupation.fill(),
+                              new Border(Optional.empty(), Optional.empty(), Border.single().right,
+                                         Border.single().right, Border.single().right, Optional.empty(),
+                                         Optional.empty(), Optional.empty()), Padding.full(1), CharacterColor.BLUE);
 
-            final Label labelLeft = new Label(CellDescriptor.builder()
-                                                      .fg(CharacterColor.WHITE)
-                                                      .bg(CharacterColor.BLUE)
-                                                      .attr(CharacterAttribute.BOLD)
-                                                      .create(),
-                                              "Left Panel!");
+            final Label labelLeft = new Label(CellDescriptor.builder().fg(CharacterColor.WHITE).bg(CharacterColor.BLUE)
+                                                      .attr(CharacterAttribute.BOLD).create(), "Left Panel!");
 
             left.add(labelLeft);
 
-            final Panel right = new Panel(Layouts.vertical(),
-                                          Occupation.fill(),
-                                          Occupation.fill(),
-                                          Border.no(),
-                                          Padding.full(1),
-                                          CharacterColor.CYAN);
+            final Panel right =
+                    new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
+                              CharacterColor.CYAN);
 
-            final Label labelRight = new Label(CellDescriptor.builder()
-                                                       .fg(CharacterColor.WHITE)
-                                                       .bg(CharacterColor.CYAN)
-                                                       .attr(CharacterAttribute.BOLD)
-                                                       .create(),
-                                               "Right Panel!");
+            final Label labelRight = new Label(CellDescriptor.builder().fg(CharacterColor.WHITE).bg(CharacterColor.CYAN)
+                                                       .attr(CharacterAttribute.BOLD).create(), "Right Panel!");
 
             right.add(labelRight);
 
             center.add(left);
             center.add(right);
 
-            final Panel bottom = new Panel(Layouts.horizontal(HorizontalAlign.CENTER),
-                                           Occupation.fill(),
-                                           Occupation.fixed(1));
+            final Panel bottom =
+                    new Panel(Layouts.horizontal(HorizontalAlign.CENTER), Occupation.fill(), Occupation.fixed(1));
 
 
             bottom.add(new Label(descriptor, "Hahocska"));
 
             mainContainer.add(top);
-//            mainContainer.add(center);
-//            mainContainer.add(bottom);
+            //            mainContainer.add(center);
+            //            mainContainer.add(bottom);
 
             scene.add(mainContainer);
 

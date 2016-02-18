@@ -4,60 +4,57 @@ import org.jtext.testsupport.DummyWidget;
 import org.jtext.ui.attribute.HorizontalAlign;
 import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.attribute.VerticalAlign;
-import org.jtext.ui.graphics.*;
+import org.jtext.ui.graphics.Dimension;
+import org.jtext.ui.graphics.Occupation;
+import org.jtext.ui.graphics.Position;
+import org.jtext.ui.graphics.Rectangle;
+import org.jtext.ui.graphics.Widget;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.jtext.ui.graphics.Occupation.*;
+import static org.jtext.ui.graphics.Occupation.fill;
+import static org.jtext.ui.graphics.Occupation.fixed;
+import static org.jtext.ui.graphics.Occupation.percent;
 import static org.junit.Assert.assertThat;
 
 public class LinearLayoutTest {
 
-    private static final DummyWidget FIXED_WIDGET = new DummyWidget(fixed(6), fixed(6), fixed(3),
-                                                                    fixed(3), fixed(6), fixed(6),
-                                                                    Position.RELATIVE, true);
+    private static final DummyWidget FIXED_WIDGET =
+            new DummyWidget(fixed(6), fixed(6), fixed(3), fixed(3), fixed(6), fixed(6), Position.RELATIVE, true);
 
 
-    private static final DummyWidget FIXED_WIDGET_MARGIN = new DummyWidget(fixed(6), fixed(6), fixed(3),
-                                                                           fixed(3), fixed(6), fixed(6),
-                                                                           Margin.of(2, 4, 1, 5),
-                                                                           Position.RELATIVE);
+    private static final DummyWidget FIXED_WIDGET_MARGIN =
+            new DummyWidget(fixed(6), fixed(6), fixed(3), fixed(3), fixed(6), fixed(6), Margin.of(2, 4, 1, 5),
+                            Position.RELATIVE);
 
-    private static final DummyWidget FIXED_WIDGET_2 = new DummyWidget(fixed(4), fixed(4), fixed(2),
-                                                                      fixed(2), fixed(4), fixed(4),
-                                                                      Position.RELATIVE, true);
+    private static final DummyWidget FIXED_WIDGET_2 =
+            new DummyWidget(fixed(4), fixed(4), fixed(2), fixed(2), fixed(4), fixed(4), Position.RELATIVE, true);
 
-    private static final DummyWidget FILLING_WIDGET = new DummyWidget(fill(), fill(), fixed(5),
-                                                                      fixed(5), fill(), fill(),
-                                                                      Position.RELATIVE, true);
+    private static final DummyWidget FILLING_WIDGET =
+            new DummyWidget(fill(), fill(), fixed(5), fixed(5), fill(), fill(), Position.RELATIVE, true);
 
-    private static final DummyWidget FILLING_WIDGET_2 = new DummyWidget(fill(), fill(), fixed(5),
-                                                                        fixed(5), fill(), fill(),
-                                                                        Position.RELATIVE, true);
+    private static final DummyWidget FILLING_WIDGET_2 =
+            new DummyWidget(fill(), fill(), fixed(5), fixed(5), fill(), fill(), Position.RELATIVE, true);
 
-    private static final DummyWidget HIDDEN_WIDGET = new DummyWidget(fill(), fill(), fixed(5),
-                                                                     fixed(5), fill(), fill(),
-                                                                     Position.RELATIVE, false);
+    private static final DummyWidget HIDDEN_WIDGET =
+            new DummyWidget(fill(), fill(), fixed(5), fixed(5), fill(), fill(), Position.RELATIVE, false);
 
-    private static final DummyWidget FILLING_WIDGET_WITH_MAX_SIZE = new DummyWidget(fill(), fill(), fixed(5),
-                                                                                    fixed(5), fixed(30), fixed(20),
-                                                                                    Position.RELATIVE, true);
+    private static final DummyWidget FILLING_WIDGET_WITH_MAX_SIZE =
+            new DummyWidget(fill(), fill(), fixed(5), fixed(5), fixed(30), fixed(20), Position.RELATIVE, true);
 
-    private static final DummyWidget PROPORTIONAL_WIDGET = new DummyWidget(percent(30), percent(50), fixed(5),
-                                                                           fixed(5), percent(30), percent(50),
-                                                                           Position.RELATIVE, true);
+    private static final DummyWidget PROPORTIONAL_WIDGET =
+            new DummyWidget(percent(30), percent(50), fixed(5), fixed(5), percent(30), percent(50), Position.RELATIVE,
+                            true);
 
 
-    private static final DummyWidget FIXED_SMALL_WIDGET_MARGIN = new DummyWidget(fixed(1), fixed(1), fixed(1),
-                                                                                 fixed(1), fixed(1), fixed(1),
-                                                                                 Margin.of(0, 3, 0, 1),
-                                                                                 Position.RELATIVE);
+    private static final DummyWidget FIXED_SMALL_WIDGET_MARGIN =
+            new DummyWidget(fixed(1), fixed(1), fixed(1), fixed(1), fixed(1), fixed(1), Margin.of(0, 3, 0, 1),
+                            Position.RELATIVE);
 
 
-    private static final DummyWidget FIXED_SMALL_WIDGET_MARGIN_MIN_SIZE = new DummyWidget(fixed(2), fixed(1), fixed(1),
-                                                                                          fixed(1), fixed(1), fixed(1),
-                                                                                          Margin.of(0, 3, 0, 1),
-                                                                                          Position.RELATIVE);
+    private static final DummyWidget FIXED_SMALL_WIDGET_MARGIN_MIN_SIZE =
+            new DummyWidget(fixed(2), fixed(1), fixed(1), fixed(1), fixed(1), fixed(1), Margin.of(0, 3, 0, 1),
+                            Position.RELATIVE);
 
     private LinearLayout layout;
 
@@ -482,14 +479,9 @@ public class LinearLayoutTest {
         // given
         layout = Layouts.vertical();
 
-        final Widget widget = new DummyWidget(Occupation.percent(30),
-                                              Occupation.fill(),
-                                              Occupation.percent(30),
-                                              Occupation.fixed(3),
-                                              Occupation.percent(30),
-                                              Occupation.fill(),
-                                              Margin.no(),
-                                              Position.RELATIVE);
+        final Widget widget =
+                new DummyWidget(Occupation.percent(30), Occupation.fill(), Occupation.percent(30), Occupation.fixed(3),
+                                Occupation.percent(30), Occupation.fill(), Margin.no(), Position.RELATIVE);
 
         layout.addWidget(widget);
 
@@ -506,14 +498,9 @@ public class LinearLayoutTest {
         // given
         layout = Layouts.horizontal();
 
-        final Widget widget = new DummyWidget(Occupation.fill(),
-                                              Occupation.percent(30),
-                                              Occupation.fixed(3),
-                                              Occupation.percent(30),
-                                              Occupation.fill(),
-                                              Occupation.percent(30),
-                                              Margin.no(),
-                                              Position.RELATIVE);
+        final Widget widget =
+                new DummyWidget(Occupation.fill(), Occupation.percent(30), Occupation.fixed(3), Occupation.percent(30),
+                                Occupation.fill(), Occupation.percent(30), Margin.no(), Position.RELATIVE);
 
         layout.addWidget(widget);
 
@@ -525,15 +512,13 @@ public class LinearLayoutTest {
     }
 
     private Widget fixedWidget(final int preferredWidth, final int minWidth) {
-        return new DummyWidget(fixed(preferredWidth), fixed(1), fixed(minWidth),
-                               fixed(1), fixed(preferredWidth), fixed(1), Position.RELATIVE, true);
+        return new DummyWidget(fixed(preferredWidth), fixed(1), fixed(minWidth), fixed(1), fixed(preferredWidth),
+                               fixed(1), Position.RELATIVE, true);
     }
 
     private Widget fixedVerticalWidget(final int preferredHeight, final int minHeight) {
-        return new DummyWidget(fixed(5), fixed(preferredHeight),
-                               fixed(5), fixed(minHeight),
-                               fixed(5), fixed(preferredHeight),
-                               Position.RELATIVE, true);
+        return new DummyWidget(fixed(5), fixed(preferredHeight), fixed(5), fixed(minHeight), fixed(5),
+                               fixed(preferredHeight), Position.RELATIVE, true);
     }
 
 }

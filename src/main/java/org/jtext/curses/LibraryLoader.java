@@ -2,27 +2,13 @@ package org.jtext.curses;
 
 import java.io.File;
 
-public class LibraryLoader {
+public final class LibraryLoader {
 
-    private enum OS {
-        MAC("dylib"),
-        LINUX("so"),
-        BSD("so"),
-        WINDOWS("dll");
+    private static boolean loaded;
 
-        private final String extension;
+    private LibraryLoader() {
 
-        OS(final String extension) {
-            this.extension = extension;
-        }
-
-        public String extension() {
-            return extension;
-        }
     }
-
-    private static boolean loaded = false;
-
 
     public static synchronized void load() {
         if (!loaded) {
@@ -43,6 +29,23 @@ public class LibraryLoader {
             }
         }
         throw new IllegalStateException("Cannot determine operating system! " + osName);
+    }
+
+    private enum OS {
+        MAC("dylib"),
+        LINUX("so"),
+        BSD("so"),
+        WINDOWS("dll");
+
+        private final String extension;
+
+        OS(final String extension) {
+            this.extension = extension;
+        }
+
+        public String extension() {
+            return extension;
+        }
     }
 
 }

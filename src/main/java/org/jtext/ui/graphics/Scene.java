@@ -6,7 +6,11 @@ import org.jtext.event.EventBus;
 import org.jtext.event.Topic;
 import org.jtext.keyboard.KeyEvent;
 import org.jtext.keyboard.KeyboardHandler;
-import org.jtext.ui.event.*;
+import org.jtext.ui.event.FocusMovedEvent;
+import org.jtext.ui.event.GainFocusEvent;
+import org.jtext.ui.event.KeyPressedEvent;
+import org.jtext.ui.event.LostFocusEvent;
+import org.jtext.ui.event.RepaintEvent;
 import org.jtext.ui.layout.Layouts;
 
 public class Scene extends Container implements Component {

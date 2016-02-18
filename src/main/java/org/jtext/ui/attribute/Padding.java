@@ -3,7 +3,8 @@ package org.jtext.ui.attribute;
 import org.jtext.ui.graphics.Dimension;
 import org.jtext.ui.graphics.Rectangle;
 
-public class Padding {
+@SuppressWarnings("checkstyle:visibilitymodifier")
+public final class Padding {
 
     private static final Padding NO_PADDING = Padding.of(0, 0, 0, 0);
 
@@ -76,11 +77,8 @@ public class Padding {
     }
 
     public Padding consider(final Border border) {
-        return Padding.of(top + border.getTopThickness(),
-                          right + border.getRightThickness(),
-                          bottom + border.getBottomThickness(),
-                          left + border.getLeftThickness()
-                         );
+        return Padding.of(top + border.getTopThickness(), right + border.getRightThickness(),
+                          bottom + border.getBottomThickness(), left + border.getLeftThickness());
     }
 
     @Override

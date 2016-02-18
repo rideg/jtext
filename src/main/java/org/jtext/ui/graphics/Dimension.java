@@ -1,12 +1,13 @@
 package org.jtext.ui.graphics;
 
-public class Dimension {
+@SuppressWarnings("checkstyle:visibilitymodifier")
+public final class Dimension {
 
     public final int width;
     public final int height;
 
 
-    public Dimension(int width, int height) {
+    private Dimension(int width, int height) {
         this.width = width;
         this.height = height;
     }
@@ -34,9 +35,9 @@ public class Dimension {
     @Override
     public String toString() {
         return "Dimension{" +
-                "width=" + width +
-                ", height=" + height +
-                '}';
+               "width=" + width +
+               ", height=" + height +
+               '}';
     }
 
 

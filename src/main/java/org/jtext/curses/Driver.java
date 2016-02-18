@@ -32,11 +32,7 @@ public interface Driver {
 
     void putCharAt(int x, int y, char character);
 
-    void changeAttributeAt(int x,
-                           int y,
-                           int length,
-                           CharacterColor foregroundColor,
-                           CharacterColor backgroundColor,
+    void changeAttributeAt(int x, int y, int length, CharacterColor foregroundColor, CharacterColor backgroundColor,
                            CharacterAttribute[] attributes);
 
     void clearScreen();
