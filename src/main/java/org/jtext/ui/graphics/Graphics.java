@@ -52,18 +52,24 @@ public class Graphics {
     }
 
     public void drawVerticalLine(final Point point, final char ch, final int length) {
-        final Point p = toReal(point);
-        driver.drawVerticalLineAt(p.x, p.y, ch, length);
+        final Line line = area.cropRelative(Line.vertical(point, length));
+        if (line.length > 0) {
+            final Point p = toReal(point);
+            driver.drawVerticalLineAt(p.x, p.y, ch, line.length);
+        }
     }
 
     public void drawHorizontalLine(final Point point, final char ch, final int length) {
-        final Point p = toReal(point);
-        driver.drawHorizontalLineAt(p.x, p.y, ch, length);
+        final Line inside = area.cropRelative(Line.horizontal(point, length));
+        if (inside.length > 0) {
+            final Point p = toReal(point);
+            driver.drawHorizontalLineAt(p.x, p.y, ch, inside.length);
+        }
     }
 
     public void printString(final Point point, final String string) {
         final Line inside = area.cropRelative(Line.horizontal(point, string.length()));
-        if(inside.length > 0) {
+        if (inside.length > 0) {
             final Point p = toReal(point);
             driver.printStringAt(p.x, p.y, string.substring(0, inside.length));
         }
