@@ -290,6 +290,7 @@ public class LinearLayout extends Layout {
 
     @SuppressWarnings("checkstyle:visibilitymodifier")
     private static class PreProcessingResults {
+
         int requiredSpace;
         int optionalSpace;
         int numberOfFillingWidgets;
@@ -314,6 +315,32 @@ public class LinearLayout extends Layout {
         @Override
         public int compareTo(final WidgetDescriptor o) {
             return Integer.compare(o.optional, optional);
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            final WidgetDescriptor that = (WidgetDescriptor) o;
+
+            return toUse == that.toUse && preferred == that.preferred && minimum == that.minimum &&
+                   optional == that.optional && maximum == that.maximum;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = toUse;
+            result = 31 * result + preferred;
+            result = 31 * result + minimum;
+            result = 31 * result + optional;
+            result = 31 * result + maximum;
+            return result;
         }
     }
 

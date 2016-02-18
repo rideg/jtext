@@ -41,7 +41,7 @@ public class CellDescriptor {
     }
 
     public CharacterAttribute[] getAttributes() {
-        return attributes;
+        return Arrays.copyOf(attributes, attributes.length);
     }
 
     public CellDescriptor ch(final char ch) {

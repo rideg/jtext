@@ -3,6 +3,7 @@ apply plugin: 'idea'
 apply plugin: 'c'
 apply plugin: 'distribution'
 apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 
 repositories {
     mavenCentral()
@@ -104,5 +105,12 @@ distributions {
 
 distZip.dependsOn(jar)
 distTar.dependsOn(jar)
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
 
 
