@@ -7,6 +7,7 @@ import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.HorizontalAlign;
 import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.attribute.VerticalAlign;
+import org.jtext.ui.event.RepaintEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Scene;
@@ -17,6 +18,8 @@ import org.jtext.ui.widget.Panel;
 import java.lang.reflect.Proxy;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static org.jtext.keyboard.KeyboardHandler.KEY_EVENT_TOPIC;
@@ -68,7 +71,7 @@ public class Main {
 
             left.add(labelLeft);
 
-            final Panel right = new Panel(Layouts.vertical(HorizontalAlign.RIGHT),
+            final Panel right = new Panel(Layouts.vertical(),
                     Occupation.fill(),
                     Occupation.fill(),
                     Border.no(),
@@ -87,7 +90,7 @@ public class Main {
             center.add(left);
             center.add(right);
 
-            final Panel bottom = new Panel(Layouts.horizontal(HorizontalAlign.RIGHT),
+            final Panel bottom = new Panel(Layouts.horizontal(HorizontalAlign.CENTER),
                     Occupation.fill(),
                     Occupation.fixed(1));
 
@@ -108,6 +111,14 @@ public class Main {
                 if (event.key.getValue() == 'q') {
                     latch.countDown();
                 }
+                if (event.key.key() == ControlKey.NULL) {
+                    if(left.isVisible()) {
+                        left.hide();
+                    } else {
+                        left.show();
+                    }
+                    eventBus.publish(Scene.REPAINT_EVENT_TOPIC, RepaintEvent.REPAINT_EVENT);
+                }
             });
             latch.await();
 
@@ -119,7 +130,7 @@ public class Main {
 
     private static Driver getDriver() {
         if (Boolean.parseBoolean(System.getProperty("test.mode", "false"))) {
-
+            final AtomicInteger closed = new AtomicInteger();
             return (Driver) Proxy.newProxyInstance(Main.class.getClassLoader(), new Class[]{Driver.class},
                     (proxy, method, args) -> {
                         if (method.getName().equals("getScreenHeight")) {
@@ -129,7 +140,11 @@ public class Main {
                             return 80;
                         }
                         if (method.getName().equals("getCh")) {
-                            return new ReadKey(ControlKey.ERR, 0);
+                            if(closed.get() > 2) {
+                                return new ReadKey(ControlKey.ERR, 0);
+                            }
+                            closed.incrementAndGet();
+                            return new ReadKey(ControlKey.NULL, 0);
                         }
                         return null;
                     });

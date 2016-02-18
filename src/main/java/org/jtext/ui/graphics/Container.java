@@ -18,7 +18,11 @@ public class Container extends Widget {
 
     @Override
     public void draw(Graphics graphics) {
-        widgets.forEach(widget -> widget.draw(graphics.restrict(layout.getAreaFor(widget))));
+        for (final Widget widget : widgets) {
+            if (widget.isVisible()) {
+                widget.draw(graphics.restrict(layout.getAreaFor(widget)));
+            }
+        }
     }
 
     @Override
@@ -51,7 +55,7 @@ public class Container extends Widget {
         layout.setDimension(area.dimension());
 
         for (Widget w : widgets) {
-            if (w instanceof Container) {
+            if (w instanceof Container && w.isVisible()) {
                 ((Container) w).setArea(layout.getAreaFor(w));
             }
         }
