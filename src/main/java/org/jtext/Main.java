@@ -18,7 +18,6 @@ import org.jtext.ui.widget.Panel;
 import java.lang.reflect.Proxy;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
@@ -37,53 +36,54 @@ public class Main {
 
             final Container mainContainer = new Container(Layouts.vertical(VerticalAlign.TOP));
 
-            final Panel top = new Panel(Layouts.horizontal(HorizontalAlign.LEFT),
-                    Occupation.fill(),
-                    Occupation.fixed(1),
-                    Border.no(),
-                    Padding.horizontal(1));
+            final Panel top = new Panel(Layouts.horizontal(HorizontalAlign.RIGHT),
+                                        Occupation.fill(),
+                                        Occupation.fixed(1),
+                                        Border.no(),
+                                        Padding.horizontal(1),
+                                        CharacterColor.BLACK);
 
-            CellDescriptor descriptor = CellDescriptor.builder().fg(CharacterColor.GREEN).create();
-            top.add(new Label(descriptor, "Hello"));
+            CellDescriptor descriptor = CellDescriptor.builder().create();
+            top.add(new Label(descriptor, "JTextIDE - 0.0.3"));
 
             final Container center = new Container(Layouts.horizontal(VerticalAlign.TOP));
 
             final Panel left = new Panel(Layouts.vertical(HorizontalAlign.LEFT),
-                    Occupation.percent(30),
-                    Occupation.fill(),
-                    new Border(Optional.empty(),
-                            Optional.empty(),
-                            Border.single().right,
-                            Border.single().right,
-                            Border.single().right,
-                            Optional.empty(),
-                            Optional.empty(),
-                            Optional.empty()),
-                    Padding.full(1),
-                    CharacterColor.BLUE);
+                                         Occupation.percent(30),
+                                         Occupation.fill(),
+                                         new Border(Optional.empty(),
+                                                    Optional.empty(),
+                                                    Border.single().right,
+                                                    Border.single().right,
+                                                    Border.single().right,
+                                                    Optional.empty(),
+                                                    Optional.empty(),
+                                                    Optional.empty()),
+                                         Padding.full(1),
+                                         CharacterColor.BLUE);
 
             final Label labelLeft = new Label(CellDescriptor.builder()
-                    .fg(CharacterColor.WHITE)
-                    .bg(CharacterColor.BLUE)
-                    .attr(CharacterAttribute.BOLD)
-                    .create(),
-                    "Left Panel!");
+                                                      .fg(CharacterColor.WHITE)
+                                                      .bg(CharacterColor.BLUE)
+                                                      .attr(CharacterAttribute.BOLD)
+                                                      .create(),
+                                              "Left Panel!");
 
             left.add(labelLeft);
 
             final Panel right = new Panel(Layouts.vertical(),
-                    Occupation.fill(),
-                    Occupation.fill(),
-                    Border.no(),
-                    Padding.full(1),
-                    CharacterColor.CYAN);
+                                          Occupation.fill(),
+                                          Occupation.fill(),
+                                          Border.no(),
+                                          Padding.full(1),
+                                          CharacterColor.CYAN);
 
             final Label labelRight = new Label(CellDescriptor.builder()
-                    .fg(CharacterColor.WHITE)
-                    .bg(CharacterColor.CYAN)
-                    .attr(CharacterAttribute.BOLD)
-                    .create(),
-                    "Right Panel!");
+                                                       .fg(CharacterColor.WHITE)
+                                                       .bg(CharacterColor.CYAN)
+                                                       .attr(CharacterAttribute.BOLD)
+                                                       .create(),
+                                               "Right Panel!");
 
             right.add(labelRight);
 
@@ -91,8 +91,8 @@ public class Main {
             center.add(right);
 
             final Panel bottom = new Panel(Layouts.horizontal(HorizontalAlign.CENTER),
-                    Occupation.fill(),
-                    Occupation.fixed(1));
+                                           Occupation.fill(),
+                                           Occupation.fixed(1));
 
 
             bottom.add(new Label(descriptor, "Hahocska"));
@@ -112,7 +112,7 @@ public class Main {
                     latch.countDown();
                 }
                 if (event.key.key() == ControlKey.NULL) {
-                    if(left.isVisible()) {
+                    if (left.isVisible()) {
                         left.hide();
                     } else {
                         left.show();
@@ -132,22 +132,22 @@ public class Main {
         if (Boolean.parseBoolean(System.getProperty("test.mode", "false"))) {
             final AtomicInteger closed = new AtomicInteger();
             return (Driver) Proxy.newProxyInstance(Main.class.getClassLoader(), new Class[]{Driver.class},
-                    (proxy, method, args) -> {
-                        if (method.getName().equals("getScreenHeight")) {
-                            return 25;
-                        }
-                        if (method.getName().equals("getScreenWidth")) {
-                            return 80;
-                        }
-                        if (method.getName().equals("getCh")) {
-                            if(closed.get() > 2) {
-                                return new ReadKey(ControlKey.ERR, 0);
-                            }
-                            closed.incrementAndGet();
-                            return new ReadKey(ControlKey.NULL, 0);
-                        }
-                        return null;
-                    });
+                                                   (proxy, method, args) -> {
+                                                       if (method.getName().equals("getScreenHeight")) {
+                                                           return 25;
+                                                       }
+                                                       if (method.getName().equals("getScreenWidth")) {
+                                                           return 80;
+                                                       }
+                                                       if (method.getName().equals("getCh")) {
+                                                           if (closed.get() > 2) {
+                                                               return new ReadKey(ControlKey.ERR, 0);
+                                                           }
+                                                           closed.incrementAndGet();
+                                                           return new ReadKey(ControlKey.NULL, 0);
+                                                       }
+                                                       return null;
+                                                   });
         }
         return new CursesDriver();
     }

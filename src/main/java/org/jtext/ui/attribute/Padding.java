@@ -66,28 +66,30 @@ public class Padding {
     }
 
     public Rectangle apply(final Dimension dimension) {
-        return Rectangle.of(left, top, dimension.width - left - right, dimension.height - top - bottom);
+        return Rectangle.of(left, top, Math.max(dimension.width - left - right, 0),
+                            Math.max(dimension.height - top - bottom, 0));
     }
 
     public Rectangle apply(final Rectangle area) {
-        return Rectangle.of(area.x + left, area.y + top, area.width - left - right, area.height - top - bottom);
+        return Rectangle.of(area.x + left, area.y + top, Math.max(area.width - left - right, 0),
+                            Math.max(area.height - top - bottom, 0));
     }
 
     public Padding consider(final Border border) {
         return Padding.of(top + border.getTopThickness(),
-                right + border.getRightThickness(),
-                bottom + border.getBottomThickness(),
-                left + border.getLeftThickness()
-        );
+                          right + border.getRightThickness(),
+                          bottom + border.getBottomThickness(),
+                          left + border.getLeftThickness()
+                         );
     }
 
     @Override
     public String toString() {
         return "Padding{" +
-                "top=" + top +
-                ", right=" + right +
-                ", bottom=" + bottom +
-                ", left=" + left +
-                '}';
+               "top=" + top +
+               ", right=" + right +
+               ", bottom=" + bottom +
+               ", left=" + left +
+               '}';
     }
 }
