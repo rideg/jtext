@@ -62,13 +62,18 @@ public class Graphics {
     }
 
     public void printString(final Point point, final String string) {
-        final Point p = toReal(point);
-        driver.printStringAt(p.x, p.y, string);
+        final Line inside = area.cropRelative(Line.horizontal(point, string.length()));
+        if(inside.length > 0) {
+            final Point p = toReal(point);
+            driver.printStringAt(p.x, p.y, string.substring(0, inside.length));
+        }
     }
 
     public void putChar(final Point point, final char ch) {
-        final Point p = toReal(point);
-        driver.putCharAt(p.x, p.y, ch);
+        if (area.has(point)) {
+            final Point p = toReal(point);
+            driver.putCharAt(p.x, p.y, ch);
+        }
     }
 
     private Point toReal(final Point point) {

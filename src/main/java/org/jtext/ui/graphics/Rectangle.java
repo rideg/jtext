@@ -4,7 +4,6 @@ public class Rectangle {
 
     private static final Rectangle EMPTY = Rectangle.of(0, 0, 0, 0);
 
-
     public final int x;
     public final int y;
     public final int width;
@@ -80,6 +79,34 @@ public class Rectangle {
         return Rectangle.of(x, y, width, height);
     }
 
+    public Rectangle flip() {
+        return Rectangle.of(y, x, height, width);
+    }
+
+    public boolean has(final Point p) {
+        return p.x >= x && p.y >= y && p.x < x + width && p.y < x + height;
+    }
+
+    public boolean hasRelative(final Point p) {
+        return p.x >= 0 && p.y >= 0 && p.x < width && p.y < height;
+    }
+
+    public Line cropRelative(final Line line) {
+        if (hasRelative(line.end()) || hasRelative(line.start()) || hasCommonPoints(line)) {
+            return Line.line(closestInner(line.start()), closestInner(line.end()), line.direction);
+        }
+        return new Line(0, 0, 0, line.direction);
+    }
+
+    private boolean hasCommonPoints(final Line line) {
+        return line.isHorizontal() ? 0 <= line.y && line.y < height && line.x < 0
+                                   : 0 <= line.x && line.x < width && line.y < 0;
+    }
+
+    private Point closestInner(final Point start) {
+        return Point.at(Math.min(Math.max(start.x, 0), width - 1), Math.min(Math.max(start.y, 0), height - 1));
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -104,10 +131,6 @@ public class Rectangle {
 
     }
 
-    public Rectangle flip() {
-        return Rectangle.of(y, x, height, width);
-    }
-
     @Override
     public int hashCode() {
         int result = x;
@@ -120,10 +143,10 @@ public class Rectangle {
     @Override
     public String toString() {
         return "Rectangle{" +
-                "x=" + x +
-                ", y=" + y +
-                ", width=" + width +
-                ", height=" + height +
-                '}';
+               "x=" + x +
+               ", y=" + y +
+               ", width=" + width +
+               ", height=" + height +
+               '}';
     }
 }
