@@ -70,7 +70,8 @@ public class TextField extends Widget {
 
     private void registerKeyHandlers() {
         keyEventProcessor.register(ControlKey.NORMAL, this::typeIn);
-        keyEventProcessor.register(ControlKey.BACKSPACE, this::deleteLastChar);
+        keyEventProcessor.register(ControlKey.BACKSPACE, this::deletePreviousChar);
+        keyEventProcessor.register(ControlKey.DELETE, this::deleteChar);
         keyEventProcessor.register(ControlKey.LEFT, this::moveCursorLeft);
         keyEventProcessor.register(ControlKey.RIGHT, this::moveCursorRight);
         keyEventProcessor.register(ControlKey.HOME, this::jumpHome);
@@ -117,10 +118,16 @@ public class TextField extends Widget {
         }
     }
 
-    private void deleteLastChar() {
+    private void deletePreviousChar() {
         if (text.length() > 0 && clip + cursor > 0) {
             text.deleteCharAt(clip + cursor - 1);
             moveCursorLeft();
+        }
+    }
+
+    private void deleteChar() {
+        if (text.length() > 0 && clip + cursor < text.length()) {
+            text.deleteCharAt(clip + cursor);
         }
     }
 
