@@ -15,6 +15,7 @@ public class Graphics {
     public Graphics(final Rectangle area, final Driver driver) {
         this.area = area;
         this.driver = driver;
+        driver.clearStyle();
     }
 
     private void executeInLock(final Runnable runnable) {
