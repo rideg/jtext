@@ -34,6 +34,19 @@ public final class CellDescriptor {
         return new CellDescriptor(character, foreground, background, new CharacterAttribute[0]);
     }
 
+
+    public static CellDescriptor of(final CharacterColor background, final CharacterColor foreground) {
+        return new CellDescriptor(null, foreground, background, new CharacterAttribute[0]);
+    }
+
+    public static CellDescriptor of(final CharacterColor background, final CharacterColor foreground,
+                                    final CharacterAttribute first, final CharacterAttribute... rest) {
+        final CharacterAttribute[] attributes = new CharacterAttribute[rest.length + 1];
+        attributes[0] = first;
+        System.arraycopy(rest, 0, attributes, 1, rest.length);
+        return new CellDescriptor(null, foreground, background, attributes);
+    }
+
     public static CellDescriptor of(final char character, final CharacterColor background,
                                     final CharacterColor foreground, CharacterAttribute first,
                                     CharacterAttribute... rest) {
