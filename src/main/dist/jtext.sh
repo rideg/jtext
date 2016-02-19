@@ -9,7 +9,18 @@ if [ ! -f "$JAVA_CMD" ]; then
   exit 1
 fi
 
-#DEBUG=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7843
+
+while getopts ":d:k" opt; do
+  case $opt in
+    d)
+      DEBUG=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7843
+      ;;
+    k)
+      kill -9 `ps -ef | grep "org.jtext.Main" | grep -v  "grep" | cut -d" " -f4`
+      exit 0
+      ;;
+  esac
+done
 
 
 clear; $JAVA_CMD -cp lib/* $DEBUG org.jtext.Main
