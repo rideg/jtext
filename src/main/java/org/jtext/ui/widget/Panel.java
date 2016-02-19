@@ -11,7 +11,7 @@ import org.jtext.ui.layout.Layout;
 
 import java.util.Optional;
 
-public class Panel extends Container {
+public class Panel extends Container implements WidgetWithBackground {
 
     private final Optional<CharacterColor> background;
     private final Border border;
@@ -66,5 +66,10 @@ public class Panel extends Container {
     @Override
     public void setArea(Rectangle area) {
         super.setArea(padding.consider(border).apply(area));
+    }
+
+    @Override
+    public Optional<CharacterColor> backgroundColor() {
+        return background;
     }
 }

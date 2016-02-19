@@ -19,10 +19,22 @@ public class Label extends Widget {
 
     @Override
     public void draw(final Graphics graphics) {
-        descriptor.background.ifPresent(graphics::setBackgroundColor);
+        determineBackground(graphics);
         descriptor.foreground.ifPresent(graphics::setForegroundColor);
         graphics.setAttributes(descriptor.attributes);
         graphics.printString(Point.at(0, 0), text);
+    }
+
+    private void determineBackground(final Graphics graphics) {
+        if (descriptor.background.isPresent()) {
+            graphics.setBackgroundColor(descriptor.background.get());
+        } else {
+            getParent().ifPresent(parent -> {
+                if (parent instanceof WidgetWithBackground) {
+                    ((WidgetWithBackground) parent).backgroundColor().ifPresent(graphics::setBackgroundColor);
+                }
+            });
+        }
     }
 
     @Override

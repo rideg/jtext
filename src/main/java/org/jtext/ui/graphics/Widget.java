@@ -55,15 +55,19 @@ public abstract class Widget {
         parent = Optional.empty();
     }
 
-    public void setParent(final Widget widget) {
-        parent = Optional.of(widget);
-    }
-
     public final void onEvent(final UIEvent event) {
         handleEvent(event);
         if (event.isBubbling()) {
             parent.ifPresent(p -> p.onEvent(event));
         }
+    }
+
+    public Optional<Widget> getParent() {
+        return parent;
+    }
+
+    public void setParent(final Widget widget) {
+        parent = Optional.of(widget);
     }
 
     public void hide() {

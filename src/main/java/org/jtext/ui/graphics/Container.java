@@ -1,6 +1,5 @@
 package org.jtext.ui.graphics;
 
-import org.jtext.ui.event.UIEvent;
 import org.jtext.ui.layout.Layout;
 
 import java.util.HashSet;
@@ -59,19 +58,16 @@ public class Container extends Widget {
 
     }
 
-    @Override
-    protected void handleEvent(UIEvent event) {
-
-    }
-
     public Container add(final Widget widget) {
         layout.addWidget(widget);
         widgets.add(widget);
+        widget.setParent(this);
         return this;
     }
 
     public void remove(final Widget widget) {
         layout.addWidget(widget);
         widgets.remove(widget);
+        widget.clearParent();
     }
 }

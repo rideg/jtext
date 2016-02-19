@@ -52,10 +52,9 @@ public final class Main {
             final Panel top =
                     new Panel(Layouts.horizontal(HorizontalAlign.RIGHT),
                             Occupation.fill(),
-                            Occupation.fill(),
+                            Occupation.fixed(1),
                             Border.no(),
-                            Padding.horizontal(1),
-                            CharacterColor.BLACK);
+                            Padding.horizontal(1));
 
             CellDescriptor descriptor = CellDescriptor.empty();
             top.add(new Label(descriptor, "JTextIDE - 0.0.3"));
