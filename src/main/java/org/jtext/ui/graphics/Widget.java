@@ -3,10 +3,16 @@ package org.jtext.ui.graphics;
 import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.event.UIEvent;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
 
 public abstract class Widget {
 
+    private final Map<Class<? extends UIEvent>, Set<Consumer<? extends UIEvent>>> eventHandlers = new HashMap<>();
     private Optional<Widget> parent;
     private Margin margin = Margin.no();
     private boolean visible = true;
@@ -55,10 +61,24 @@ public abstract class Widget {
         parent = Optional.empty();
     }
 
+
+    public <T extends UIEvent> void addHandler(final Class<T> type, final Consumer<T> handler) {
+        eventHandlers.computeIfAbsent(type, t -> new HashSet<>()).add(handler);
+    }
+
     public final void onEvent(final UIEvent event) {
-        handleEvent(event);
-        if (event.isBubbling()) {
-            parent.ifPresent(p -> p.onEvent(event));
+        if (eventHandlers.containsKey(event.getClass())) {
+            for (Consumer c : eventHandlers.get(event.getClass())) {
+                if (event.isPropagating()) {
+                    c.accept(event);
+                }
+            }
+        }
+        if (event.isPropagating()) {
+            handleEvent(event);
+            if (event.isBubbling()) {
+                parent.ifPresent(p -> p.onEvent(event));
+            }
         }
     }
 

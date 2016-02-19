@@ -50,11 +50,13 @@ public class Scene extends Container implements Component {
     }
 
     public void onFocusMoved(final FocusMovedEvent event) {
-        if (activeWidget != null) {
-            activeWidget.onEvent(LostFocusEvent.LOST_FOCUS_EVENT);
+        if (activeWidget != event.current) {
+            if (activeWidget != null) {
+                activeWidget.onEvent(new LostFocusEvent());
+            }
+            activeWidget = event.current;
+            activeWidget.onEvent(new GainFocusEvent());
         }
-        activeWidget = event.current;
-        activeWidget.onEvent(GainFocusEvent.GAIN_FOCUS_EVENT);
     }
 
 

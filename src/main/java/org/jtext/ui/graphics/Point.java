@@ -31,6 +31,10 @@ public final class Point {
         return Point.at(x + 1, y);
     }
 
+    public Point shiftX(final int value) {
+        return Point.at(x + value, y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

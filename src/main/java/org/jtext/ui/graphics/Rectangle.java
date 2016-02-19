@@ -93,8 +93,10 @@ public final class Rectangle {
     }
 
     public Line cropRelative(final Line line) {
-        if (hasRelative(line.end()) || hasRelative(line.start()) || hasCommonPoints(line)) {
-            return Line.line(closestInner(line.start()), closestInner(line.end()), line.direction);
+        if (line.length > 0) {
+            if (hasRelative(line.end()) || hasRelative(line.start()) || hasCommonPoints(line)) {
+                return Line.line(closestInner(line.start()), closestInner(line.end()), line.direction);
+            }
         }
         return new Line(0, 0, 0, line.direction);
     }

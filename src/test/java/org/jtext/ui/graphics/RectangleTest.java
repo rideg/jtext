@@ -72,6 +72,7 @@ public class RectangleTest {
         assertThat(rectangle.cropRelative(horizontal(-3, 5, 20)), is(horizontal(0, 5, 10)));
         assertThat(rectangle.cropRelative(horizontal(2, 5, 20)), is(horizontal(2, 5, 8)));
         assertThat(rectangle.cropRelative(horizontal(12, 5, 20)), is(horizontal(0, 0, 0)));
+        assertThat(rectangle.cropRelative(horizontal(5, 2, 0)), is(horizontal(0, 0, 0)));
 
     }
 }

@@ -84,7 +84,7 @@ public class Graphics {
     }
 
     public void putChar(final Point point, final char ch) {
-        if (area.has(point)) {
+        if (area.hasRelative(point)) {
             final Point p = toReal(point);
             executeInLock(() -> driver.putCharAt(p.x, p.y, ch));
         }
@@ -125,6 +125,15 @@ public class Graphics {
             border.bottomLeft.ifPresent(d -> putCharAt(area.bottomLeft(), d));
             border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d));
         });
+    }
+
+    public void changeAttributeAt(final Point point, final int length, CellDescriptor descriptor) {
+        final Line inside = area.cropRelative(Line.horizontal(point, length));
+        if (inside.length > 0) {
+            final Point p = toReal(point);
+            executeInLock(() -> driver.changeAttributeAt(p.x, p.y, inside.length, descriptor.foreground.get(),
+                                                         descriptor.background.get(), descriptor.attributes));
+        }
     }
 
     private void drawVerticalLine(Point point, int length, CellDescriptor descriptor) {
