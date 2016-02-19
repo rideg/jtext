@@ -1,7 +1,6 @@
 package org.jtext.ui.widget;
 
 import org.jtext.curses.CellDescriptor;
-import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.CharacterColor;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.ReadKey;
@@ -25,6 +24,9 @@ public class TextField extends Widget {
     private int width;
     private int cursor;
     private int clip;
+    private Selection selection;
+
+    //    private Selection selection;
     private Border border;
     private Padding padding;
     private CharacterColor background;
@@ -49,6 +51,7 @@ public class TextField extends Widget {
         this.borderColor = borderColor;
         this.unfocusedBorderColor = unfocusedBorderColor;
         this.keyEventProcessor = new KeyEventProcessor();
+        this.selection = Selection.NONE;
 
         registerKeyHandlers();
 
@@ -76,9 +79,49 @@ public class TextField extends Widget {
         keyEventProcessor.register(ControlKey.RIGHT, this::moveCursorRight);
         keyEventProcessor.register(ControlKey.HOME, this::jumpHome);
         keyEventProcessor.register(ControlKey.END, this::jumpEnd);
+        keyEventProcessor.register(ControlKey.SHIFT_LEFT, this::leftSelect);
+        keyEventProcessor.register(ControlKey.SHIFT_RIGHT, this::rightSelect);
+    }
+
+    public void leftSelect() {
+        if (clip + cursor > 0) {
+            if (selection != Selection.NONE) {
+                selection = selection.decrement();
+            } else {
+                selection = Selection.of(clip + cursor, clip + cursor - 1);
+            }
+        }
+        moveCursorLeftAndDropIfNeeded(false);
+    }
+
+    private void moveCursorLeftAndDropIfNeeded(boolean dropSelection) {
+        if (!dropSelection || selection == Selection.NONE) {
+            if (cursor > 0) {
+                cursor--;
+            } else if (clip > 0) {
+                clip--;
+            }
+        } else {
+            selection = Selection.NONE;
+        }
+    }
+
+    public void rightSelect() {
+        if (clip + cursor < text.length()) {
+            if (selection != Selection.NONE) {
+                selection = selection.increment();
+            } else {
+                selection = Selection.of(clip + cursor, clip + cursor + 1);
+            }
+        }
+        moveCursorRightAndDropIfNeeded(false);
     }
 
     private void typeIn(final ReadKey e) {
+        if (selection != Selection.NONE) {
+            text.delete(selection.getStart(), selection.getEnd() + 1);
+            selection = Selection.NONE;
+        }
         text.insert(clip + cursor, (char) e.value);
         if (cursor == width - 1) {
             clip++;
@@ -103,19 +146,23 @@ public class TextField extends Widget {
     }
 
     private void moveCursorRight() {
-        if (cursor < width - 1 && clip + cursor < text.length()) {
-            cursor++;
-        } else if (clip + cursor < text.length()) {
-            clip++;
+        moveCursorRightAndDropIfNeeded(true);
+    }
+
+    private void moveCursorRightAndDropIfNeeded(boolean dropSelection) {
+        if (!dropSelection || selection == Selection.NONE) {
+            if (cursor < width - 1 && clip + cursor < text.length()) {
+                cursor++;
+            } else if (clip + cursor < text.length()) {
+                clip++;
+            }
+        } else {
+            selection = Selection.NONE;
         }
     }
 
     private void moveCursorLeft() {
-        if (cursor > 0) {
-            cursor--;
-        } else if (clip > 0) {
-            clip--;
-        }
+        moveCursorLeftAndDropIfNeeded(true);
     }
 
     private void deletePreviousChar() {
@@ -168,17 +215,25 @@ public class TextField extends Widget {
         if (text.length() - clip >= width) {
             graphics.putChar(startPoint.shiftX(width), '…');
         }
-        graphics.changeAttributeAt(startPoint.shiftX(cursor), 1,
-                                   CellDescriptor.of(back, fore, CharacterAttribute.REVERSE));
+
+        if (selection != Selection.NONE) {
+            graphics.changeAttributeAt(
+                    startPoint.shiftX(Math.max(selection.getStart() - clip, 0)),
+                    Math.min(selection.length() + 1 - Math.max(clip - selection.getStart(), 0), width - 1),
+                    CellDescriptor.of(fore, back));
+        } else {
+            graphics.changeAttributeAt(startPoint.shiftX(cursor), 1,
+                    CellDescriptor.of(fore, back));
+        }
     }
 
     @Override
     public Occupation getPreferredWidth() {
         return Occupation.fixed(width +
-                                border.getLeftThickness() +
-                                border.getRightThickness() +
-                                padding.left +
-                                padding.right);
+                border.getLeftThickness() +
+                border.getRightThickness() +
+                padding.left +
+                padding.right);
     }
 
     @Override
