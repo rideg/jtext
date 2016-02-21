@@ -12,6 +12,15 @@ import java.util.function.Consumer;
 public class KeyEventProcessor {
 
     private final Map<ControlKey, Consumer<ReadKey>> handlers = new HashMap<>();
+    private final boolean stopPropagation;
+
+    public KeyEventProcessor() {
+        this(false);
+    }
+
+    public KeyEventProcessor(boolean stopPropagation) {
+        this.stopPropagation = stopPropagation;
+    }
 
     public void register(final ControlKey key, Consumer<ReadKey> handler) {
         handlers.put(key, handler);
@@ -22,12 +31,16 @@ public class KeyEventProcessor {
     }
 
     public boolean handle(KeyPressedEvent event) {
+        boolean isHandled = false;
         Optional<Consumer<ReadKey>> handler = Optional.ofNullable(handlers.get(event.getKey().controlKey));
         if (handler.isPresent()) {
             handler.get().accept(event.getKey());
-            return true;
+            isHandled = true;
         }
-        return false;
+        if (isHandled && stopPropagation) {
+            event.stopPropagating();
+        }
+        return isHandled;
     }
 
 }

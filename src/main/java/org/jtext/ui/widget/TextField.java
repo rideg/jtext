@@ -16,6 +16,9 @@ import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
 import org.jtext.ui.util.KeyEventProcessor;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class TextField extends Widget {
 
     private final KeyEventProcessor keyEventProcessor;
@@ -25,40 +28,46 @@ public class TextField extends Widget {
     private int cursor;
     private int clip;
     private Selection selection;
-
-    //    private Selection selection;
     private Border border;
     private Padding padding;
-    private CharacterColor background;
-    private CharacterColor foreground;
+    private CharacterColor backgroundColor;
+    private CharacterColor foregroundColor;
     private CharacterColor unfocusedBackground;
     private CharacterColor unfocusedForeground;
     private CellDescriptor borderColor;
     private CellDescriptor unfocusedBorderColor;
 
-    public TextField(final int width, final Border border, final Padding padding, final CharacterColor background,
-                     final CharacterColor foreground, final CharacterColor unfocusedBackground,
+    public TextField(final int width, final Border border, final Padding padding, final CharacterColor backgroundColor,
+                     final CharacterColor foregroundColor, final CharacterColor unfocusedBackground,
                      final CharacterColor unfocusedForeground, final CellDescriptor borderColor,
                      final CellDescriptor unfocusedBorderColor) {
         text = new StringBuilder();
         this.border = border;
         this.padding = padding;
-        this.background = background;
-        this.foreground = foreground;
+        this.backgroundColor = backgroundColor;
+        this.foregroundColor = foregroundColor;
         this.unfocusedBackground = unfocusedBackground;
         this.unfocusedForeground = unfocusedForeground;
         this.width = width;
         this.borderColor = borderColor;
         this.unfocusedBorderColor = unfocusedBorderColor;
-        this.keyEventProcessor = new KeyEventProcessor();
+        this.keyEventProcessor = new KeyEventProcessor(true);
         this.selection = Selection.NONE;
 
         registerKeyHandlers();
 
         addHandler(GainFocusEvent.class, this::onGainedFocus);
         addHandler(LostFocusEvent.class, this::onLostFocus);
-        addHandler(KeyPressedEvent.class, this::onKeyPressed);
+        addHandler(KeyPressedEvent.class, keyEventProcessor::handle);
 
+    }
+
+    public String getText() {
+        return text.toString();
+    }
+
+    String getVisibleText() {
+        return text.substring(clip, clip + max(min(text.length() - clip, width), 0));
     }
 
     private void onLostFocus(final LostFocusEvent event) {
@@ -84,146 +93,138 @@ public class TextField extends Widget {
     }
 
     public void leftSelect() {
-        if (clip + cursor > 0) {
+        if (cursor > 0) {
             if (selection != Selection.NONE) {
                 selection = selection.decrement();
             } else {
-                selection = Selection.of(clip + cursor, clip + cursor - 1);
+                selection = Selection.of(Math.min(cursor, text.length() - 1), cursor - 1);
             }
-        }
-        moveCursorLeftAndDropIfNeeded(false);
-    }
-
-    private void moveCursorLeftAndDropIfNeeded(boolean dropSelection) {
-        if (!dropSelection || selection == Selection.NONE) {
-            if (cursor > 0) {
-                cursor--;
-            } else if (clip > 0) {
-                clip--;
-            }
-        } else {
-            selection = Selection.NONE;
+            moveCursor(cursor - 1);
         }
     }
 
     public void rightSelect() {
-        if (clip + cursor < text.length()) {
-            if (selection != Selection.NONE) {
-                selection = selection.increment();
-            } else {
-                selection = Selection.of(clip + cursor, clip + cursor + 1);
+        if (cursor < text.length()) {
+            if (cursor < text.length() - 1) {
+                if (selection != Selection.NONE) {
+                    selection = selection.increment();
+                } else {
+                    selection = Selection.of(cursor, cursor + 1);
+                }
             }
+            moveCursor(cursor + 1);
         }
-        moveCursorRightAndDropIfNeeded(false);
     }
 
     private void typeIn(final ReadKey e) {
-        if (selection != Selection.NONE) {
-            text.delete(selection.getStart(), selection.getEnd() + 1);
-            selection = Selection.NONE;
+        if (selectionExists()) {
+            deleteSelection();
         }
-        text.insert(clip + cursor, (char) e.value);
-        if (cursor == width - 1) {
-            clip++;
-        } else {
-            cursor++;
-        }
+        text.insert(cursor, (char) e.value);
+        moveCursor(cursor + 1);
+    }
+
+    private boolean selectionExists() {
+        return selection != Selection.NONE;
+    }
+
+    private void deleteSelection() {
+        moveCursor(selection.getStart());
+        text.delete(selection.getStart(), selection.getEnd() + 1);
+        selection = Selection.NONE;
     }
 
     private void jumpEnd() {
-        if (text.length() >= width) {
-            cursor = width - 1;
-            clip = text.length() - cursor;
-        } else {
-            clip = 0;
-            cursor = text.length();
-        }
+        moveCursor(text.length());
     }
 
     private void jumpHome() {
-        clip = 0;
-        cursor = 0;
+        moveCursor(0);
     }
 
     private void moveCursorRight() {
-        moveCursorRightAndDropIfNeeded(true);
-    }
-
-    private void moveCursorRightAndDropIfNeeded(boolean dropSelection) {
-        if (!dropSelection || selection == Selection.NONE) {
-            if (cursor < width - 1 && clip + cursor < text.length()) {
-                cursor++;
-            } else if (clip + cursor < text.length()) {
-                clip++;
+        if (selectionExists()) {
+            if (selection.isRightToLeft()) {
+                moveCursor(selection.getEnd());
             }
-        } else {
             selection = Selection.NONE;
+        } else {
+            moveCursor(cursor + 1);
         }
     }
 
     private void moveCursorLeft() {
-        moveCursorLeftAndDropIfNeeded(true);
+        if (selectionExists()) {
+            if (selection.isLeftToRight()) {
+                moveCursor(selection.getStart());
+            }
+            selection = Selection.NONE;
+        } else {
+            moveCursor(cursor - 1);
+        }
     }
 
     private void deletePreviousChar() {
-        if (text.length() > 0 && clip + cursor > 0) {
-            text.deleteCharAt(clip + cursor - 1);
-            moveCursorLeft();
+        if (selectionExists()) {
+            deleteSelection();
+        } else {
+            if (text.length() > 0 && cursor > 0) {
+                text.deleteCharAt(cursor - 1);
+                moveCursor(cursor - 1);
+            }
         }
     }
 
     private void deleteChar() {
-        if (text.length() > 0 && clip + cursor < text.length()) {
-            text.deleteCharAt(clip + cursor);
+        if (selectionExists()) {
+            deleteSelection();
+        } else {
+            if (text.length() > 0 && cursor < text.length()) {
+                text.deleteCharAt(cursor);
+            }
         }
     }
 
-    private void onKeyPressed(final KeyPressedEvent event) {
-        if (keyEventProcessor.handle(event)) {
-            event.stopBubbling();
+    private void moveCursor(int position) {
+        if (position >= 0 && position <= text.length()) {
+            cursor = position;
+            if (position < clip) {
+                clip = position;
+            } else if (position >= clip + width) {
+                clip = position - width + 1;
+            }
         }
     }
 
     @Override
     public void draw(final Graphics graphics) {
-        final CharacterColor back;
-        final CharacterColor fore;
-        final CellDescriptor borderC;
-        if (focused) {
-            back = background;
-            fore = foreground;
-            borderC = borderColor;
-        } else {
-            back = unfocusedBackground;
-            fore = unfocusedForeground;
-            borderC = unfocusedBorderColor;
-        }
-        graphics.fillBackground(back);
-        graphics.drawBorder(border.changeCell(borderC));
+        final CharacterColor background = getBackgroundColor();
+        final CharacterColor foreground = getForegroundColor();
+        final CellDescriptor border = getBorderColor();
+        graphics.fillBackground(background);
+        graphics.drawBorder(this.border.changeCell(border));
 
-        graphics.setBackgroundColor(back);
-        graphics.setForegroundColor(fore);
+        graphics.setBackgroundColor(background);
+        graphics.setForegroundColor(foreground);
 
-        final Point startPoint = Point.at(padding.left + border.getLeftThickness(), border.getTopThickness());
+        final Point startPoint = Point.at(padding.left + this.border.getLeftThickness(), this.border.getTopThickness());
         if (clip > 0) {
             graphics.putChar(startPoint.decX(), '…');
 
         }
-        final String toWrite = text.substring(clip, clip + Math.max(Math.min(text.length() - clip, width), 0));
-        graphics.printString(startPoint, toWrite);
+        graphics.printString(startPoint, getVisibleText());
 
         if (text.length() - clip >= width) {
             graphics.putChar(startPoint.shiftX(width), '…');
         }
 
         if (selection != Selection.NONE) {
-            graphics.changeAttributeAt(
-                    startPoint.shiftX(Math.max(selection.getStart() - clip, 0)),
-                    Math.min(selection.length() + 1 - Math.max(clip - selection.getStart(), 0), width - 1),
-                    CellDescriptor.of(fore, back));
+            graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
+                    min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
+                    CellDescriptor.of(foreground, background));
         } else {
-            graphics.changeAttributeAt(startPoint.shiftX(cursor), 1,
-                    CellDescriptor.of(fore, back));
+            graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1,
+                    CellDescriptor.of(foreground, background));
         }
     }
 
@@ -248,5 +249,17 @@ public class TextField extends Widget {
 
     public boolean isFocused() {
         return focused;
+    }
+
+    public CharacterColor getBackgroundColor() {
+        return focused ? backgroundColor : unfocusedBackground;
+    }
+
+    public CharacterColor getForegroundColor() {
+        return focused ? foregroundColor : unfocusedForeground;
+    }
+
+    public CellDescriptor getBorderColor() {
+        return focused ? borderColor : unfocusedBorderColor;
     }
 }

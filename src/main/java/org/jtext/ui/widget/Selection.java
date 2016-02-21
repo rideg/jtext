@@ -43,4 +43,12 @@ public final class Selection {
     public int length() {
         return getEnd() - getStart();
     }
+
+    public boolean isRightToLeft() {
+        return start > end;
+    }
+
+    public boolean isLeftToRight() {
+        return start <= end;
+    }
 }

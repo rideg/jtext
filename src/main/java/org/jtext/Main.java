@@ -120,7 +120,7 @@ public final class Main {
             final CountDownLatch latch = new CountDownLatch(1);
 
 
-            final KeyEventProcessor processor = new KeyEventProcessor();
+            final KeyEventProcessor processor = new KeyEventProcessor(true);
 
             processor.register(ControlKey.ESCAPE, latch::countDown);
             processor.register(ControlKey.DATA_LINK_ESCAPE, e -> {
