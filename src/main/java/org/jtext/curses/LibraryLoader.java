@@ -15,7 +15,7 @@ public final class LibraryLoader {
             final OS os = getOperatingSystem();
             final String arch = System.getProperty("sun.arch.data.model");
             final String path = System.getProperty("org.jtext.ldPath", "native");
-            final String libPath = path + "/" + os.name().toLowerCase() + "_" + arch + "/libcurses." + os.extension();
+            final String libPath = path + "/" + os.name().toLowerCase() + "_" + arch + "/libcursesjni." + os.extension();
             System.load(new File(libPath).getAbsolutePath());
             loaded = true;
         }

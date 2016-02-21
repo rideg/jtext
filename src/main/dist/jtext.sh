@@ -22,6 +22,7 @@ while getopts ":d:k" opt; do
   esac
 done
 
+export LD_LIBRARY_PATH=native/mac_64:$LD_LIBRARY_PATH
 
-clear; $JAVA_CMD -cp lib/* $DEBUG org.jtext.Main
+clear; $JAVA_CMD -cp "lib/*" $DEBUG org.jtext.Main
 

@@ -31,6 +31,7 @@ void configure_signal_handling()
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
  (JNIEnv * env, jobject obj)
 {
+    use_tioctl(TRUE);
     setlocale(LC_ALL, "");
     screen = initscr();
     pad = newpad(1, 1);
@@ -46,6 +47,7 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
     keypad(pad, TRUE);
     noecho();
     curs_set(FALSE);
+
 }
 
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenWidth

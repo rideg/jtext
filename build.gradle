@@ -16,7 +16,7 @@ targetCompatibility = 1.8
 
 model {
     components {
-        curses(NativeLibrarySpec) {
+        cursesjni(NativeLibrarySpec) {
             targetPlatform "mac_64"
             targetPlatform "linux_32"
             targetPlatform "linux_64"
@@ -28,11 +28,12 @@ model {
 		 if (targetPlatform.name == 'mac_64') { 
                     cCompiler.args  "-I$System.env.JAVA_HOME/include",
                                     "-I/$System.env.JAVA_HOME/include/darwin",
+                                    "-I/usr/local/opt/ncurses/include",
                                     "-Wall",
                                     "-D _XOPEN_SOURCE_EXTENDED",
                                     "-g",
                                     "-O0"
-		            linker.args     "-lncurses", "-liconv"
+		            linker.args     "-L/usr/local/opt/ncurses/lib", "-lncursesw.6", "-liconv"
 	          }
 		  if (targetPlatform.name == 'linux_32' || targetPlatform.name == 'linux_64') {
                     cCompiler.args  "-I$System.env.JAVA_HOME/include",
@@ -93,7 +94,11 @@ distributions {
                 into 'lib'
             }
 
-            from("$libsDir/curses/shared") {
+            from("$libsDir/cursesjni/shared") {
+                into 'native'
+            }
+
+            from("native") {
                 into 'native'
             }
 
