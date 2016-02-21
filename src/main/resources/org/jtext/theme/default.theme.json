@@ -1,0 +1,56 @@
+{
+  "borders": {
+    "single": {
+      "topLeft": "┌",
+      "top": "─",
+      "topRight": "┐",
+      "right": "│",
+      "bottomRight": "┘",
+      "bottom": "─",
+      "bottomLeft": "└",
+      "left": "│"
+    },
+    "double": {
+      "topLeft": "╔",
+      "top": "═",
+      "topRight": "╗",
+      "right": "║",
+      "bottomRight": "╝",
+      "bottom": "═",
+      "bottomLeft": "╚",
+      "left": "║"
+    },
+    "single.curved": {
+      "topLeft": "╭",
+      "top": "─",
+      "topRight": "╮",
+      "right": "│",
+      "bottomRight": "╯",
+      "bottom": "─",
+      "bottomLeft": "╰",
+      "left": "│"
+    }
+  },
+  "colors": {
+    "black": "#000000",
+    "white": "#ffffff",
+    "red": "#ff0000",
+    "green": "#00ff00",
+    "blue": "#0000ff",
+    "yellow": "#ffff00",
+    "magenta": "#ff00ff",
+    "cyan": "#00ffff"
+  },
+  "widgets": {
+    "jtex.org.TextField": {
+      "border": "single black white",
+      "padding": "0 1 0 1",
+      "focused.background": "black",
+      "focused.foreground": "white",
+      "cursor.background": "white",
+      "cursor.foreground": "black",
+      "cursor.unfocused.background": "black",
+      "cursor.unfocused.foreground": "white"
+    }
+  }
+}
