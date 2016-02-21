@@ -20,6 +20,12 @@ public class CursesDriver implements Driver {
     public native void init();
 
     @Override
+    public native void initColor(int number, byte red, byte green, byte blue);
+
+    @Override
+    public native void initColorPair(int foreground, int background);
+
+    @Override
     public native int getScreenWidth();
 
     @Override

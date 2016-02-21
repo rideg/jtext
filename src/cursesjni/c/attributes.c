@@ -25,6 +25,7 @@ attr_t get_attribute_code(const char* name)
     if(strcmp(name, "DIM") == 0) return A_DIM;
     if(strcmp(name, "BOLD") == 0) return A_BOLD;
     if(strcmp(name, "INVIS") == 0) return A_INVIS;
+    if(strcmp(name, "ITALIC") == 0) return A_ITALIC;
 
     return 0;
 }

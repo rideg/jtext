@@ -8,5 +8,6 @@ public enum CharacterAttribute {
     BLINK,
     DIM,
     BOLD,
-    INVIS
+    INVIS,
+    ITALIC
 }
