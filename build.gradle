@@ -31,7 +31,7 @@ model {
                     if (targetPlatform.name == 'mac_64') {
                         cCompiler.args "-I$System.env.JAVA_HOME/include",
                                 "-I/$System.env.JAVA_HOME/include/darwin",
-                                "-I/usr/local/opt/ncurses/include",
+                                "-I${projectDir}/native/include",
                                 "-Wall",
                                 "-D _XOPEN_SOURCE_EXTENDED",
                                 "-g",
@@ -39,7 +39,7 @@ model {
                         linker.args "-L/usr/local/opt/ncurses/lib", "-lncursesw.6", "-liconv"
                     }
                     if (targetPlatform.name == 'linux_32' || targetPlatform.name == 'linux_64') {
-                        cCompiler.args "-I${projectDir}/native/include/linux",
+                        cCompiler.args "-I${projectDir}/native/include",
                                 "-I$System.env.JAVA_HOME/include",
                                 "-I$System.env.JAVA_HOME/include/linux",
                                 "-Wall",
