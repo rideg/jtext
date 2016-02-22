@@ -115,7 +115,7 @@ public class Scene extends Container implements Component {
     public void stop() {
         // todo unsubscribe from topics
 
-        executorService.shutdown();
+        executorService.shutdownNow();
         try {
             executorService.awaitTermination(3, TimeUnit.SECONDS);
         } catch (InterruptedException e) {

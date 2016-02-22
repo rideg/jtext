@@ -38,5 +38,5 @@ done
 set_ld_library_path
 export LD_LIBRARY_PATH=$NATIVE_LIB:$LD_LIBRARY_PATH
 
-$JAVA_CMD -cp "lib/*" $DEBUG org.jtext.Main
+$JAVA_CMD -cp "lib/*" $DEBUG -Dlogback.configurationFile=config/logging.xml org.jtext.Main
 

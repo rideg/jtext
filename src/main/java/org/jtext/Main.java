@@ -41,9 +41,9 @@ public final class Main {
         final Driver driver = getDriver();
         final EventBus eventBus = new EventBus();
         final KeyboardHandler keyboardHandler = new KeyboardHandler(driver, newSingleThreadExecutor(), eventBus);
+        final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor());
         try {
             driver.init();
-            final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor());
 
             final Container mainContainer =
                     new Container(Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER));
@@ -153,6 +153,7 @@ public final class Main {
 
         } finally {
             keyboardHandler.stop();
+            scene.stop();
             driver.shutdown();
         }
     }
