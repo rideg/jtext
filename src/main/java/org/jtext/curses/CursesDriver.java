@@ -1,20 +1,6 @@
 package org.jtext.curses;
 
-import java.util.concurrent.locks.ReentrantLock;
-
 public class CursesDriver implements Driver {
-
-    private final ReentrantLock lock = new ReentrantLock();
-
-    @Override
-    public void lock() {
-        lock.lock();
-    }
-
-    @Override
-    public void unlock() {
-        lock.unlock();
-    }
 
     @Override
     public native void init();

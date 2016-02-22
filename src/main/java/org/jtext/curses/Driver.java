@@ -2,10 +2,6 @@ package org.jtext.curses;
 
 public interface Driver {
 
-    void lock();
-
-    void unlock();
-
     void init();
 
     void initColor(int number, short red, short green, short blue);

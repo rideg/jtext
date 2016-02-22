@@ -43,7 +43,7 @@ public final class Main {
         final KeyboardHandler keyboardHandler = new KeyboardHandler(driver, newSingleThreadExecutor(), eventBus);
         try {
             driver.init();
-            final Scene scene = new Scene(driver, eventBus);
+            final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor());
 
             final Container mainContainer =
                     new Container(Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER));

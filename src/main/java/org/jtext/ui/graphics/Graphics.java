@@ -18,15 +18,6 @@ public class Graphics {
         driver.clearStyle();
     }
 
-    private void executeInLock(final Runnable runnable) {
-        driver.lock();
-        try {
-            runnable.run();
-        } finally {
-            driver.unlock();
-        }
-    }
-
     public Graphics restrict(final Rectangle area) {
         return new Graphics(area.relativeTo(this.area.topLeft()), driver);
     }
@@ -63,7 +54,7 @@ public class Graphics {
         final Line line = area.cropRelative(Line.vertical(point, length));
         if (line.length > 0) {
             final Point p = toReal(point);
-            executeInLock(() -> driver.drawVerticalLineAt(p.x, p.y, ch, line.length));
+            driver.drawVerticalLineAt(p.x, p.y, ch, line.length);
         }
     }
 
@@ -79,14 +70,14 @@ public class Graphics {
         final Line inside = area.cropRelative(Line.horizontal(point, string.length()));
         if (inside.length > 0) {
             final Point p = toReal(point);
-            executeInLock(() -> driver.printStringAt(p.x, p.y, string.substring(0, inside.length)));
+            driver.printStringAt(p.x, p.y, string.substring(0, inside.length));
         }
     }
 
     public void putChar(final Point point, final char ch) {
         if (area.hasRelative(point)) {
             final Point p = toReal(point);
-            executeInLock(() -> driver.putCharAt(p.x, p.y, ch));
+            driver.putCharAt(p.x, p.y, ch);
         }
     }
 
@@ -103,36 +94,32 @@ public class Graphics {
     }
 
     public void fillBackground(final CharacterColor characterColor) {
-        executeInLock(() -> {
-            driver.setBackgroundColor(characterColor);
-            driver.setForegroundColor(CharacterColor.WHITE);
-            Point point = area.topLeft();
-            for (int i = 0; i < area.height; i++) {
-                driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
-                point = point.incY();
-            }
-        });
+        driver.setBackgroundColor(characterColor);
+        driver.setForegroundColor(CharacterColor.WHITE);
+        Point point = area.topLeft();
+        for (int i = 0; i < area.height; i++) {
+            driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
+            point = point.incY();
+        }
     }
 
     public void drawBorder(final Border border) {
-        executeInLock(() -> {
-            border.topLeft.ifPresent(d -> putCharAt(area.topLeft(), d));
-            border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d));
-            border.topRight.ifPresent(d -> putCharAt(area.topRight(), d));
-            border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.height - 2, d));
-            border.bottomRight.ifPresent(d -> putCharAt(area.bottomRight(), d));
-            border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d));
-            border.bottomLeft.ifPresent(d -> putCharAt(area.bottomLeft(), d));
-            border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d));
-        });
+        border.topLeft.ifPresent(d -> putCharAt(area.topLeft(), d));
+        border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d));
+        border.topRight.ifPresent(d -> putCharAt(area.topRight(), d));
+        border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.height - 2, d));
+        border.bottomRight.ifPresent(d -> putCharAt(area.bottomRight(), d));
+        border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d));
+        border.bottomLeft.ifPresent(d -> putCharAt(area.bottomLeft(), d));
+        border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d));
     }
 
     public void changeAttributeAt(final Point point, final int length, CellDescriptor descriptor) {
         final Line inside = area.cropRelative(Line.horizontal(point, length));
         if (inside.length > 0) {
             final Point p = toReal(point);
-            executeInLock(() -> driver.changeAttributeAt(p.x, p.y, inside.length, descriptor.foreground.get(),
-                                                         descriptor.background.get(), descriptor.attributes));
+            driver.changeAttributeAt(p.x, p.y, inside.length, descriptor.foreground.get(), descriptor.background.get(),
+                                     descriptor.attributes);
         }
     }
 
