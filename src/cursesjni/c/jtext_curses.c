@@ -50,6 +50,18 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
 
 }
 
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColorPair
+  (JNIEnv * env, jobject self, jint pair_id, jint fg, jint bg)
+ {
+   init_pair(pair_id, fg, bg);
+ }
+
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColor
+  (JNIEnv * env, jobject self, jint color_id, jshort red_component, jshort green_component, jshort blue_component)
+ {
+    init_color((short) color_id, (short) red_component, (short) green_component, (short) blue_component);
+ }
+
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenWidth
  (JNIEnv * env, jobject obj)
 {

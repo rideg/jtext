@@ -8,9 +8,9 @@ public interface Driver {
 
     void init();
 
-    void initColor(int number, byte red, byte green, byte blue);
+    void initColor(int number, short red, short green, short blue);
 
-    void initColorPair(int foreground, int background);
+    void initColorPair(int colorId, int foreground, int background);
 
     int getScreenWidth();
 

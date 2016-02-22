@@ -15,6 +15,24 @@ extern "C" {
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
   (JNIEnv *, jobject);
 
+
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    initColorPair
+ * Signature: (III)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColorPair
+  (JNIEnv *, jobject, jint, jint, jint);
+
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    initColor
+ * Signature: (ISSS)V
+ */
+JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColor
+  (JNIEnv *, jobject, jint, jshort, jshort, jshort);
+
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    getScreenWidth

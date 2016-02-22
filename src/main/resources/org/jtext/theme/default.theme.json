@@ -42,7 +42,7 @@
     "cyan": "#00ffff"
   },
   "widgets": {
-    "jtex.org.TextField": {
+    "org.jtext.ui.widget.TextField": {
       "border": "single black white",
       "padding": "0 1 0 1",
       "focused.background": "black",
