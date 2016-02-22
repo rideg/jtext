@@ -9,14 +9,14 @@ if [ ! -f "$JAVA_CMD" ]; then
   exit 1
 fi
 
-function set_ld_library_path {
-    if [ "$(uname -s)" == "Linux" ]; then
-        if [ "$(uname -i)" == "x86_64" ]; then
+set_ld_library_path() {
+    if [ "$(uname -s)" = Linux ]; then
+        if [ "$(uname -i)" = x86_64 ]; then
             NATIVE_LIB=native/linux_64
         else
            NATIVE_LIB=native/linux_32
         fi
-    elif [ "$(uname -s)" == "Darwin" ]; then
+    elif [ "$(uname -s)" = Darwin ]; then
         NATIVE_LIB=native/mac_64
     fi
 }
