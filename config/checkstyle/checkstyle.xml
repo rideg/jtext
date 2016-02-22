@@ -119,7 +119,4 @@
     <!-- <module name="HiddenField"/> It turns out that we do this all the time in setters and constructors. -->
     <!-- <module name="ImportOrder"> Its just not worth trying to get imports to line up. -->
   </module>
-
-  <!-- More formatting stuff that can't be in TreeWalker -->
-  <module name="NewlineAtEndOfFile" />
 </module>
