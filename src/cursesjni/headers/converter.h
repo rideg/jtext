@@ -1,5 +1,5 @@
 #include <jni.h>
-#include <curses.h>
+#include <ncursesw6/curses.h>
 #include <string.h>
 #include <stdlib.h>
 #include <iconv.h>

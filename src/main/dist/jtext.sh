@@ -9,6 +9,19 @@ if [ ! -f "$JAVA_CMD" ]; then
   exit 1
 fi
 
+function set_ld_library_path {
+    if [ "$(uname -s)" == "Linux" ]; then
+        if [ "$(uname -i)" == "x86_64" ]; then
+            NATIVE_LIB=native/linux_64
+        else
+           NATIVE_LIB=native/linux_32
+        fi
+    elif [ "$(uname -s)" == "Darwin" ]; then
+        NATIVE_LIB=native/mac_64
+    fi
+}
+
+
 
 while getopts ":d:k" opt; do
   case $opt in
@@ -22,7 +35,8 @@ while getopts ":d:k" opt; do
   esac
 done
 
-export LD_LIBRARY_PATH=native/mac_64:$LD_LIBRARY_PATH
+set_ld_library_path
+export LD_LIBRARY_PATH=$NATIVE_LIB:$LD_LIBRARY_PATH
 
-clear; $JAVA_CMD -cp "lib/*" $DEBUG org.jtext.Main
+$JAVA_CMD -cp "lib/*" $DEBUG org.jtext.Main
 

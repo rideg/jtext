@@ -2,7 +2,7 @@
 #define __JTEXT_ATTRIBUTES
 
 #include <jni.h>
-#include <curses.h>
+#include <ncursesw6/curses.h>
 
 #ifdef __cpluplus
 extern "C" {

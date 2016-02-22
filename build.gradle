@@ -3,7 +3,7 @@ apply plugin: 'idea'
 apply plugin: 'c'
 apply plugin: 'distribution'
 apply plugin: 'checkstyle'
-if(project.hasProperty('findbugs')) {
+if (project.hasProperty('findbugs')) {
     apply plugin: 'findbugs'
 }
 
@@ -14,36 +14,40 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+
+println "-I${projectDir}/native/include/linux"
+
 model {
     components {
         cursesjni(NativeLibrarySpec) {
             targetPlatform "mac_64"
-            targetPlatform "linux_32"
+//            targetPlatform "linux_32"
             targetPlatform "linux_64"
             targetPlatform "windows_64"
             targetPlatform "windows_32"
 
             binaries {
                 all {
-		 if (targetPlatform.name == 'mac_64') { 
-                    cCompiler.args  "-I$System.env.JAVA_HOME/include",
-                                    "-I/$System.env.JAVA_HOME/include/darwin",
-                                    "-I/usr/local/opt/ncurses/include",
-                                    "-Wall",
-                                    "-D _XOPEN_SOURCE_EXTENDED",
-                                    "-g",
-                                    "-O0"
-		            linker.args     "-L/usr/local/opt/ncurses/lib", "-lncursesw.6", "-liconv"
-	          }
-		  if (targetPlatform.name == 'linux_32' || targetPlatform.name == 'linux_64') {
-                    cCompiler.args  "-I$System.env.JAVA_HOME/include",
-                                    "-I$System.env.JAVA_HOME/include/linux",
-                                    "-Wall",
-                                    "-D _XOPEN_SOURCE_EXTENDED",
-                                    "-pedantic",
-                                    "-g"
-                    linker.args     "-lncursesw"
-		  }
+                    if (targetPlatform.name == 'mac_64') {
+                        cCompiler.args "-I$System.env.JAVA_HOME/include",
+                                "-I/$System.env.JAVA_HOME/include/darwin",
+                                "-I/usr/local/opt/ncurses/include",
+                                "-Wall",
+                                "-D _XOPEN_SOURCE_EXTENDED",
+                                "-g",
+                                "-O0"
+                        linker.args "-L/usr/local/opt/ncurses/lib", "-lncursesw.6", "-liconv"
+                    }
+                    if (targetPlatform.name == 'linux_32' || targetPlatform.name == 'linux_64') {
+                        cCompiler.args "-I${projectDir}/native/include/linux",
+                                "-I$System.env.JAVA_HOME/include",
+                                "-I$System.env.JAVA_HOME/include/linux",
+                                "-Wall",
+                                "-D _XOPEN_SOURCE_EXTENDED",
+                                "-pedantic",
+                                "-g"
+                        linker.args "-Lnative/lib/${targetPlatform.name}", "-lncursesw6"
+                    }
                 }
             }
         }
@@ -98,7 +102,7 @@ distributions {
                 into 'native'
             }
 
-            from("native") {
+            from("native/lib") {
                 into 'native'
             }
 
