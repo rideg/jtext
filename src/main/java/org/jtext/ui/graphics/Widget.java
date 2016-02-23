@@ -66,6 +66,7 @@ public abstract class Widget {
         eventHandlers.computeIfAbsent(type, t -> new HashSet<>()).add(handler);
     }
 
+    @SuppressWarnings("unchecked")
     public final void onEvent(final UIEvent event) {
         if (eventHandlers.containsKey(event.getClass())) {
             for (Consumer c : eventHandlers.get(event.getClass())) {
