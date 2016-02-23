@@ -1,11 +1,7 @@
 package org.jtext.ui.widget;
 
-import org.jtext.curses.CellDescriptor;
-import org.jtext.curses.CharacterColor;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.ReadKey;
-import org.jtext.ui.attribute.Border;
-import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.event.KeyPressedEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,10 +13,7 @@ public class TextFieldTest {
 
     @Before
     public void setUp() throws Exception {
-        field = new TextField(10, Border.single(), Padding.horizontal(1), CharacterColor.BLUE, CharacterColor.WHITE,
-                CharacterColor.CYAN, CharacterColor.BLACK,
-                CellDescriptor.of(CharacterColor.RED, CharacterColor.GREEN),
-                CellDescriptor.of(CharacterColor.RED, CharacterColor.GREEN));
+        field = new TextField(10);
     }
 
     @Test

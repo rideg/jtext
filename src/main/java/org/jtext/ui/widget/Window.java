@@ -1,7 +1,7 @@
 package org.jtext.ui.widget;
 
+import org.jtext.curses.BaseColor;
 import org.jtext.curses.CharacterAttribute;
-import org.jtext.curses.CharacterColor;
 import org.jtext.curses.Driver;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.graphics.Point;
@@ -33,11 +33,11 @@ public class Window {
         return area.height;
     }
 
-    public void setBackgroundColor(final CharacterColor color) {
+    public void setBackgroundColor(final BaseColor color) {
 
     }
 
-    public void setForegroundColor(final CharacterColor color) {
+    public void setForegroundColor(final BaseColor color) {
 
     }
 

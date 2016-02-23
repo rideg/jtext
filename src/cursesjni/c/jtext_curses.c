@@ -40,7 +40,6 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
     configure_signal_handling();
     start_color();
     use_default_colors();
-    init_color_pairs();
     nonl();
     raw();
     meta(pad, TRUE);
@@ -53,13 +52,18 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColorPair
   (JNIEnv * env, jobject self, jint pair_id, jint fg, jint bg)
  {
-   init_pair(pair_id, fg, bg);
+   init_pair((NCURSES_PAIRS_T) pair_id,
+            (NCURSES_COLOR_T) fg,
+            (NCURSES_COLOR_T) bg);
  }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColor
-  (JNIEnv * env, jobject self, jint color_id, jshort red_component, jshort green_component, jshort blue_component)
+  (JNIEnv * env, jobject self, jint color_id, jint red_component, jint green_component, jint blue_component)
  {
-    init_color((short) color_id, (short) red_component, (short) green_component, (short) blue_component);
+    init_color((NCURSES_COLOR_T) color_id,
+    (NCURSES_COLOR_T) red_component,
+    (NCURSES_COLOR_T) green_component,
+    (NCURSES_COLOR_T) blue_component);
  }
 
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenWidth
@@ -83,44 +87,34 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_shutdown
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
-  (JNIEnv * env, jobject self, jobject fg, jobject bg)
+  (JNIEnv * env, jobject self, jint color_pair)
 {
-    attr_t attr = get_color_pair(env, fg, bg);
-    wattron(screen, attr);
+    wcolor_set(screen, color_pair, NULL);
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackgroundColor
-  (JNIEnv * env, jobject self, jobject color)
+
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getForegroundColor
+  (JNIEnv * env, jobject self)
 {
-
-    attr_t attr;
-    short pair_id;
-    jint fgId;
-    jint bgId;
-    wattr_get(screen, &attr, &pair_id, NULL);
-
-    fgId = pair_id >> 3;
-    bgId = get_color_id(env, color);
-
-    wcolor_set(screen, __COLOR_PAIRS[fgId][bgId], NULL);
+    NCURSES_COLOR_T fg;
+    NCURSES_COLOR_T bg;
+    NCURSES_PAIRS_T pair_id;
+    attr_t t;
+    wattr_get(screen, &t, &pair_id, NULL);
+    pair_content(pair_id, &fg, &bg);
+    return fg;
 }
 
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
-  (JNIEnv * env, jobject self, jobject color)
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getBackgroundColor
+  (JNIEnv * env, jobject self)
 {
-
-    attr_t attr;
-    short pair_id;
-    jint fgId;
-    jint bgId;
-
-    wattr_get(screen, &attr, &pair_id, NULL);
-
-    fgId = get_color_id(env, color);
-    bgId = pair_id % 8;
-
-     wcolor_set(screen, __COLOR_PAIRS[fgId][bgId], NULL);
-
+    NCURSES_COLOR_T fg;
+    NCURSES_COLOR_T bg;
+    NCURSES_PAIRS_T pair_id;
+    attr_t t;
+    wattr_get(screen, &t, &pair_id, NULL);
+    pair_content(pair_id, &fg, &bg);
+    return bg;
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_onAttributes
@@ -190,13 +184,11 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putCharAt
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
   (JNIEnv * env, jobject self, jint x, jint y,
-    jint length, jobject fg, jobject bg, jobjectArray attributes)
+    jint length, jint color_pair, jobjectArray attributes)
 {
     attr_t attr;
     attr = get_attribute(env, attributes);
-    short color;
-    color = get_color_pair(env, fg, bg);
-    mvwchgat(screen, y, x, length, attr, color, NULL);
+    mvwchgat(screen, y, x, length, attr, color_pair, NULL);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_bell

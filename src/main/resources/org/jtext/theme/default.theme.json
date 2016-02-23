@@ -32,6 +32,9 @@
     }
   },
   "colors": {
+    "config": {
+      "changeSystemDefaults": true
+    },
     "black": "#000000",
     "white": "#ffffff",
     "red": "#ff0000",
@@ -39,18 +42,20 @@
     "blue": "#0000ff",
     "yellow": "#ffff00",
     "magenta": "#ff00ff",
-    "cyan": "#00ffff"
+    "cyan": "#00ffff",
+    "gray": "#aaaaaa"
   },
   "widgets": {
     "org.jtext.ui.widget.TextField": {
-      "border": "single black white",
+      "focused.border": "single black white",
+      "unfocused.border": "single black gray",
       "padding": "0 1 0 1",
       "focused.background": "black",
       "focused.foreground": "white",
-      "cursor.background": "white",
-      "cursor.foreground": "black",
-      "cursor.unfocused.background": "black",
-      "cursor.unfocused.foreground": "white"
+      "unfocused.background": "black",
+      "unfocused.foreground": "white",
+      "cursor.background": "green",
+      "cursor.foreground": "black"
     }
   }
 }

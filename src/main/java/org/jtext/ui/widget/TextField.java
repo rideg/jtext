@@ -2,7 +2,7 @@ package org.jtext.ui.widget;
 
 import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.CharacterAttribute;
-import org.jtext.curses.CharacterColor;
+import org.jtext.curses.Color;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.ReadKey;
 import org.jtext.ui.attribute.Border;
@@ -29,32 +29,12 @@ public class TextField extends Widget {
     private int cursor;
     private int clip;
     private Selection selection;
-    private Border border;
-    private Padding padding;
-    private CharacterColor backgroundColor;
-    private CharacterColor foregroundColor;
-    private CharacterColor unfocusedBackground;
-    private CharacterColor unfocusedForeground;
-    private CellDescriptor borderColor;
-    private CellDescriptor unfocusedBorderColor;
 
-    public TextField(final int width, final Border border, final Padding padding, final CharacterColor backgroundColor,
-                     final CharacterColor foregroundColor, final CharacterColor unfocusedBackground,
-                     final CharacterColor unfocusedForeground, final CellDescriptor borderColor,
-                     final CellDescriptor unfocusedBorderColor) {
+    public TextField(final int width) {
         text = new StringBuilder();
-        this.border = border;
-        this.padding = padding;
-        this.backgroundColor = backgroundColor;
-        this.foregroundColor = foregroundColor;
-        this.unfocusedBackground = unfocusedBackground;
-        this.unfocusedForeground = unfocusedForeground;
         this.width = width;
-        this.borderColor = borderColor;
-        this.unfocusedBorderColor = unfocusedBorderColor;
         this.keyEventProcessor = new KeyEventProcessor(true);
         this.selection = Selection.NONE;
-
         registerKeyHandlers();
 
         addHandler(GainFocusEvent.class, this::onGainedFocus);
@@ -199,16 +179,18 @@ public class TextField extends Widget {
 
     @Override
     public void draw(final Graphics graphics) {
-        final CharacterColor background = getBackgroundColor();
-        final CharacterColor foreground = getForegroundColor();
-        final CellDescriptor border = getBorderColor();
-        graphics.fillBackground(background);
-        graphics.drawBorder(this.border.changeCell(border));
+        final Border border = getBorder();
+        final Color background = getBackgroundColor();
+        final Color foreground = getForegroundColor();
 
+        graphics.fillBackground(background);
+        graphics.drawBorder(border);
         graphics.setBackgroundColor(background);
         graphics.setForegroundColor(foreground);
 
-        final Point startPoint = Point.at(padding.left + this.border.getLeftThickness(), this.border.getTopThickness());
+        final Padding padding = getTheme().getPadding("padding");
+
+        final Point startPoint = Point.at(padding.left + border.getLeftThickness(), border.getTopThickness());
         if (clip > 0) {
             graphics.putChar(startPoint.decX(), '…');
         }
@@ -220,27 +202,36 @@ public class TextField extends Widget {
             graphics.putChar(startPoint.shiftX(width), '…');
         }
 
+        final CellDescriptor selectionColor = CellDescriptor.of(getTheme().getColor("cursor.foreground"),
+                                                                getTheme().getColor("cursor.background"));
+
         if (selection != Selection.NONE) {
             graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
-                    min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
-                    CellDescriptor.of(foreground, background));
+                                       min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
+                                       selectionColor);
         } else {
-            graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1,
-                    CellDescriptor.of(foreground, background));
+            graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1, selectionColor);
         }
+    }
+
+    private Border getBorder() {
+        return getTheme().getBorder(getPrefix() + ".border");
     }
 
     @Override
     public Occupation getPreferredWidth() {
+        final Border border = getBorder();
+        final Padding padding = getTheme().getPadding("padding");
         return Occupation.fixed(width +
-                border.getLeftThickness() +
-                border.getRightThickness() +
-                padding.left +
-                padding.right);
+                                border.getLeftThickness() +
+                                border.getRightThickness() +
+                                padding.left +
+                                padding.right);
     }
 
     @Override
     public Occupation getPreferredHeight() {
+        final Border border = getTheme().getBorder(getPrefix() + ".border");
         return Occupation.fixed(1 + border.getBottomThickness() + border.getTopThickness());
     }
 
@@ -253,15 +244,15 @@ public class TextField extends Widget {
         return focused;
     }
 
-    public CharacterColor getBackgroundColor() {
-        return focused ? backgroundColor : unfocusedBackground;
+    public String getPrefix() {
+        return isFocused() ? "focused" : "unfocused";
     }
 
-    public CharacterColor getForegroundColor() {
-        return focused ? foregroundColor : unfocusedForeground;
+    public Color getBackgroundColor() {
+        return getTheme().getColor(getPrefix() + ".background");
     }
 
-    public CellDescriptor getBorderColor() {
-        return focused ? borderColor : unfocusedBorderColor;
+    public Color getForegroundColor() {
+        return getTheme().getColor(getPrefix() + ".foreground");
     }
 }

@@ -1,6 +1,7 @@
 package org.jtext.ui.graphics;
 
 import org.jtext.ui.layout.Layout;
+import org.jtext.ui.theme.Theme;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,14 @@ public class Container extends Widget {
             if (widget.isVisible()) {
                 widget.draw(graphics.restrict(layout.getAreaFor(widget)));
             }
+        }
+    }
+
+    @Override
+    public void setTheme(final Theme theme) {
+        super.setTheme(theme);
+        for (final Widget widget : widgets) {
+            widget.setTheme(theme.useFor(widget.getClass()));
         }
     }
 

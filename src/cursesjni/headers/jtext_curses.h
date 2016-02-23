@@ -28,10 +28,10 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColorPair
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    initColor
- * Signature: (ISSS)V
+ * Signature: (IIII)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColor
-  (JNIEnv *, jobject, jint, jshort, jshort, jshort);
+  (JNIEnv *, jobject, jint, jint, jint, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
@@ -53,26 +53,26 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getScreenHeight
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    setColor
- * Signature: (Lorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;)V
+ * Signature: (I)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
-  (JNIEnv *, jobject, jobject, jobject);
+  (JNIEnv *, jobject, jint);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
- * Method:    setBackgroundColor
- * Signature: (Lorg/jtext/curses/CharacterColor;)V
+ * Method:    getForegroundColor
+ * Signature: ()I
  */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setBackgroundColor
-  (JNIEnv *, jobject, jobject);
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getForegroundColor
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
- * Method:    setForegroundColor
- * Signature: (Lorg/jtext/curses/CharacterColor;)V
+ * Method:    getBackgroundColor
+ * Signature: ()I
  */
-JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setForegroundColor
-  (JNIEnv *, jobject, jobject);
+JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getBackgroundColor
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
@@ -133,10 +133,10 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_putCharAt
 /*
  * Class:     org_jtext_curses_CursesDriver
  * Method:    changeAttributeAt
- * Signature: (IIILorg/jtext/curses/CharacterColor;Lorg/jtext/curses/CharacterColor;[Lorg/jtext/curses/CharacterAttribute;)V
+ * Signature: (IIII[Lorg/jtext/curses/CharacterAttribute;)V
  */
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_changeAttributeAt
-  (JNIEnv *, jobject, jint, jint, jint, jobject, jobject, jobjectArray);
+  (JNIEnv *, jobject, jint, jint, jint, jint, jobjectArray);
 
 /*
  * Class:     org_jtext_curses_CursesDriver

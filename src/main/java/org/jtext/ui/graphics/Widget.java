@@ -2,6 +2,7 @@ package org.jtext.ui.graphics;
 
 import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.event.UIEvent;
+import org.jtext.ui.theme.Theme;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ public abstract class Widget {
     private Optional<Widget> parent;
     private Margin margin = Margin.no();
     private boolean visible = true;
+    private Theme theme;
 
     public Widget() {
         this.parent = Optional.empty();
@@ -23,6 +25,14 @@ public abstract class Widget {
 
     public Widget(final Widget widget) {
         this.parent = Optional.of(widget);
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(final Theme theme) {
+        this.theme = theme;
     }
 
     public abstract void draw(Graphics graphics);

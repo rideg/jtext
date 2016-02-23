@@ -1,46 +1,56 @@
 package org.jtext.ui.theme;
 
-import com.eclipsesource.json.Json;
-import com.eclipsesource.json.JsonObject;
+import org.jtext.curses.Color;
+import org.jtext.ui.attribute.Border;
+import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.graphics.Widget;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
+public class Theme {
 
-public final class Theme {
+    private final Class<? extends Widget> widgetType;
+    private final ThemeProvider themeProvider;
+    private final ColorProvider colorProvider;
+    private final BorderProvider borderProvider;
 
-    private final JsonObject root;
-
-    private Theme(final JsonObject root) {
-        this.root = root;
+    public Theme(final Class<? extends Widget> widgetType,
+                 final ThemeProvider themeProvider,
+                 final ColorProvider colorProvider,
+                 final BorderProvider borderProvider) {
+        this.widgetType = widgetType;
+        this.themeProvider = themeProvider;
+        this.colorProvider = colorProvider;
+        this.borderProvider = borderProvider;
     }
 
-    public static Theme loadDefault() {
-        return load(Theme.class.getResourceAsStream("/org/jtext/theme/default.theme.json"));
+    public Border getBorder(final String name) {
+        return borderProvider.getBorder(themeProvider.getWidgetConfig(widgetType).getString(name, "no"));
     }
 
-    public static Theme load(final Path themeFile) {
-        try (final FileInputStream stream = new FileInputStream(themeFile.toFile())) {
-            return load(stream);
-        } catch (IOException exception) {
-            throw new IllegalStateException("Cannot load theme from: " + themeFile.toString());
-        }
+    public Padding getPadding(final String name) {
+        return Padding.parse(themeProvider.getWidgetConfig(widgetType).getString(name, "no"));
     }
 
-    private static Theme load(final InputStream stream) {
-        try (final InputStreamReader reader = new InputStreamReader(stream)) {
-            return new Theme(Json.parse(reader).asObject());
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot read default theme!");
-        }
+    public Color getColor(final String name) {
+        return colorProvider.getColor(name);
     }
 
-    public JsonObject getWidgetConfig(final Class<? extends Widget> type) {
-        return root.get("widgets").asObject().get(type.getCanonicalName()).asObject();
+    public String getString(final String name) {
+        return themeProvider.getWidgetConfig(widgetType).getString(name, null);
     }
 
+    public long getLong(final String name) {
+        return themeProvider.getWidgetConfig(widgetType).getLong(name, 0L);
+    }
 
+    public int getInt(final String name) {
+        return themeProvider.getWidgetConfig(widgetType).getInt(name, 0);
+    }
+
+    public boolean getBoolean(final String name) {
+        return themeProvider.getWidgetConfig(widgetType).getBoolean(name, false);
+    }
+
+    public Theme useFor(final Class<? extends Widget> widgetType) {
+        return new Theme(widgetType, themeProvider, colorProvider, borderProvider);
+    }
 }

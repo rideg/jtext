@@ -62,6 +62,17 @@ public final class Padding {
         return new Padding(0, value, 0, 0);
     }
 
+    public static Padding parse(final String string) {
+        if ("no".equals(string)) {
+            return Padding.no();
+        }
+        final String[] pads = string.trim().split(" ");
+        return Padding.of(Integer.parseInt(pads[0]),
+                          Integer.parseInt(pads[1]),
+                          Integer.parseInt(pads[2]),
+                          Integer.parseInt(pads[3]));
+    }
+
     public Padding inc() {
         return Padding.of(top + 1, right + 1, bottom + 1, left + 1);
     }

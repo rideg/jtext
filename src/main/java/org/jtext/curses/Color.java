@@ -1,4 +1,4 @@
-package org.jtext.ui.theme;
+package org.jtext.curses;
 
 public class Color {
 
@@ -7,6 +7,9 @@ public class Color {
     private final String name;
 
     public Color(final int colorId, final String name, final RgbValue rgbValue) {
+        if (colorId < 0 || colorId > 255) {
+            throw new IllegalArgumentException("Color id must be in range [0, 255]");
+        }
         this.colorId = colorId;
         this.name = name;
         this.rgbValue = rgbValue;

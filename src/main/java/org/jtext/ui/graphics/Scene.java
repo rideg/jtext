@@ -12,6 +12,10 @@ import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.event.LostFocusEvent;
 import org.jtext.ui.event.RepaintEvent;
 import org.jtext.ui.layout.Layouts;
+import org.jtext.ui.theme.BorderProvider;
+import org.jtext.ui.theme.ColorProvider;
+import org.jtext.ui.theme.Theme;
+import org.jtext.ui.theme.ThemeProvider;
 import org.slf4j.Logger;
 
 import java.util.concurrent.BlockingDeque;
@@ -30,14 +34,18 @@ public class Scene extends Container implements Component {
     private final EventBus eventBus;
     private final ExecutorService executorService;
     private final BlockingDeque<Runnable> taskQueue = new LinkedBlockingDeque<>();
+    private final ColorProvider colorProvider;
     private Widget activeWidget;
     private volatile boolean isRunning = true;
 
-    public Scene(final Driver driver, EventBus eventBus, final ExecutorService executorService) {
+    public Scene(final Driver driver, EventBus eventBus, final ExecutorService executorService,
+                 final ThemeProvider themeProvider) {
         super(Layouts.vertical());
         this.driver = driver;
         this.eventBus = eventBus;
         this.executorService = executorService;
+        this.colorProvider = new ColorProvider(driver, themeProvider);
+        setTheme(new Theme(this.getClass(), themeProvider, colorProvider, new BorderProvider(colorProvider)));
         eventBus.registerTopic(REPAINT_EVENT_TOPIC);
         eventBus.registerTopic(FOCUS_MOVED_EVENT_TOPIC);
     }
@@ -47,8 +55,9 @@ public class Scene extends Container implements Component {
             driver.clearScreen();
             driver.clearStyle();
             final Rectangle area = calculateArea();
+            setTheme(getTheme());
             setArea(area);
-            draw(new Graphics(area, driver));
+            draw(new Graphics(area, driver, colorProvider));
             driver.refresh();
         });
     }
@@ -101,9 +110,8 @@ public class Scene extends Container implements Component {
 
     @Override
     public void start() {
+
         executorService.submit(this::mainLoop);
-
-
         eventBus.subscribe(KeyboardHandler.KEY_EVENT_TOPIC, this::onKeyBoardEvent);
         eventBus.subscribe(FOCUS_MOVED_EVENT_TOPIC, this::onFocusMoved);
         eventBus.subscribe(REPAINT_EVENT_TOPIC, this::onRepaint);

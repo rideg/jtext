@@ -6,7 +6,7 @@ public class CursesDriver implements Driver {
     public native void init();
 
     @Override
-    public native void initColor(int number, short red, short green, short blue);
+    public native void initColor(int number, int red, int green, int blue);
 
     @Override
     public native void initColorPair(int colorId, int foreground, int background);
@@ -18,39 +18,37 @@ public class CursesDriver implements Driver {
     public native int getScreenHeight();
 
     @Override
-    public native void setColor(final CharacterColor foreground, final CharacterColor background);
+    public native void setColor(int colorPairId);
 
     @Override
-    public native void setBackgroundColor(final CharacterColor color);
+    public native int getForegroundColor();
 
     @Override
-    public native void setForegroundColor(final CharacterColor color);
+    public native int getBackgroundColor();
 
     @Override
-    public native void onAttributes(final CharacterAttribute[] attributes);
+    public native void onAttributes(CharacterAttribute[] attributes);
 
     @Override
-    public native void onAttribute(final CharacterAttribute attribute);
+    public native void onAttribute(CharacterAttribute attribute);
 
     @Override
-    public native void offAttribute(final CharacterAttribute attribute);
+    public native void offAttribute(CharacterAttribute attribute);
 
     @Override
-    public native void drawHorizontalLineAt(final int x, final int y, final char character, final int length);
+    public native void drawHorizontalLineAt(int x, int y, char character, int length);
 
     @Override
-    public native void drawVerticalLineAt(final int x, final int y, final char character, final int length);
+    public native void drawVerticalLineAt(int x, int y, char character, int length);
 
     @Override
-    public native void printStringAt(final int x, final int y, final String string);
+    public native void printStringAt(int x, int y, String string);
 
     @Override
-    public native void putCharAt(final int x, final int y, final char character);
+    public native void putCharAt(int x, int y, char character);
 
     @Override
-    public native void changeAttributeAt(final int x, final int y, final int length,
-                                         final CharacterColor foregroundColor, final CharacterColor backgroundColor,
-                                         final CharacterAttribute[] attributes);
+    public native void changeAttributeAt(int x, int y, int length, int colorPairId, CharacterAttribute[] attributes);
 
     @Override
     public native void bell();

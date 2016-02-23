@@ -1,6 +1,6 @@
 package org.jtext.ui.widget;
 
-import org.jtext.curses.CharacterColor;
+import org.jtext.curses.Color;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.graphics.Container;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class Panel extends Container implements WidgetWithBackground {
 
-    private final Optional<CharacterColor> background;
+    private final Optional<Color> background;
     private final Border border;
     private final Padding padding;
     private final Occupation preferredWith;
@@ -25,7 +25,7 @@ public class Panel extends Container implements WidgetWithBackground {
     }
 
     private Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight,
-                  final Border border, final Padding padding, final Optional<CharacterColor> backgroundColor) {
+                  final Border border, final Padding padding, final Optional<Color> backgroundColor) {
         super(layout);
         this.preferredWith = preferredWith;
         this.preferredHeight = preferredHeight;
@@ -35,7 +35,7 @@ public class Panel extends Container implements WidgetWithBackground {
     }
 
     public Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight,
-                 final Border border, final Padding padding, final CharacterColor backgroundColor) {
+                 final Border border, final Padding padding, final Color backgroundColor) {
         this(layout, preferredWith, preferredHeight, border, padding, Optional.of(backgroundColor));
     }
 
@@ -69,7 +69,7 @@ public class Panel extends Container implements WidgetWithBackground {
     }
 
     @Override
-    public Optional<CharacterColor> backgroundColor() {
+    public Optional<Color> backgroundColor() {
         return background;
     }
 }

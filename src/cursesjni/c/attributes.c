@@ -1,20 +1,6 @@
 #include "../headers/attributes.h"
 #include <string.h>
 
-void init_color_pairs()
-{
-    short pair_id = 0;
-    short i;
-    short j;
-    for(i = 0; i < 8; i++) {
-        for(j = 0; j < 8; j++) {
-            init_pair(pair_id, i, j);
-            __COLOR_PAIRS[i][j] = pair_id;
-            pair_id++;
-        }
-    }
-}
-
 attr_t get_attribute_code(const char* name)
 {
     if(strcmp(name, "NORMAL") == 0) return A_NORMAL;
@@ -48,14 +34,6 @@ jint get_color_id(JNIEnv* env, jobject color)
     jmethodID ordinalM = (*env)->GetMethodID(env, colorCls, "ordinal", "()I");
 
     return (*env)->CallIntMethod(env, color, ordinalM);
-}
-
-attr_t get_color_pair(JNIEnv* env, jobject fg, jobject bg)
-{
-    jint fgId = get_color_id(env, fg);
-    jint bgId = get_color_id(env, bg);
-
-    return COLOR_PAIR(__COLOR_PAIRS[fgId][bgId]);
 }
 
 attr_t get_attribute(JNIEnv * env, jobject attributes)

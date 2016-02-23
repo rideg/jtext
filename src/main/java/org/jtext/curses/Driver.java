@@ -4,7 +4,7 @@ public interface Driver {
 
     void init();
 
-    void initColor(int number, short red, short green, short blue);
+    void initColor(int number, int red, int green, int blue);
 
     void initColorPair(int colorId, int foreground, int background);
 
@@ -12,11 +12,11 @@ public interface Driver {
 
     int getScreenHeight();
 
-    void setColor(CharacterColor foreground, CharacterColor background);
+    void setColor(int colorPairId);
 
-    void setBackgroundColor(CharacterColor color);
+    int getForegroundColor();
 
-    void setForegroundColor(CharacterColor color);
+    int getBackgroundColor();
 
     void onAttributes(CharacterAttribute[] attributes);
 
@@ -32,8 +32,7 @@ public interface Driver {
 
     void putCharAt(int x, int y, char character);
 
-    void changeAttributeAt(int x, int y, int length, CharacterColor foregroundColor, CharacterColor backgroundColor,
-                           CharacterAttribute[] attributes);
+    void changeAttributeAt(int x, int y, int length, int colorPairId, CharacterAttribute[] attributes);
 
     void clearScreen();
 
@@ -50,5 +49,4 @@ public interface Driver {
     int getCursorX();
 
     int getCursorY();
-
 }

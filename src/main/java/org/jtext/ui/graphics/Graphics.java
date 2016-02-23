@@ -2,32 +2,26 @@ package org.jtext.ui.graphics;
 
 import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.CharacterAttribute;
-import org.jtext.curses.CharacterColor;
+import org.jtext.curses.Color;
 import org.jtext.curses.Driver;
 import org.jtext.ui.attribute.Border;
+import org.jtext.ui.theme.ColorProvider;
 
 public class Graphics {
 
     private final Rectangle area;
     private final Driver driver;
-    private boolean isRelative = true;
+    private final ColorProvider colorProvider;
 
-    public Graphics(final Rectangle area, final Driver driver) {
+    public Graphics(final Rectangle area, final Driver driver, final ColorProvider colorProvider) {
         this.area = area;
         this.driver = driver;
+        this.colorProvider = colorProvider;
         driver.clearStyle();
     }
 
     public Graphics restrict(final Rectangle area) {
-        return new Graphics(area.relativeTo(this.area.topLeft()), driver);
-    }
-
-    public void setAbsoluteMode() {
-        isRelative = false;
-    }
-
-    public void setRelativeMode() {
-        isRelative = true;
+        return new Graphics(area.relativeTo(this.area.topLeft()), driver, colorProvider);
     }
 
     public void setAttributes(final CharacterAttribute[] attributes) {
@@ -42,12 +36,14 @@ public class Graphics {
         driver.offAttribute(attribute);
     }
 
-    public void setBackgroundColor(final CharacterColor color) {
-        driver.setBackgroundColor(color);
+    public void setBackgroundColor(final Color color) {
+        final Color fg = colorProvider.getColor(driver.getForegroundColor());
+        driver.setColor(colorProvider.getPairId(fg, color));
     }
 
-    public void setForegroundColor(final CharacterColor color) {
-        driver.setForegroundColor(color);
+    public void setForegroundColor(final Color color) {
+        final Color bg = colorProvider.getColor(driver.getBackgroundColor());
+        driver.setColor(colorProvider.getPairId(color, bg));
     }
 
     public void drawVerticalLine(final Point point, final char ch, final int length) {
@@ -82,7 +78,7 @@ public class Graphics {
     }
 
     private Point toReal(final Point point) {
-        return isRelative ? Point.at(point.x + area.x, point.y + area.y) : point;
+        return Point.at(point.x + area.x, point.y + area.y);
     }
 
     public Point getTopLeft() {
@@ -93,9 +89,8 @@ public class Graphics {
         return Point.at(driver.getCursorX(), driver.getCursorY());
     }
 
-    public void fillBackground(final CharacterColor characterColor) {
-        driver.setBackgroundColor(characterColor);
-        driver.setForegroundColor(CharacterColor.WHITE);
+    public void fillBackground(final Color color) {
+        setBackgroundColor(color);
         Point point = area.topLeft();
         for (int i = 0; i < area.height; i++) {
             driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
@@ -118,7 +113,8 @@ public class Graphics {
         final Line inside = area.cropRelative(Line.horizontal(point, length));
         if (inside.length > 0) {
             final Point p = toReal(point);
-            driver.changeAttributeAt(p.x, p.y, inside.length, descriptor.foreground.get(), descriptor.background.get(),
+            driver.changeAttributeAt(p.x, p.y, inside.length,
+                                     colorProvider.getPairId(descriptor.foreground.get(), descriptor.background.get()),
                                      descriptor.attributes);
         }
     }
@@ -145,8 +141,12 @@ public class Graphics {
     }
 
     private void setColorsAndAttributes(CellDescriptor descriptor) {
-        descriptor.background.ifPresent(driver::setBackgroundColor);
-        descriptor.foreground.ifPresent(driver::setForegroundColor);
+        if (descriptor.background.isPresent() && descriptor.foreground.isPresent()) {
+            driver.setColor(colorProvider.getPairId(descriptor.background.get(), descriptor.foreground.get()));
+        } else {
+            descriptor.background.ifPresent(this::setBackgroundColor);
+            descriptor.foreground.ifPresent(this::setForegroundColor);
+        }
         driver.onAttributes(descriptor.attributes);
     }
 
