@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public final class ThemeProvider {
     }
 
     private static ThemeProvider load(final InputStream stream) {
-        try (final InputStreamReader reader = new InputStreamReader(stream)) {
+        try (final InputStreamReader reader = new InputStreamReader(stream, Charset.forName("UTF-8"))) {
             return new ThemeProvider(Json.parse(reader).asObject());
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read default theme!");
