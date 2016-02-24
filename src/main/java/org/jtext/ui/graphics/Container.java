@@ -33,6 +33,14 @@ public class Container extends Widget {
     }
 
     @Override
+    public void setRepaintRequester(final Runnable repaintRequester) {
+        super.setRepaintRequester(repaintRequester);
+        for (final Widget widget : widgets) {
+            widget.setRepaintRequester(repaintRequester);
+        }
+    }
+
+    @Override
     public Occupation getPreferredWidth() {
         return Occupation.fill();
     }
@@ -71,6 +79,7 @@ public class Container extends Widget {
         layout.addWidget(widget);
         widgets.add(widget);
         widget.setParent(this);
+        widget.setRepaintRequester(getRepaintRequester());
         return this;
     }
 
@@ -78,5 +87,6 @@ public class Container extends Widget {
         layout.addWidget(widget);
         widgets.remove(widget);
         widget.clearParent();
+        widget.clearRepaintRequester();
     }
 }

@@ -11,7 +11,6 @@ import org.jtext.ui.attribute.HorizontalAlign;
 import org.jtext.ui.attribute.VerticalAlign;
 import org.jtext.ui.event.FocusMovedEvent;
 import org.jtext.ui.event.KeyPressedEvent;
-import org.jtext.ui.event.RepaintEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Scene;
 import org.jtext.ui.layout.Layouts;
@@ -43,7 +42,7 @@ public final class Main {
             final Container mainContainer =
                     new Container(Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER));
 
-            TextField textField = new TextField(15);
+            final TextField textField = new TextField(15);
             mainContainer.add(textField);
 
 
@@ -58,6 +57,7 @@ public final class Main {
             final KeyEventProcessor processor = new KeyEventProcessor(true);
 
             processor.register(ControlKey.ESCAPE, latch::countDown);
+
             processor.register(ControlKey.DATA_LINK_ESCAPE, e -> {
                 if (textField.isVisible()) {
                     textField.hide();
@@ -67,6 +67,7 @@ public final class Main {
                     scene.onFocusMoved(new FocusMovedEvent(textField));
                 }
             });
+
             processor.register(ControlKey.NULL, e -> {
                 if (textField.isVisible()) {
                     if (textField.isFocused()) {
@@ -77,13 +78,7 @@ public final class Main {
                 }
             });
 
-            eventBus.subscribe(KEY_EVENT_TOPIC, event -> {
-                processor.handle(new KeyPressedEvent(event.key));
-                if (event.key.controlKey != ControlKey.ESCAPE) {
-                    eventBus.publish(Scene.REPAINT_EVENT_TOPIC, RepaintEvent.REPAINT_EVENT);
-                }
-            });
-
+            eventBus.subscribe(KEY_EVENT_TOPIC, event -> processor.handle(new KeyPressedEvent(event.key)));
             latch.await();
 
         } finally {

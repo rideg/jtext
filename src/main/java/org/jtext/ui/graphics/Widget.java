@@ -18,6 +18,8 @@ public abstract class Widget {
     private Margin margin = Margin.no();
     private boolean visible = true;
     private Theme theme;
+    private Runnable repaintRequester = () -> {
+    };
 
     public Widget() {
         this.parent = Optional.empty();
@@ -33,6 +35,23 @@ public abstract class Widget {
 
     public void setTheme(final Theme theme) {
         this.theme = theme;
+    }
+
+    public void requestRepaint() {
+        repaintRequester.run();
+    }
+
+    public Runnable getRepaintRequester() {
+        return repaintRequester;
+    }
+
+    public void setRepaintRequester(final Runnable repaintRequester) {
+        this.repaintRequester = repaintRequester;
+    }
+
+    public void clearRepaintRequester() {
+        repaintRequester = () -> {
+        };
     }
 
     public abstract void draw(Graphics graphics);
@@ -67,10 +86,10 @@ public abstract class Widget {
         this.margin = margin == null ? Margin.no() : margin;
     }
 
+
     public void clearParent() {
         parent = Optional.empty();
     }
-
 
     public <T extends UIEvent> void addHandler(final Class<T> type, final Consumer<T> handler) {
         eventHandlers.computeIfAbsent(type, t -> new HashSet<>()).add(handler);

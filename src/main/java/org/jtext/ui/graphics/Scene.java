@@ -36,13 +36,12 @@ public class Scene implements Component {
     private Widget activeWidget;
     private volatile boolean isRunning = true;
 
-    public Scene(final Driver driver, EventBus eventBus,
-                 final ExecutorService executorService,
-                 final ThemeImpl theme) {
+    public Scene(final Driver driver, EventBus eventBus, final ExecutorService executorService, final ThemeImpl theme) {
         this.driver = driver;
         this.eventBus = eventBus;
         this.executorService = executorService;
         this.theme = theme;
+        mainContainer.setRepaintRequester(() -> this.onRepaint(RepaintEvent.REPAINT_EVENT));
         eventBus.registerTopic(REPAINT_EVENT_TOPIC);
         eventBus.registerTopic(FOCUS_MOVED_EVENT_TOPIC);
     }

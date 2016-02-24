@@ -38,7 +38,7 @@ public class TextField extends Widget {
 
         addHandler(GainFocusEvent.class, this::onGainedFocus);
         addHandler(LostFocusEvent.class, this::onLostFocus);
-        addHandler(KeyPressedEvent.class, keyEventProcessor::handle);
+        addHandler(KeyPressedEvent.class, this::onKeyPressed);
 
     }
 
@@ -53,11 +53,20 @@ public class TextField extends Widget {
     private void onLostFocus(final LostFocusEvent event) {
         focused = false;
         event.stopPropagating();
+        requestRepaint();
     }
 
     private void onGainedFocus(final GainFocusEvent event) {
         focused = true;
         event.stopPropagating();
+        requestRepaint();
+    }
+
+    private void onKeyPressed(final KeyPressedEvent event) {
+        if (keyEventProcessor.handle(event)) {
+            requestRepaint();
+
+        }
     }
 
     private void registerKeyHandlers() {
