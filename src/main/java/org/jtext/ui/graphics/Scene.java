@@ -52,6 +52,7 @@ public class Scene implements Component {
             driver.clearScreen();
             driver.clearStyle();
             final Rectangle area = calculateArea();
+            mainContainer.setTheme(theme);
             mainContainer.setArea(area);
             mainContainer.draw(new Graphics(area, driver, theme.getColorManager()));
             driver.refresh();
@@ -99,7 +100,7 @@ public class Scene implements Component {
             } catch (final InterruptedException e) {
                 isRunning = false;
             } catch (final Exception e) {
-                LOGGER.warn("Interrupted while enqueuing task!", e);
+                LOGGER.warn("Exception occurred while running task", e);
             }
         }
     }

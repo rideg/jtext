@@ -45,8 +45,11 @@ public class BorderProvider {
         return ofNullable(borderJson.getString(name, null)).map(s -> empty().withCh(s.charAt(0)));
     }
 
-    public Border getBorder(final String name) {
-        final String[] split = name.trim().split(" +");
+    public Border getBorder(final String description) {
+        if ("no".equals(description)) {
+            return Border.no();
+        }
+        final String[] split = description.trim().split(" +");
         final Border borderTemplate = nameToBorder.get(split[0]);
 
         if (borderTemplate != null) {

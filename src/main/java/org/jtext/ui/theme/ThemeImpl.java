@@ -30,8 +30,8 @@ public class ThemeImpl implements Theme {
     }
 
     @Override
-    public Border getBorder(final String name) {
-        return borderProvider.getBorder(themeProvider.getWidgetConfig(widgetType).getString(name, "no"));
+    public Border getBorder(final String identifier) {
+        return borderProvider.getBorder(themeProvider.getWidgetConfig(widgetType).getString(identifier, "no"));
     }
 
     @Override

@@ -73,6 +73,6 @@ public final class ThemeProvider {
     }
 
     public JsonObject getBorders() {
-        return borders;
+        return root.get("borders").asObject();
     }
 }
