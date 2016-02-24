@@ -9,11 +9,10 @@ import org.junit.Test;
 
 public class ThemeProviderTest {
 
-
     @Test
     public void shouldTextFieldWidgetTheme() throws Exception {
         ThemeProvider themeProvider = ThemeProvider.loadDefault();
         JsonObject widgetConfig = themeProvider.getWidgetConfig(TextField.class);
-        Assert.assertThat(widgetConfig.get("border").asString(), Is.is("single black white"));
+        Assert.assertThat(widgetConfig.get("focused.border").asString(), Is.is("single black white"));
     }
 }

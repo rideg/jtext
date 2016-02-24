@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+@SuppressWarnings("checkstyle:classfanoutcomplexity")
 public class Scene extends Container implements Component {
 
     public static final Topic<RepaintEvent> REPAINT_EVENT_TOPIC = new Topic<>();
@@ -55,7 +56,6 @@ public class Scene extends Container implements Component {
             driver.clearScreen();
             driver.clearStyle();
             final Rectangle area = calculateArea();
-            setTheme(getTheme());
             setArea(area);
             draw(new Graphics(area, driver, colorProvider));
             driver.refresh();
