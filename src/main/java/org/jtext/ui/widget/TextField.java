@@ -1,7 +1,6 @@
 package org.jtext.ui.widget;
 
 import org.jtext.curses.CellDescriptor;
-import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.Color;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.ReadKey;
@@ -194,9 +193,8 @@ public class TextField extends Widget {
         if (clip > 0) {
             graphics.putChar(startPoint.decX(), '…');
         }
-        graphics.setAttribute(CharacterAttribute.ITALIC);
+
         graphics.printString(startPoint, getVisibleText());
-        graphics.removeAttribute(CharacterAttribute.ITALIC);
 
         if (text.length() - clip >= width) {
             graphics.putChar(startPoint.shiftX(width), '…');
