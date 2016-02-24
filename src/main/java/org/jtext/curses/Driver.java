@@ -6,7 +6,7 @@ public interface Driver {
 
     void initColor(int number, int red, int green, int blue);
 
-    void initColorPair(int colorId, int foreground, int background);
+    void initColorPair(int pairId, int foreground, int background);
 
     int getScreenWidth();
 

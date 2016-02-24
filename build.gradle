@@ -15,8 +15,6 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 
-println "-I${projectDir}/native/include/linux"
-
 model {
     components {
         cursesjni(NativeLibrarySpec) {

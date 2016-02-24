@@ -23,6 +23,9 @@ public class ColorManager {
         nameToColor = new HashMap<>();
         idToColor = new HashMap<>();
         colorPairs = new int[MAXIMUM_NUMBER_OF_COLORS][MAXIMUM_NUMBER_OF_COLORS];
+    }
+
+    public void initialise() {
         initialise(themeProvider.getDefinedColors());
     }
 
@@ -74,18 +77,25 @@ public class ColorManager {
     }
 
     public Color getColor(final int colorId) {
+        if (colorId == -1) {
+            return nameToColor.get("black");
+        }
         return idToColor.get(colorId);
     }
 
     public Color getColor(final String name) {
-        String colorName = themeProvider.getColorValue(name);
-        while (colorName != null && !nameToColor.containsKey(colorName)) {
-            colorName = themeProvider.getColorValue(colorName);
+        if (nameToColor.containsKey(name)) {
+            return nameToColor.get(name);
+        } else {
+            String colorName = themeProvider.getColorValue(name);
+            while (colorName != null && !nameToColor.containsKey(colorName)) {
+                colorName = themeProvider.getColorValue(colorName);
+            }
+            if (!nameToColor.containsKey(name) && colorName != null) {
+                nameToColor.put(name, nameToColor.get(colorName));
+            }
+            return colorName == null ? null : nameToColor.get(name);
         }
-        if (!nameToColor.containsKey(name) && colorName != null) {
-            nameToColor.put(name, nameToColor.get(colorName));
-        }
-        return colorName == null ? null : nameToColor.get(name);
     }
 
     public int getPairId(final Color foreground, final Color background) {

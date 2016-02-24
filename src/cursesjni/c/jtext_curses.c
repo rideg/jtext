@@ -89,7 +89,8 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_shutdown
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
   (JNIEnv * env, jobject self, jint color_pair)
 {
-    wcolor_set(screen, color_pair, NULL);
+   wcolor_set(screen, color_pair, NULL);
+//   wattron(screen, COLOR_PAIR(color_pair));
 }
 
 

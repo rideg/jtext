@@ -43,16 +43,17 @@
     "yellow": "#ffff00",
     "magenta": "#ff00ff",
     "cyan": "#00ffff",
-    "gray": "#aaaaaa"
+    "gray": "#aaaaaa",
+    "dark-gray": "#444444"
   },
   "widgets": {
     "org.jtext.ui.widget.TextField": {
       "focused.border": "single black white",
       "unfocused.border": "single black gray",
       "padding": "0 1 0 1",
-      "focused.background": "black",
+      "focused.background": "dark-gray",
       "focused.foreground": "white",
-      "unfocused.background": "black",
+      "unfocused.background": "dark-gray",
       "unfocused.foreground": "white",
       "cursor.background": "green",
       "cursor.foreground": "black"

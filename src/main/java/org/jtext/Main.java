@@ -16,7 +16,6 @@ import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Scene;
 import org.jtext.ui.layout.Layouts;
 import org.jtext.ui.theme.ThemeImpl;
-import org.jtext.ui.theme.ThemeProvider;
 import org.jtext.ui.util.KeyEventProcessor;
 import org.jtext.ui.widget.TextField;
 
@@ -36,14 +35,11 @@ public final class Main {
     public static void main(String[] args) throws InterruptedException {
         LibraryLoader.load();
         final Driver driver = getDriver();
+        driver.init();
         final EventBus eventBus = new EventBus();
         final KeyboardHandler keyboardHandler = new KeyboardHandler(driver, newSingleThreadExecutor(), eventBus);
-        final Scene scene = new Scene(driver, eventBus,
-                                      newSingleThreadExecutor(),
-                                      new ThemeImpl(driver, ThemeProvider.loadDefault()));
+        final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor(), new ThemeImpl(driver));
         try {
-            driver.init();
-
             final Container mainContainer =
                     new Container(Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER));
 
@@ -114,6 +110,12 @@ public final class Main {
                                                            }
                                                            closed.incrementAndGet();
                                                            return new ReadKey(ControlKey.NORMAL, 'a');
+                                                       }
+                                                       if (method.getName().equals("getBackgroundColor")) {
+                                                           return 0;
+                                                       }
+                                                       if (method.getName().equals("getForegroundColor")) {
+                                                           return 0;
                                                        }
                                                        return null;
                                                    });

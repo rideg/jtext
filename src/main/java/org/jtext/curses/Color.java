@@ -26,4 +26,13 @@ public class Color {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Color{" +
+               "colorId=" + colorId +
+               ", name='" + name + '\'' +
+               ", rgbValue=" + rgbValue +
+               '}';
+    }
 }

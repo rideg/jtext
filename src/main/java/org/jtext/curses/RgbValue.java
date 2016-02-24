@@ -33,15 +33,15 @@ public final class RgbValue {
 
 
     public int cursesRed() {
-        return red * 4;
+        return Math.min(1000, (red * 1000) / 255);
     }
 
     public int cursesGreen() {
-        return green * 4;
+        return Math.min(1000, (green * 1000) / 255);
     }
 
     public int cursesBlue() {
-        return blue * 4;
+        return Math.min(1000, (blue * 1000) / 255);
     }
 
 

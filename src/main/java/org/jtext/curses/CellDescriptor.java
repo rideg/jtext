@@ -1,5 +1,6 @@
 package org.jtext.curses;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
@@ -66,4 +67,13 @@ public final class CellDescriptor {
         return new CellDescriptor(character.orElse(null), background.orElse(null), color, attributes);
     }
 
+    @Override
+    public String toString() {
+        return "CellDescriptor{" +
+               "character=" + character +
+               ", foreground=" + foreground +
+               ", background=" + background +
+               ", attributes=" + Arrays.toString(attributes) +
+               '}';
+    }
 }

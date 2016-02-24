@@ -9,7 +9,7 @@ public class CursesDriver implements Driver {
     public native void initColor(int number, int red, int green, int blue);
 
     @Override
-    public native void initColorPair(int colorId, int foreground, int background);
+    public native void initColorPair(int pairId, int foreground, int background);
 
     @Override
     public native int getScreenWidth();

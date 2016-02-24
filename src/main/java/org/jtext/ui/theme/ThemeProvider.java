@@ -10,12 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static java.util.Spliterators.spliterator;
 
 public final class ThemeProvider {
 
@@ -51,16 +47,14 @@ public final class ThemeProvider {
     }
 
     public Map<String, RgbValue> getDefinedColors() {
+        final Map<String, RgbValue> colorsMapping = new HashMap<>();
         JsonObject colors = root.get("colors").asObject();
-        return StreamSupport.stream(spliterator(colors.iterator(), colors.size(),
-                                                Spliterator.DISTINCT |
-                                                Spliterator.IMMUTABLE |
-                                                Spliterator.SIZED |
-                                                Spliterator.SUBSIZED), false)
-                       .filter(m -> !m.getName().equals("config"))
-                       .filter(m -> m.getValue().asString().length() == 0)
-                       .filter(m -> m.getValue().asString().charAt(0) != '#')
-                       .collect(Collectors.toMap(JsonObject.Member::getName, m -> convert(m.getValue().asString())));
+        for (JsonObject.Member member : colors) {
+            if (!"config".equals(member.getName())) {
+                colorsMapping.put(member.getName(), convert(member.getValue().asString()));
+            }
+        }
+        return colorsMapping;
     }
 
     private RgbValue convert(final String value) {

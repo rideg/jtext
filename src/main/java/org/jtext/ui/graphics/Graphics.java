@@ -142,7 +142,7 @@ public class Graphics {
 
     private void setColorsAndAttributes(CellDescriptor descriptor) {
         if (descriptor.background.isPresent() && descriptor.foreground.isPresent()) {
-            driver.setColor(colorManager.getPairId(descriptor.background.get(), descriptor.foreground.get()));
+            driver.setColor(colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()));
         } else {
             descriptor.background.ifPresent(this::setBackgroundColor);
             descriptor.foreground.ifPresent(this::setForegroundColor);

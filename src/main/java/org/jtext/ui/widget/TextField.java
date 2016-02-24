@@ -202,15 +202,17 @@ public class TextField extends Widget {
             graphics.putChar(startPoint.shiftX(width), '…');
         }
 
-        final CellDescriptor selectionColor = CellDescriptor.of(getTheme().getColor("cursor.foreground"),
-                                                                getTheme().getColor("cursor.background"));
+        if (focused) {
+            final CellDescriptor selectionColor = CellDescriptor.of(getTheme().getColor("cursor.background"),
+                                                                    getTheme().getColor("cursor.foreground"));
 
-        if (selection != Selection.NONE) {
-            graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
-                                       min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
-                                       selectionColor);
-        } else {
-            graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1, selectionColor);
+            if (selection != Selection.NONE) {
+                graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
+                                           min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
+                                           selectionColor);
+            } else {
+                graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1, selectionColor);
+            }
         }
     }
 

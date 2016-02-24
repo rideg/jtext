@@ -21,6 +21,10 @@ public class ThemeImpl implements Theme {
         this.borderProvider = new BorderProvider(colorManager, themeProvider.getBorders());
     }
 
+    public ThemeImpl(final Driver driver) {
+        this(driver, ThemeProvider.loadDefault());
+    }
+
     private ThemeImpl(final Class<? extends Widget> widgetType, final ThemeProvider themeProvider,
                       final ColorManager colorManager, final BorderProvider borderProvider) {
         this.widgetType = widgetType;
@@ -41,7 +45,7 @@ public class ThemeImpl implements Theme {
 
     @Override
     public Color getColor(final String name) {
-        return colorManager.getColor(name);
+        return colorManager.getColor(themeProvider.getWidgetConfig(widgetType).getString(name, null));
     }
 
     @Override
@@ -71,5 +75,9 @@ public class ThemeImpl implements Theme {
 
     public ColorManager getColorManager() {
         return colorManager;
+    }
+
+    public void initialise() {
+        colorManager.initialise();
     }
 }
