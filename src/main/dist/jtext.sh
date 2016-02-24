@@ -23,7 +23,7 @@ set_ld_library_path() {
 
 
 
-while getopts ":d:k" opt; do
+while getopts ":dk" opt; do
   case $opt in
     d)
       DEBUG=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7843
