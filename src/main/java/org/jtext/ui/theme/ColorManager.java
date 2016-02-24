@@ -8,7 +8,7 @@ import org.jtext.curses.RgbValue;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ColorProvider {
+public class ColorManager {
 
     public static final int MAXIMUM_NUMBER_OF_COLORS = 256;
     private final Map<String, Color> nameToColor;
@@ -17,7 +17,7 @@ public class ColorProvider {
     private final Driver driver;
     private ThemeProvider themeProvider;
 
-    public ColorProvider(final Driver driver, final ThemeProvider themeProvider) {
+    public ColorManager(final Driver driver, final ThemeProvider themeProvider) {
         this.driver = driver;
         this.themeProvider = themeProvider;
         nameToColor = new HashMap<>();

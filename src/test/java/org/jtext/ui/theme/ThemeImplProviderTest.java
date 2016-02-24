@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public class ThemeProviderTest {
+public class ThemeImplProviderTest {
 
     @Test
     public void shouldTextFieldWidgetTheme() throws Exception {

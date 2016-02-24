@@ -5,52 +5,21 @@ import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.graphics.Widget;
 
-public class Theme {
+public interface Theme {
 
-    private final Class<? extends Widget> widgetType;
-    private final ThemeProvider themeProvider;
-    private final ColorProvider colorProvider;
-    private final BorderProvider borderProvider;
+    Border getBorder(final String description);
 
-    public Theme(final Class<? extends Widget> widgetType,
-                 final ThemeProvider themeProvider,
-                 final ColorProvider colorProvider,
-                 final BorderProvider borderProvider) {
-        this.widgetType = widgetType;
-        this.themeProvider = themeProvider;
-        this.colorProvider = colorProvider;
-        this.borderProvider = borderProvider;
-    }
+    Padding getPadding(final String description);
 
-    public Border getBorder(final String name) {
-        return borderProvider.getBorder(themeProvider.getWidgetConfig(widgetType).getString(name, "no"));
-    }
+    Color getColor(String name);
 
-    public Padding getPadding(final String name) {
-        return Padding.parse(themeProvider.getWidgetConfig(widgetType).getString(name, "no"));
-    }
+    String getString(String name);
 
-    public Color getColor(final String name) {
-        return colorProvider.getColor(name);
-    }
+    long getLong(String name);
 
-    public String getString(final String name) {
-        return themeProvider.getWidgetConfig(widgetType).getString(name, null);
-    }
+    int getInt(String name);
 
-    public long getLong(final String name) {
-        return themeProvider.getWidgetConfig(widgetType).getLong(name, 0L);
-    }
+    boolean getBoolean(String name);
 
-    public int getInt(final String name) {
-        return themeProvider.getWidgetConfig(widgetType).getInt(name, 0);
-    }
-
-    public boolean getBoolean(final String name) {
-        return themeProvider.getWidgetConfig(widgetType).getBoolean(name, false);
-    }
-
-    public Theme useFor(final Class<? extends Widget> widgetType) {
-        return new Theme(widgetType, themeProvider, colorProvider, borderProvider);
-    }
+    ThemeImpl useFor(Class<? extends Widget> widgetType);
 }

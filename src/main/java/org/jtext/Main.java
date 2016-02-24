@@ -15,6 +15,7 @@ import org.jtext.ui.event.RepaintEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Scene;
 import org.jtext.ui.layout.Layouts;
+import org.jtext.ui.theme.ThemeImpl;
 import org.jtext.ui.theme.ThemeProvider;
 import org.jtext.ui.util.KeyEventProcessor;
 import org.jtext.ui.widget.TextField;
@@ -37,7 +38,9 @@ public final class Main {
         final Driver driver = getDriver();
         final EventBus eventBus = new EventBus();
         final KeyboardHandler keyboardHandler = new KeyboardHandler(driver, newSingleThreadExecutor(), eventBus);
-        final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor(), ThemeProvider.loadDefault());
+        final Scene scene = new Scene(driver, eventBus,
+                                      newSingleThreadExecutor(),
+                                      new ThemeImpl(driver, ThemeProvider.loadDefault()));
         try {
             driver.init();
 

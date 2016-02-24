@@ -20,6 +20,7 @@ import static java.util.Spliterators.spliterator;
 public final class ThemeProvider {
 
     private final JsonObject root;
+    private JsonObject borders;
 
     private ThemeProvider(final JsonObject root) {
         this.root = root;
@@ -69,5 +70,9 @@ public final class ThemeProvider {
 
     public String getColorValue(final String colorName) {
         return root.get("colors").asObject().getString(colorName, null);
+    }
+
+    public JsonObject getBorders() {
+        return borders;
     }
 }

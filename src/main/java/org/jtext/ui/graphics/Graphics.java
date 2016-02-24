@@ -5,23 +5,23 @@ import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.Color;
 import org.jtext.curses.Driver;
 import org.jtext.ui.attribute.Border;
-import org.jtext.ui.theme.ColorProvider;
+import org.jtext.ui.theme.ColorManager;
 
 public class Graphics {
 
     private final Rectangle area;
     private final Driver driver;
-    private final ColorProvider colorProvider;
+    private final ColorManager colorManager;
 
-    public Graphics(final Rectangle area, final Driver driver, final ColorProvider colorProvider) {
+    public Graphics(final Rectangle area, final Driver driver, final ColorManager colorManager) {
         this.area = area;
         this.driver = driver;
-        this.colorProvider = colorProvider;
+        this.colorManager = colorManager;
         driver.clearStyle();
     }
 
     public Graphics restrict(final Rectangle area) {
-        return new Graphics(area.relativeTo(this.area.topLeft()), driver, colorProvider);
+        return new Graphics(area.relativeTo(this.area.topLeft()), driver, colorManager);
     }
 
     public void setAttributes(final CharacterAttribute[] attributes) {
@@ -37,13 +37,13 @@ public class Graphics {
     }
 
     public void setBackgroundColor(final Color color) {
-        final Color fg = colorProvider.getColor(driver.getForegroundColor());
-        driver.setColor(colorProvider.getPairId(fg, color));
+        final Color fg = colorManager.getColor(driver.getForegroundColor());
+        driver.setColor(colorManager.getPairId(fg, color));
     }
 
     public void setForegroundColor(final Color color) {
-        final Color bg = colorProvider.getColor(driver.getBackgroundColor());
-        driver.setColor(colorProvider.getPairId(color, bg));
+        final Color bg = colorManager.getColor(driver.getBackgroundColor());
+        driver.setColor(colorManager.getPairId(color, bg));
     }
 
     public void drawVerticalLine(final Point point, final char ch, final int length) {
@@ -114,7 +114,7 @@ public class Graphics {
         if (inside.length > 0) {
             final Point p = toReal(point);
             driver.changeAttributeAt(p.x, p.y, inside.length,
-                                     colorProvider.getPairId(descriptor.foreground.get(), descriptor.background.get()),
+                                     colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
                                      descriptor.attributes);
         }
     }
@@ -142,7 +142,7 @@ public class Graphics {
 
     private void setColorsAndAttributes(CellDescriptor descriptor) {
         if (descriptor.background.isPresent() && descriptor.foreground.isPresent()) {
-            driver.setColor(colorProvider.getPairId(descriptor.background.get(), descriptor.foreground.get()));
+            driver.setColor(colorManager.getPairId(descriptor.background.get(), descriptor.foreground.get()));
         } else {
             descriptor.background.ifPresent(this::setBackgroundColor);
             descriptor.foreground.ifPresent(this::setForegroundColor);

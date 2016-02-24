@@ -12,10 +12,7 @@ import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.event.LostFocusEvent;
 import org.jtext.ui.event.RepaintEvent;
 import org.jtext.ui.layout.Layouts;
-import org.jtext.ui.theme.BorderProvider;
-import org.jtext.ui.theme.ColorProvider;
-import org.jtext.ui.theme.Theme;
-import org.jtext.ui.theme.ThemeProvider;
+import org.jtext.ui.theme.ThemeImpl;
 import org.slf4j.Logger;
 
 import java.util.concurrent.BlockingDeque;
@@ -25,8 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-@SuppressWarnings("checkstyle:classfanoutcomplexity")
-public class Scene extends Container implements Component {
+public class Scene implements Component {
 
     public static final Topic<RepaintEvent> REPAINT_EVENT_TOPIC = new Topic<>();
     public static final Topic<FocusMovedEvent> FOCUS_MOVED_EVENT_TOPIC = new Topic<>();
@@ -35,18 +31,18 @@ public class Scene extends Container implements Component {
     private final EventBus eventBus;
     private final ExecutorService executorService;
     private final BlockingDeque<Runnable> taskQueue = new LinkedBlockingDeque<>();
-    private final ColorProvider colorProvider;
+    private final ThemeImpl theme;
+    private final Container mainContainer = new Container(Layouts.vertical());
     private Widget activeWidget;
     private volatile boolean isRunning = true;
 
-    public Scene(final Driver driver, EventBus eventBus, final ExecutorService executorService,
-                 final ThemeProvider themeProvider) {
-        super(Layouts.vertical());
+    public Scene(final Driver driver, EventBus eventBus,
+                 final ExecutorService executorService,
+                 final ThemeImpl theme) {
         this.driver = driver;
         this.eventBus = eventBus;
         this.executorService = executorService;
-        this.colorProvider = new ColorProvider(driver, themeProvider);
-        setTheme(new Theme(this.getClass(), themeProvider, colorProvider, new BorderProvider(colorProvider)));
+        this.theme = theme;
         eventBus.registerTopic(REPAINT_EVENT_TOPIC);
         eventBus.registerTopic(FOCUS_MOVED_EVENT_TOPIC);
     }
@@ -56,8 +52,8 @@ public class Scene extends Container implements Component {
             driver.clearScreen();
             driver.clearStyle();
             final Rectangle area = calculateArea();
-            setArea(area);
-            draw(new Graphics(area, driver, colorProvider));
+            mainContainer.setArea(area);
+            mainContainer.draw(new Graphics(area, driver, theme.getColorManager()));
             driver.refresh();
         });
     }
@@ -129,5 +125,9 @@ public class Scene extends Container implements Component {
         } catch (InterruptedException e) {
             LOGGER.warn("Interrupted while waiting for executor service to stop", e);
         }
+    }
+
+    public Container add(final Widget widget) {
+        return mainContainer.add(widget);
     }
 }
