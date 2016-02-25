@@ -6,15 +6,21 @@ import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Point;
 import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
+import org.jtext.ui.model.DocumentModel;
+import org.jtext.ui.model.TextModel;
 
 public class Label extends Widget {
 
+    private final DocumentModel model;
     private final CellDescriptor descriptor;
-    private final String text;
 
     public Label(final CellDescriptor descriptor, final String text) {
+        this(descriptor, new TextModel(text));
+    }
+
+    public Label(final CellDescriptor descriptor, final DocumentModel model) {
+        this.model = model;
         this.descriptor = descriptor;
-        this.text = text;
     }
 
     @Override
@@ -22,7 +28,7 @@ public class Label extends Widget {
         determineBackground(graphics);
         descriptor.foreground.ifPresent(graphics::setForegroundColor);
         graphics.setAttributes(descriptor.attributes);
-        graphics.printString(Point.at(0, 0), text);
+        graphics.printString(Point.at(0, 0), model.getChars());
     }
 
     private void determineBackground(final Graphics graphics) {
@@ -39,7 +45,7 @@ public class Label extends Widget {
 
     @Override
     public Occupation getPreferredWidth() {
-        return Occupation.fixed(text.length());
+        return Occupation.fixed(model.length());
     }
 
     @Override

@@ -21,14 +21,14 @@ public abstract class Occupation {
     }
 
     public static Fixed fixed(final int size) {
-        if (size <= 0) {
+        if (size < 0) {
             throw new IllegalArgumentException("Size must be a positive integer!");
         }
         return new Fixed(size);
     }
 
     public static Proportional percent(final int percentage) {
-        if (percentage <= 0 || percentage > 100) {
+        if (percentage < 0 || percentage > 100) {
             throw new IllegalArgumentException("Portion must be between 0 and 100");
         }
         return new Proportional(percentage);

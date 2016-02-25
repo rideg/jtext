@@ -5,6 +5,7 @@ import org.jtext.curses.Color;
 import org.jtext.curses.Driver;
 import org.jtext.curses.RgbValue;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,10 +24,22 @@ public class ColorManager {
         nameToColor = new HashMap<>();
         idToColor = new HashMap<>();
         colorPairs = new int[MAXIMUM_NUMBER_OF_COLORS][MAXIMUM_NUMBER_OF_COLORS];
+        initialise(themeProvider.getDefinedColors());
     }
 
-    public void initialise() {
-        initialise(themeProvider.getDefinedColors());
+    public void registerColors() {
+        for (final Color c : idToColor.values()) {
+            RgbValue rgbValue = c.getRgbValue();
+            driver.initColor(c.getColorId(), rgbValue.cursesRed(), rgbValue.cursesGreen(), rgbValue.cursesBlue());
+        }
+
+        for (int i = 0; i < colorPairs.length; i++) {
+            for (int j = 0; j < colorPairs.length; j++) {
+                if (colorPairs[i][j] != -1) {
+                    driver.initColorPair(colorPairs[i][j], i, j);
+                }
+            }
+        }
     }
 
     private void initialise(final Map<String, RgbValue> colors) {
@@ -49,7 +62,6 @@ public class ColorManager {
     }
 
     private void registerAndStoreColor(final int idIndex, final RgbValue value, final String name) {
-        driver.initColor(idIndex, value.cursesRed(), value.cursesGreen(), value.cursesBlue());
         Color color = new Color(idIndex, name, value);
         nameToColor.put(name, color);
         idToColor.put(idIndex, color);
@@ -66,12 +78,14 @@ public class ColorManager {
     }
 
     private void initColorPairs() {
+        for (final int[] colorPair : colorPairs) {
+            Arrays.fill(colorPair, -1);
+        }
+
         int i = 0;
         for (final Color foreground : nameToColor.values()) {
             for (final Color background : nameToColor.values()) {
-                colorPairs[foreground.getColorId()][background.getColorId()] = i;
-                driver.initColorPair(i, foreground.getColorId(), background.getColorId());
-                i++;
+                colorPairs[foreground.getColorId()][background.getColorId()] = i++;
             }
         }
     }

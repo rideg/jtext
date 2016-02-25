@@ -1,5 +1,6 @@
 package org.jtext;
 
+import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.CursesDriver;
 import org.jtext.curses.Driver;
@@ -14,8 +15,10 @@ import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Scene;
 import org.jtext.ui.layout.Layouts;
+import org.jtext.ui.model.TextModel;
 import org.jtext.ui.theme.ThemeImpl;
 import org.jtext.ui.util.KeyEventProcessor;
+import org.jtext.ui.widget.Label;
 import org.jtext.ui.widget.TextField;
 
 import java.lang.reflect.Proxy;
@@ -37,14 +40,19 @@ public final class Main {
         driver.init();
         final EventBus eventBus = new EventBus();
         final KeyboardHandler keyboardHandler = new KeyboardHandler(driver, newSingleThreadExecutor(), eventBus);
-        final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor(), new ThemeImpl(driver));
+        final ThemeImpl theme = new ThemeImpl(driver);
+        final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor(), theme);
         try {
+
             final Container mainContainer =
                     new Container(Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER));
 
-            final TextField textField = new TextField(25);
-            mainContainer.add(textField);
 
+            TextModel model = new TextModel("Hello");
+            final TextField textField = new TextField(model, 25);
+            mainContainer.add(textField);
+            mainContainer.add(new Label(CellDescriptor.of(theme.getColorByName("black"), theme.getColorByName("white")),
+                                        model));
 
             scene.add(mainContainer);
 

@@ -25,11 +25,23 @@ public class EventBus {
         }
     }
 
+    public synchronized <T extends Event> void publish(final Topic<T> topic) {
+        publish(topic, null);
+    }
+
     public synchronized <T extends Event> void subscribe(final Topic<T> topic, EventHandler<T> handler) {
         List<EventHandler> handlers = topics.get(topic);
         if (handlers == null) {
             throw new IllegalArgumentException("The topic is not registered!");
         }
         handlers.add(handler);
+    }
+
+    public synchronized <T extends Event> void subscribe(final Topic<T> topic, Runnable handler) {
+        List<EventHandler> handlers = topics.get(topic);
+        if (handlers == null) {
+            throw new IllegalArgumentException("The topic is not registered!");
+        }
+        handlers.add((e) -> handler.run());
     }
 }

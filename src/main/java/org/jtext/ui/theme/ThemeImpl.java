@@ -73,11 +73,15 @@ public class ThemeImpl implements Theme {
         return new ThemeImpl(widgetType, themeProvider, colorManager, borderProvider);
     }
 
+    public Color getColorByName(final String color) {
+        return colorManager.getColor(color);
+    }
+
     public ColorManager getColorManager() {
         return colorManager;
     }
 
     public void initialise() {
-        colorManager.initialise();
+        colorManager.registerColors();
     }
 }

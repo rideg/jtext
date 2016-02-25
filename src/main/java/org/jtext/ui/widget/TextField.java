@@ -14,6 +14,8 @@ import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Point;
 import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
+import org.jtext.ui.model.DocumentModel;
+import org.jtext.ui.model.TextModel;
 import org.jtext.ui.util.KeyEventProcessor;
 
 import static java.lang.Math.max;
@@ -22,15 +24,19 @@ import static java.lang.Math.min;
 public class TextField extends Widget {
 
     private final KeyEventProcessor keyEventProcessor;
+    private final DocumentModel model;
     private boolean focused;
-    private StringBuilder text;
     private int width;
     private int cursor;
     private int clip;
     private Selection selection;
 
     public TextField(final int width) {
-        text = new StringBuilder();
+        this(new TextModel(), width);
+    }
+
+    public TextField(final DocumentModel model, final int width) {
+        this.model = model;
         this.width = width;
         this.keyEventProcessor = new KeyEventProcessor(true);
         this.selection = Selection.NONE;
@@ -42,12 +48,8 @@ public class TextField extends Widget {
 
     }
 
-    public String getText() {
-        return text.toString();
-    }
-
-    String getVisibleText() {
-        return text.substring(clip, clip + max(min(text.length() - clip, width), 0));
+    private String getVisibleText() {
+        return model.getChars(clip, clip + max(min(model.length() - clip, width), 0));
     }
 
     private void onLostFocus(final LostFocusEvent event) {
@@ -65,7 +67,6 @@ public class TextField extends Widget {
     private void onKeyPressed(final KeyPressedEvent event) {
         if (keyEventProcessor.handle(event)) {
             requestRepaint();
-
         }
     }
 
@@ -86,15 +87,15 @@ public class TextField extends Widget {
             if (selection != Selection.NONE) {
                 selection = selection.decrement();
             } else {
-                selection = Selection.of(Math.min(cursor, text.length() - 1), cursor - 1);
+                selection = Selection.of(Math.min(cursor, model.length() - 1), cursor - 1);
             }
             moveCursor(cursor - 1);
         }
     }
 
     public void rightSelect() {
-        if (cursor < text.length()) {
-            if (cursor < text.length() - 1) {
+        if (cursor < model.length()) {
+            if (cursor < model.length() - 1) {
                 if (selection != Selection.NONE) {
                     selection = selection.increment();
                 } else {
@@ -109,7 +110,7 @@ public class TextField extends Widget {
         if (selectionExists()) {
             deleteSelection();
         }
-        text.insert(cursor, (char) e.value);
+        model.insertCharAt(cursor, (char) e.value);
         moveCursor(cursor + 1);
     }
 
@@ -119,12 +120,12 @@ public class TextField extends Widget {
 
     private void deleteSelection() {
         moveCursor(selection.getStart());
-        text.delete(selection.getStart(), selection.getEnd() + 1);
+        model.deleteRegion(selection.getStart(), selection.getEnd() + 1);
         selection = Selection.NONE;
     }
 
     private void jumpEnd() {
-        moveCursor(text.length());
+        moveCursor(model.length());
     }
 
     private void jumpHome() {
@@ -157,8 +158,8 @@ public class TextField extends Widget {
         if (selectionExists()) {
             deleteSelection();
         } else {
-            if (text.length() > 0 && cursor > 0) {
-                text.deleteCharAt(cursor - 1);
+            if (model.length() > 0 && cursor > 0) {
+                model.deleteCharAt(cursor - 1);
                 moveCursor(cursor - 1);
             }
         }
@@ -168,14 +169,14 @@ public class TextField extends Widget {
         if (selectionExists()) {
             deleteSelection();
         } else {
-            if (text.length() > 0 && cursor < text.length()) {
-                text.deleteCharAt(cursor);
+            if (model.length() > 0 && cursor < model.length()) {
+                model.deleteCharAt(cursor);
             }
         }
     }
 
     private void moveCursor(int position) {
-        if (position >= 0 && position <= text.length()) {
+        if (position >= 0 && position <= model.length()) {
             cursor = position;
             if (position < clip) {
                 clip = position;
@@ -205,7 +206,7 @@ public class TextField extends Widget {
 
         graphics.printString(startPoint, getVisibleText());
 
-        if (text.length() - clip >= width) {
+        if (model.length() - clip >= width) {
             graphics.putChar(startPoint.shiftX(width), '…');
         }
 
@@ -213,8 +214,8 @@ public class TextField extends Widget {
 
         if (selection != Selection.NONE) {
             graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
-                    min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
-                    highlightColor);
+                                       min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
+                                       highlightColor);
         } else {
             graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1, highlightColor);
         }
@@ -222,7 +223,7 @@ public class TextField extends Widget {
 
     private CellDescriptor getHighlightDescriptor() {
         return CellDescriptor.of(getTheme().getColor(getPrefix() + ".highlight.background"),
-                getTheme().getColor(getPrefix() + ".highlight.foreground"));
+                                 getTheme().getColor(getPrefix() + ".highlight.foreground"));
     }
 
     private Border getBorder() {
@@ -234,10 +235,10 @@ public class TextField extends Widget {
         final Border border = getBorder();
         final Padding padding = getTheme().getPadding("padding");
         return Occupation.fixed(width +
-                border.getLeftThickness() +
-                border.getRightThickness() +
-                padding.left +
-                padding.right);
+                                border.getLeftThickness() +
+                                border.getRightThickness() +
+                                padding.left +
+                                padding.right);
     }
 
     @Override

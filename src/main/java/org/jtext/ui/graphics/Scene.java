@@ -41,12 +41,12 @@ public class Scene implements Component {
         this.eventBus = eventBus;
         this.executorService = executorService;
         this.theme = theme;
-        mainContainer.setRepaintRequester(() -> this.onRepaint(RepaintEvent.REPAINT_EVENT));
+        mainContainer.setRepaintRequester(this::onRepaint);
         eventBus.registerTopic(REPAINT_EVENT_TOPIC);
         eventBus.registerTopic(FOCUS_MOVED_EVENT_TOPIC);
     }
 
-    public void onRepaint(final RepaintEvent repaintEvent) {
+    public void onRepaint() {
         enqueueTask(() -> {
             driver.clearScreen();
             driver.clearStyle();
@@ -111,8 +111,7 @@ public class Scene implements Component {
         eventBus.subscribe(KeyboardHandler.KEY_EVENT_TOPIC, this::onKeyBoardEvent);
         eventBus.subscribe(FOCUS_MOVED_EVENT_TOPIC, this::onFocusMoved);
         eventBus.subscribe(REPAINT_EVENT_TOPIC, this::onRepaint);
-
-        onRepaint(RepaintEvent.REPAINT_EVENT);
+        onRepaint();
     }
 
     @Override

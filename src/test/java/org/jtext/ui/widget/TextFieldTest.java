@@ -3,6 +3,7 @@ package org.jtext.ui.widget;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.ReadKey;
 import org.jtext.ui.event.KeyPressedEvent;
+import org.jtext.ui.model.TextModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class TextFieldTest {
 
     @Before
     public void setUp() throws Exception {
-        field = new TextField(10);
+        field = new TextField(new TextModel(), 10);
     }
 
     @Test
