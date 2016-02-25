@@ -4,6 +4,8 @@ public interface Driver {
 
     void init();
 
+    RgbValue getColorDefinition(int colorId);
+
     void initColor(int number, int red, int green, int blue);
 
     void initColorPair(int pairId, int foreground, int background);
@@ -46,7 +48,5 @@ public interface Driver {
 
     void clearStyle();
 
-    int getCursorX();
-
-    int getCursorY();
+    Point getCursor();
 }

@@ -15,6 +15,13 @@ extern "C" {
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_jtext_curses_CursesDriver
+ * Method:    getColorDefinition
+ * Signature: (I)Lorg/jtext/curses/RgbValue;
+ */
+JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getColorDefinition
+  (JNIEnv *, jobject, jint);
 
 
 /*
@@ -187,20 +194,13 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearScreen
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_clearStyle
   (JNIEnv *, jobject);
 
-/*
- * Class:     org_jtext_curses_CursesDriver
- * Method:    getCursorX
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorX
-  (JNIEnv *, jobject);
 
 /*
  * Class:     org_jtext_curses_CursesDriver
- * Method:    getCursorY
- * Signature: ()I
+ * Method:    getCursorX
+ * Signature: ()Lorg/jtext/curse/Point;
  */
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
+JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCursor
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

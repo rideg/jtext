@@ -1,4 +1,4 @@
-package org.jtext.ui.graphics;
+package org.jtext.curses;
 
 @SuppressWarnings("checkstyle:visibilitymodifier")
 public final class Point {

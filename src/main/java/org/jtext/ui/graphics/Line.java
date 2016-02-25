@@ -1,5 +1,6 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.curses.Point;
 import org.jtext.ui.attribute.Direction;
 
 @SuppressWarnings("checkstyle:visibilitymodifier")

@@ -5,6 +5,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 bool no_current_refresh = true;
 WINDOW* screen;
@@ -47,6 +48,19 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_init
     noecho();
     curs_set(FALSE);
 
+}
+
+JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getColorDefinition
+  (JNIEnv * env, jobject self, jint color_id)
+{
+    short red, green, blue;
+    jclass value_class;
+    jmethodID method_id;
+
+    color_content(color_id, &red, &green, &blue);
+    value_class = (*env)->FindClass(env, "org/jtext/curses/RgbValue");
+    method_id = (*env)->GetStaticMethodID(env, value_class, "of", "(III)Lorg/jtext/curses/RgbValue;");
+    return  (*env)->CallStaticObjectMethod(env, value_class, method_id, red, green, blue);
 }
 
 JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_initColorPair
@@ -97,11 +111,11 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_setColor
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getForegroundColor
   (JNIEnv * env, jobject self)
 {
-    NCURSES_COLOR_T fg;
-    NCURSES_COLOR_T bg;
+    NCURSES_COLOR_T fg, bg;
     NCURSES_PAIRS_T pair_id;
-    attr_t t;
-    wattr_get(screen, &t, &pair_id, NULL);
+    attr_t ignored;
+
+    wattr_get(screen, &ignored, &pair_id, NULL);
     pair_content(pair_id, &fg, &bg);
     return fg;
 }
@@ -109,11 +123,10 @@ JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getForegroundColor
 JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getBackgroundColor
   (JNIEnv * env, jobject self)
 {
-    NCURSES_COLOR_T fg;
-    NCURSES_COLOR_T bg;
+    NCURSES_COLOR_T fg, bg;
     NCURSES_PAIRS_T pair_id;
-    attr_t t;
-    wattr_get(screen, &t, &pair_id, NULL);
+    attr_t ignored;
+    wattr_get(screen, &ignored, &pair_id, NULL);
     pair_content(pair_id, &fg, &bg);
     return bg;
 }
@@ -146,13 +159,10 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_drawHorizontalLineAt
   (JNIEnv * env, jobject self, jint x, jint y, jchar ch, jint length)
 {
     const cchar_t* cch;
-    cch = convert_jchar(ch);
     int result;
+    cch = convert_jchar(ch);
     result = mvwhline_set(screen, y, x, cch, length);
     free(cch);
-    if(result == ERR) {
-        throw_exception(env, "java/lang/IllegalStateException", "problem with drawing line!");
-    }
 
 }
 
@@ -201,16 +211,24 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_bell
 JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
  (JNIEnv * env, jobject obj)
 {
-    jclass readKeyClass = (*env)->FindClass(env, "org/jtext/curses/ReadKey");
-    jclass controlKeyClass = (*env)->FindClass(env, "org/jtext/curses/ControlKey");
-    jmethodID readKeyConstructor = (*env)->GetMethodID(env, readKeyClass, "<init>", "(Lorg/jtext/curses/ControlKey;I)V");
+    jclass readKeyClass, controlKeyClass;
+    jmethodID readKeyConstructor;
+    jfieldID fieldNumber;
+    jobject enumConst;
+    wint_t ch;
+    int res;
+    const char* name;
+
+
+    readKeyClass = (*env)->FindClass(env, "org/jtext/curses/ReadKey");
+    controlKeyClass = (*env)->FindClass(env, "org/jtext/curses/ControlKey");
+    readKeyConstructor = (*env)->GetMethodID(env, readKeyClass, "<init>", "(Lorg/jtext/curses/ControlKey;I)V");
 
     while(!no_current_refresh);
 
-    wint_t ch;
-    int res = wget_wch(pad, &ch);
 
-    const char* name;
+    res = wget_wch(pad, &ch);
+
     if(res == ERR) {
         name = "ERR";
     } else if(res == KEY_CODE_YES || ch < 32 || ch == 127) {
@@ -219,8 +237,8 @@ JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCh
         name = "NORMAL";
     }
 
-    jfieldID fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, name, "Lorg/jtext/curses/ControlKey;");
-    jobject enumConst = (*env)->GetStaticObjectField(env, controlKeyClass, fieldNumber);
+    fieldNumber = (*env)->GetStaticFieldID(env, controlKeyClass, name, "Lorg/jtext/curses/ControlKey;");
+    enumConst = (*env)->GetStaticObjectField(env, controlKeyClass, fieldNumber);
     return (*env)->NewObject(env, readKeyClass, readKeyConstructor, enumConst, ch);
 }
 
@@ -243,21 +261,15 @@ JNIEXPORT void JNICALL Java_org_jtext_curses_CursesDriver_refresh
     wstandend(screen);
 }
 
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorX
+JNIEXPORT jobject JNICALL Java_org_jtext_curses_CursesDriver_getCursor
   (JNIEnv * env, jobject self)
 {
-    int x;
-    int y;
-    getyx(screen, y, x);
-    return x;
-}
-
-JNIEXPORT jint JNICALL Java_org_jtext_curses_CursesDriver_getCursorY
-  (JNIEnv * env, jobject self)
-{
-    int x;
-    int y;
-    getyx(screen, y, x);
-    return y;
+  jclass point_class;
+  jmethodID method_id;
+  int x, y;
+  getyx(screen, y, x);
+  point_class = (*env)->FindClass(env, "org/jtext/curses/Point");
+  method_id = (*env)->GetStaticMethodID(env, point_class, "of", "(II)Lorg/jtext/curses/Point;");
+  return (*env)->CallStaticObjectMethod(env, point_class, method_id, x, y);
 }
 

@@ -1,9 +1,9 @@
 package org.jtext.ui.widget;
 
 import org.jtext.curses.CellDescriptor;
+import org.jtext.curses.Point;
 import org.jtext.ui.graphics.Graphics;
 import org.jtext.ui.graphics.Occupation;
-import org.jtext.ui.graphics.Point;
 import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
 import org.jtext.ui.model.DocumentModel;

@@ -6,6 +6,9 @@ public class CursesDriver implements Driver {
     public native void init();
 
     @Override
+    public native RgbValue getColorDefinition(int colorId);
+
+    @Override
     public native void initColor(int number, int red, int green, int blue);
 
     @Override
@@ -70,9 +73,6 @@ public class CursesDriver implements Driver {
     public native void clearStyle();
 
     @Override
-    public native int getCursorX();
-
-    @Override
-    public native int getCursorY();
+    public native Point getCursor();
 
 }

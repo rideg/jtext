@@ -1,5 +1,7 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.curses.Point;
+
 @SuppressWarnings("checkstyle:visibilitymodifier")
 public final class Rectangle {
 

@@ -3,8 +3,8 @@ package org.jtext.ui.widget;
 import org.jtext.curses.BaseColor;
 import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.Driver;
+import org.jtext.curses.Point;
 import org.jtext.ui.attribute.Border;
-import org.jtext.ui.graphics.Point;
 import org.jtext.ui.graphics.Rectangle;
 
 import java.util.Set;

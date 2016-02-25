@@ -1,5 +1,6 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.curses.Point;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;

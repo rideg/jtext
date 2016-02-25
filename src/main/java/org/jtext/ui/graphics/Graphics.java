@@ -4,6 +4,7 @@ import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.CharacterAttribute;
 import org.jtext.curses.Color;
 import org.jtext.curses.Driver;
+import org.jtext.curses.Point;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.theme.ColorManager;
 
@@ -86,7 +87,7 @@ public class Graphics {
     }
 
     public Point getCursor() {
-        return Point.at(driver.getCursorX(), driver.getCursorY());
+        return driver.getCursor();
     }
 
     public void fillBackground(final Color color) {
