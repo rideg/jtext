@@ -30,7 +30,7 @@ public class ColorManager {
     public void registerColors() {
         for (final Color c : idToColor.values()) {
             RgbValue rgbValue = c.getRgbValue();
-            driver.initColor(c.getColorId(), rgbValue.cursesRed(), rgbValue.cursesGreen(), rgbValue.cursesBlue());
+            driver.initColor(c.getColorId(), rgbValue.getRed(), rgbValue.getGreen(), rgbValue.getBlue());
         }
 
         for (int i = 0; i < colorPairs.length; i++) {

@@ -17,6 +17,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.util.Collections.sort;
 import static org.jtext.ui.graphics.Occupation.isFilling;
+import static org.jtext.ui.util.Util.divHalfUp;
 
 public class LinearLayout extends Layout {
 
@@ -142,8 +143,8 @@ public class LinearLayout extends Layout {
             final int target = preProcessingResults.requiredSpace - getAvailableSpace();
             if (target != 0) {
                 final WidgetDescriptor d = processedWidgets.get(w);
-                int reduction = min(max((target * d.optional + (preProcessingResults.optionalSpace >> 1)) /
-                                        preProcessingResults.optionalSpace, 1), min(target, d.optional));
+                int reduction = min(max(divHalfUp(target * d.optional, preProcessingResults.optionalSpace), 1),
+                                    min(target, d.optional));
                 d.toUse = d.preferred - reduction;
                 d.optional = d.toUse - d.minimum;
                 preProcessingResults.requiredSpace -= reduction;

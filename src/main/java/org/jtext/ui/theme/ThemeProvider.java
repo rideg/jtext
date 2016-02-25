@@ -59,8 +59,9 @@ public final class ThemeProvider {
     }
 
     private RgbValue convert(final String value) {
-        return RgbValue.of(Integer.valueOf(value.substring(1, 3), 16), Integer.valueOf(value.substring(3, 5), 16),
-                           Integer.valueOf(value.substring(5, 7), 16));
+        return RgbValue.fromClassic(Integer.valueOf(value.substring(1, 3), 16),
+                                    Integer.valueOf(value.substring(3, 5), 16),
+                                    Integer.valueOf(value.substring(5, 7), 16));
     }
 
     public String getColorValue(final String colorName) {

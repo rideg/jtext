@@ -8,17 +8,19 @@ import org.jtext.curses.LibraryLoader;
 import org.jtext.curses.ReadKey;
 import org.jtext.event.EventBus;
 import org.jtext.keyboard.KeyboardHandler;
-import org.jtext.ui.attribute.HorizontalAlign;
-import org.jtext.ui.attribute.VerticalAlign;
+import org.jtext.ui.attribute.Border;
+import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.event.FocusMovedEvent;
 import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.graphics.Container;
+import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Scene;
 import org.jtext.ui.layout.Layouts;
 import org.jtext.ui.model.TextModel;
 import org.jtext.ui.theme.ThemeImpl;
 import org.jtext.ui.util.KeyEventProcessor;
 import org.jtext.ui.widget.Label;
+import org.jtext.ui.widget.Panel;
 import org.jtext.ui.widget.TextField;
 
 import java.lang.reflect.Proxy;
@@ -45,14 +47,14 @@ public final class Main {
         try {
 
             final Container mainContainer =
-                    new Container(Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER));
+                    new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
+                              theme.getColorByName("blue"));
 
 
             TextModel model = new TextModel("Hello");
             final TextField textField = new TextField(model, 25);
             mainContainer.add(textField);
-            mainContainer.add(new Label(CellDescriptor.of(theme.getColorByName("black"), theme.getColorByName("white")),
-                                        model));
+            mainContainer.add(new Label(CellDescriptor.of(null, theme.getColorByName("white")), model));
 
             scene.add(mainContainer);
 

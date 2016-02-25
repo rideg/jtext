@@ -1,5 +1,7 @@
 package org.jtext.curses;
 
+import org.jtext.ui.util.Util;
+
 public final class RgbValue {
 
     private final int red;
@@ -13,10 +15,13 @@ public final class RgbValue {
     }
 
     public static RgbValue of(final int red, final int green, final int blue) {
-        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-            throw new IllegalArgumentException("Each intensity value must be in range of [0-255]");
-        }
         return new RgbValue(red, green, blue);
+    }
+
+    public static RgbValue fromClassic(final int red, final int green, final int blue) {
+        return new RgbValue(Util.divHalfUp(red * 1000, 255),
+                            Util.divHalfUp(green * 1000, 255),
+                            Util.divHalfUp(blue * 1000, 255));
     }
 
     public int getRed() {
@@ -30,20 +35,6 @@ public final class RgbValue {
     public int getBlue() {
         return blue;
     }
-
-
-    public int cursesRed() {
-        return Math.min(1000, (red * 1000) / 255);
-    }
-
-    public int cursesGreen() {
-        return Math.min(1000, (green * 1000) / 255);
-    }
-
-    public int cursesBlue() {
-        return Math.min(1000, (blue * 1000) / 255);
-    }
-
 
     @Override
     public boolean equals(final Object o) {
