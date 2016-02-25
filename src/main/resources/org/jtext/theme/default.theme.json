@@ -55,8 +55,10 @@
       "focused.foreground": "white",
       "unfocused.background": "dark-gray",
       "unfocused.foreground": "white",
-      "cursor.background": "green",
-      "cursor.foreground": "black"
+      "focused.highlight.background": "green",
+      "focused.highlight.foreground": "black",
+      "unfocused.highlight.background": "gray",
+      "unfocused.highlight.foreground": "black"
     }
   }
 }

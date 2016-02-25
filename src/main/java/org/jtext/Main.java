@@ -42,7 +42,7 @@ public final class Main {
             final Container mainContainer =
                     new Container(Layouts.vertical(HorizontalAlign.CENTER, VerticalAlign.CENTER));
 
-            final TextField textField = new TextField(15);
+            final TextField textField = new TextField(25);
             mainContainer.add(textField);
 
 

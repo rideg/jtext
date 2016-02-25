@@ -99,13 +99,13 @@ public class Graphics {
     }
 
     public void drawBorder(final Border border) {
-        border.topLeft.ifPresent(d -> putCharAt(area.topLeft(), d));
+        border.topLeft.ifPresent(d -> putCharReal(area.topLeft(), d));
         border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d));
-        border.topRight.ifPresent(d -> putCharAt(area.topRight(), d));
+        border.topRight.ifPresent(d -> putCharReal(area.topRight(), d));
         border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.height - 2, d));
-        border.bottomRight.ifPresent(d -> putCharAt(area.bottomRight(), d));
+        border.bottomRight.ifPresent(d -> putCharReal(area.bottomRight(), d));
         border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d));
-        border.bottomLeft.ifPresent(d -> putCharAt(area.bottomLeft(), d));
+        border.bottomLeft.ifPresent(d -> putCharReal(area.bottomLeft(), d));
         border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d));
     }
 
@@ -114,8 +114,8 @@ public class Graphics {
         if (inside.length > 0) {
             final Point p = toReal(point);
             driver.changeAttributeAt(p.x, p.y, inside.length,
-                                     colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
-                                     descriptor.attributes);
+                    colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
+                    descriptor.attributes);
         }
     }
 
@@ -133,11 +133,15 @@ public class Graphics {
         });
     }
 
-    public void putCharAt(final Point point, final CellDescriptor descriptor) {
+    private void putCharReal(final Point point, final CellDescriptor descriptor) {
         descriptor.character.ifPresent(ch -> {
             setColorsAndAttributes(descriptor);
             driver.putCharAt(point.x, point.y, ch);
         });
+    }
+
+    public void putCharAt(final Point point, final CellDescriptor descriptor) {
+        putCharReal(toReal(point), descriptor);
     }
 
     private void setColorsAndAttributes(CellDescriptor descriptor) {

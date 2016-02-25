@@ -209,18 +209,20 @@ public class TextField extends Widget {
             graphics.putChar(startPoint.shiftX(width), '…');
         }
 
-        if (focused) {
-            final CellDescriptor selectionColor = CellDescriptor.of(getTheme().getColor("cursor.background"),
-                                                                    getTheme().getColor("cursor.foreground"));
+        final CellDescriptor highlightColor = getHighlightDescriptor();
 
-            if (selection != Selection.NONE) {
-                graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
-                                           min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
-                                           selectionColor);
-            } else {
-                graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1, selectionColor);
-            }
+        if (selection != Selection.NONE) {
+            graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
+                    min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
+                    highlightColor);
+        } else {
+            graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1, highlightColor);
         }
+    }
+
+    private CellDescriptor getHighlightDescriptor() {
+        return CellDescriptor.of(getTheme().getColor(getPrefix() + ".highlight.background"),
+                getTheme().getColor(getPrefix() + ".highlight.foreground"));
     }
 
     private Border getBorder() {
@@ -232,10 +234,10 @@ public class TextField extends Widget {
         final Border border = getBorder();
         final Padding padding = getTheme().getPadding("padding");
         return Occupation.fixed(width +
-                                border.getLeftThickness() +
-                                border.getRightThickness() +
-                                padding.left +
-                                padding.right);
+                border.getLeftThickness() +
+                border.getRightThickness() +
+                padding.left +
+                padding.right);
     }
 
     @Override
