@@ -82,6 +82,6 @@ public class ThemeImpl implements Theme {
     }
 
     public void initialise() {
-        colorManager.registerColors();
+        colorManager.registerColorPairs();
     }
 }
