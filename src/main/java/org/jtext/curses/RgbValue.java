@@ -20,8 +20,8 @@ public final class RgbValue {
 
     public static RgbValue fromClassic(final int red, final int green, final int blue) {
         return new RgbValue(Util.divHalfUp(red * 1000, 255),
-                            Util.divHalfUp(green * 1000, 255),
-                            Util.divHalfUp(blue * 1000, 255));
+                Util.divHalfUp(green * 1000, 255),
+                Util.divHalfUp(blue * 1000, 255));
     }
 
     public int getRed() {
@@ -51,6 +51,12 @@ public final class RgbValue {
 
     }
 
+    public static RgbValue parse(String value) {
+        return RgbValue.of(Integer.valueOf(value.substring(1, 3), 16),
+                Integer.valueOf(value.substring(3, 5), 16),
+                Integer.valueOf(value.substring(5, 7), 16));
+    }
+
     @Override
     public int hashCode() {
         int result = red;
@@ -62,9 +68,9 @@ public final class RgbValue {
     @Override
     public String toString() {
         return "RgbValue{" +
-               "red=" + red +
-               ", green=" + green +
-               ", blue=" + blue +
-               '}';
+                "red=" + red +
+                ", green=" + green +
+                ", blue=" + blue +
+                '}';
     }
 }
