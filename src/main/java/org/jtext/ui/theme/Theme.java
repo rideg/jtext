@@ -1,6 +1,6 @@
 package org.jtext.ui.theme;
 
-import org.jtext.curses.Color;
+import org.jtext.curses.ColorName;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.Padding;
 import org.jtext.ui.graphics.Widget;
@@ -11,7 +11,7 @@ public interface Theme {
 
     Padding getPadding(final String description);
 
-    Color getColor(String name);
+    ColorName getColor(String name);
 
     String getString(String name);
 

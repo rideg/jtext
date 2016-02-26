@@ -1,6 +1,6 @@
 package org.jtext.ui.theme;
 
-import org.jtext.curses.Color;
+import org.jtext.curses.ColorName;
 import org.jtext.curses.Driver;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.Padding;
@@ -17,7 +17,7 @@ public class ThemeImpl implements Theme {
                      final ThemeProvider themeProvider) {
         this.widgetType = null;
         this.themeProvider = themeProvider;
-        this.colorManager = new ColorManager(driver, themeProvider);
+        this.colorManager = new ColorManager(driver, themeProvider.getColors());
         this.borderProvider = new BorderProvider(colorManager, themeProvider.getBorders());
     }
 
@@ -44,7 +44,7 @@ public class ThemeImpl implements Theme {
     }
 
     @Override
-    public Color getColor(final String name) {
+    public ColorName getColor(final String name) {
         return colorManager.getColor(themeProvider.getWidgetConfig(widgetType).getString(name, null));
     }
 
@@ -73,15 +73,11 @@ public class ThemeImpl implements Theme {
         return new ThemeImpl(widgetType, themeProvider, colorManager, borderProvider);
     }
 
-    public Color getColorByName(final String color) {
-        return colorManager.getColor(color);
-    }
-
     public ColorManager getColorManager() {
         return colorManager;
     }
 
     public void initialise() {
-        colorManager.registerColorPairs();
+        colorManager.initColorPairs();
     }
 }

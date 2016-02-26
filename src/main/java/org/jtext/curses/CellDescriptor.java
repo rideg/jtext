@@ -9,16 +9,16 @@ import java.util.Set;
 public final class CellDescriptor {
 
     public final Optional<Character> character;
-    public final Optional<Color> foreground;
-    public final Optional<Color> background;
+    public final Optional<ColorName> foreground;
+    public final Optional<ColorName> background;
     public final CharacterAttribute[] attributes;
 
-    private CellDescriptor(final char character, final Color background, final Color foreground,
+    private CellDescriptor(final char character, final ColorName background, final ColorName foreground,
                            final Set<CharacterAttribute> attributes) {
         this(character, foreground, background, attributes.toArray(new CharacterAttribute[attributes.size()]));
     }
 
-    private CellDescriptor(final Character character, final Color foreground, final Color background,
+    private CellDescriptor(final Character character, final ColorName foreground, final ColorName background,
                            final CharacterAttribute[] attributes) {
         this.foreground = Optional.ofNullable(foreground);
         this.background = Optional.ofNullable(background);
@@ -30,16 +30,17 @@ public final class CellDescriptor {
         return new CellDescriptor(null, null, null, new CharacterAttribute[0]);
     }
 
-    public static CellDescriptor of(final char character, final Color background, final Color foreground) {
+    public static CellDescriptor of(final char character, final ColorName background, final ColorName foreground) {
         return new CellDescriptor(character, foreground, background, new CharacterAttribute[0]);
     }
 
 
-    public static CellDescriptor of(final Color background, final Color foreground) {
+    public static CellDescriptor of(final ColorName background, final ColorName foreground) {
         return new CellDescriptor(null, foreground, background, new CharacterAttribute[0]);
     }
 
-    public static CellDescriptor of(final Color background, final Color foreground, final CharacterAttribute first,
+    public static CellDescriptor of(final ColorName background, final ColorName foreground,
+                                    final CharacterAttribute first,
                                     final CharacterAttribute... rest) {
         final CharacterAttribute[] attributes = new CharacterAttribute[rest.length + 1];
         attributes[0] = first;
@@ -47,7 +48,7 @@ public final class CellDescriptor {
         return new CellDescriptor(null, foreground, background, attributes);
     }
 
-    public static CellDescriptor of(final char character, final Color background, final Color foreground,
+    public static CellDescriptor of(final char character, final ColorName background, final ColorName foreground,
                                     CharacterAttribute first, CharacterAttribute... rest) {
         final CharacterAttribute[] attributes = new CharacterAttribute[rest.length + 1];
         attributes[0] = first;
@@ -59,12 +60,12 @@ public final class CellDescriptor {
         return new CellDescriptor(character, foreground.orElse(null), background.orElse(null), attributes);
     }
 
-    public CellDescriptor withBackground(final Color color) {
-        return new CellDescriptor(character.orElse(null), color, foreground.orElse(null), attributes);
+    public CellDescriptor withBackground(final ColorName colorName) {
+        return new CellDescriptor(character.orElse(null), colorName, foreground.orElse(null), attributes);
     }
 
-    public CellDescriptor withForeground(final Color color) {
-        return new CellDescriptor(character.orElse(null), background.orElse(null), color, attributes);
+    public CellDescriptor withForeground(final ColorName colorName) {
+        return new CellDescriptor(character.orElse(null), background.orElse(null), colorName, attributes);
     }
 
     @Override

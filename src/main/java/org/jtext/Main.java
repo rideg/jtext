@@ -1,6 +1,7 @@
 package org.jtext;
 
 import org.jtext.curses.CellDescriptor;
+import org.jtext.curses.ColorName;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.CursesDriver;
 import org.jtext.curses.Driver;
@@ -48,13 +49,13 @@ public final class Main {
 
             final Container mainContainer =
                     new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
-                              theme.getColorByName("blue"));
+                              ColorName.BLUE);
 
 
             TextModel model = new TextModel("Hello");
             final TextField textField = new TextField(model, 25);
             mainContainer.add(textField);
-            mainContainer.add(new Label(CellDescriptor.of(null, theme.getColorByName("white")), model));
+            mainContainer.add(new Label(CellDescriptor.of(null, ColorName.WHITE), model));
 
             scene.add(mainContainer);
 

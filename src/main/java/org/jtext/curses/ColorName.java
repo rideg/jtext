@@ -1,6 +1,6 @@
 package org.jtext.curses;
 
-public enum ColorNames {
+public enum ColorName {
     BLACK,
     RED,
     GREEN,

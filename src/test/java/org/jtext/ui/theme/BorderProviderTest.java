@@ -5,8 +5,7 @@ import com.eclipsesource.json.JsonObject;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.core.Is;
 import org.jtext.curses.CellDescriptor;
-import org.jtext.curses.Color;
-import org.jtext.curses.RgbValue;
+import org.jtext.curses.ColorName;
 import org.jtext.ui.attribute.Border;
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,10 +50,10 @@ public class BorderProviderTest {
                                                         "      \"left\": \"│\"" +
                                                         "    }" +
                                                         "  }").asObject();
+    public static final ColorName BACKGROUND = ColorName.AIR_FORCE_BLUE;
+    public static final ColorName FOREGROUND = ColorName.AQUAMARINE;
 
 
-    public static final Color BACKGROUND = new Color(1, "color1", RgbValue.of(34, 55, 125));
-    public static final Color FOREGROUND = new Color(2, "color2", RgbValue.of(221, 44, 199));
     private ColorManager colorManager;
     private BorderProvider provider;
 
@@ -68,11 +67,11 @@ public class BorderProviderTest {
     @Test
     public void shouldReturnFoundBorderWithAppropriateColoring() throws Exception {
         // given
-        doReturn(BACKGROUND).when(colorManager).getColor(BACKGROUND.getName());
-        doReturn(FOREGROUND).when(colorManager).getColor(FOREGROUND.getName());
+        doReturn(BACKGROUND).when(colorManager).getColor("air-force-blue");
+        doReturn(FOREGROUND).when(colorManager).getColor("aquamarine");
 
         // when
-        final Border border = provider.getBorder("single color1 color2");
+        final Border border = provider.getBorder("single air-force-blue aquamarine");
 
         // then
         final CellDescriptor template = CellDescriptor.of(BACKGROUND, FOREGROUND);

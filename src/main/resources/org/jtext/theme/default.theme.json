@@ -32,19 +32,7 @@
     }
   },
   "colors": {
-    "config": {
-      "changeSystemDefaults": true
-    },
-    "black": "#000000",
-    "white": "#ffffff",
-    "red": "#ff0000",
-    "green": "#00ff00",
-    "blue": "#0000ff",
-    "yellow": "#ffff00",
-    "magenta": "#ff00ff",
-    "cyan": "#00ffff",
-    "gray": "#aaaaaa",
-    "dark-gray": "#444444"
+     "gray": "DIM_GRAY"
   },
   "widgets": {
     "org.jtext.ui.widget.TextField": {

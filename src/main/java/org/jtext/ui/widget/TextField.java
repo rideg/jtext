@@ -1,7 +1,7 @@
 package org.jtext.ui.widget;
 
 import org.jtext.curses.CellDescriptor;
-import org.jtext.curses.Color;
+import org.jtext.curses.ColorName;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.Point;
 import org.jtext.curses.ReadKey;
@@ -189,8 +189,8 @@ public class TextField extends Widget {
     @Override
     public void draw(final Graphics graphics) {
         final Border border = getBorder();
-        final Color background = getBackgroundColor();
-        final Color foreground = getForegroundColor();
+        final ColorName background = getBackgroundColor();
+        final ColorName foreground = getForegroundColor();
 
         graphics.fillBackground(background);
         graphics.drawBorder(border);
@@ -260,11 +260,11 @@ public class TextField extends Widget {
         return isFocused() ? "focused" : "unfocused";
     }
 
-    public Color getBackgroundColor() {
+    public ColorName getBackgroundColor() {
         return getTheme().getColor(getPrefix() + ".background");
     }
 
-    public Color getForegroundColor() {
+    public ColorName getForegroundColor() {
         return getTheme().getColor(getPrefix() + ".foreground");
     }
 }

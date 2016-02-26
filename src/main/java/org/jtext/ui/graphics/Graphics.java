@@ -2,7 +2,7 @@ package org.jtext.ui.graphics;
 
 import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.CharacterAttribute;
-import org.jtext.curses.Color;
+import org.jtext.curses.ColorName;
 import org.jtext.curses.Driver;
 import org.jtext.curses.Point;
 import org.jtext.ui.attribute.Border;
@@ -37,13 +37,13 @@ public class Graphics {
         driver.offAttribute(attribute);
     }
 
-    public void setBackgroundColor(final Color color) {
-        final Color fg = colorManager.getColor(driver.getForegroundColor());
+    public void setBackgroundColor(final ColorName color) {
+        final ColorName fg = ColorName.values()[Math.max(driver.getForegroundColor(), 0)];
         driver.setColor(colorManager.getPairId(fg, color));
     }
 
-    public void setForegroundColor(final Color color) {
-        final Color bg = colorManager.getColor(driver.getBackgroundColor());
+    public void setForegroundColor(final ColorName color) {
+        final ColorName bg = ColorName.values()[Math.max(driver.getBackgroundColor(), 0)];
         driver.setColor(colorManager.getPairId(color, bg));
     }
 
@@ -90,7 +90,7 @@ public class Graphics {
         return driver.getCursor();
     }
 
-    public void fillBackground(final Color color) {
+    public void fillBackground(final ColorName color) {
         setBackgroundColor(color);
         Point point = area.topLeft();
         for (int i = 0; i < area.height; i++) {
@@ -115,8 +115,8 @@ public class Graphics {
         if (inside.length > 0) {
             final Point p = toReal(point);
             driver.changeAttributeAt(p.x, p.y, inside.length,
-                    colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
-                    descriptor.attributes);
+                                     colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
+                                     descriptor.attributes);
         }
     }
 
