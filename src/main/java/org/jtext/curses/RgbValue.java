@@ -1,5 +1,6 @@
 package org.jtext.curses;
 
+import com.sun.istack.internal.NotNull;
 import org.jtext.ui.util.Util;
 
 public final class RgbValue {
@@ -73,4 +74,19 @@ public final class RgbValue {
                 ", blue=" + blue +
                 '}';
     }
+
+    @NotNull
+    public String toHexString() {
+        return String.format("0x%02x%02x%02x", red, green, blue);
+    }
+
+    public int intValue() {
+        return (red << 16) | (green << 8) | blue;
+    }
+
+    public double length() {
+        return Math.sqrt((red * red + green * green + blue * blue));
+    }
+
+
 }

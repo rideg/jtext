@@ -50,7 +50,7 @@ public class BorderProviderTest {
                                                         "      \"left\": \"│\"" +
                                                         "    }" +
                                                         "  }").asObject();
-    public static final ColorName BACKGROUND = ColorName.AIR_FORCE_BLUE;
+    public static final ColorName BACKGROUND = ColorName.CONFETTI;
     public static final ColorName FOREGROUND = ColorName.AQUAMARINE;
 
 
@@ -67,11 +67,11 @@ public class BorderProviderTest {
     @Test
     public void shouldReturnFoundBorderWithAppropriateColoring() throws Exception {
         // given
-        doReturn(BACKGROUND).when(colorManager).getColor("air-force-blue");
+        doReturn(BACKGROUND).when(colorManager).getColor("confetti");
         doReturn(FOREGROUND).when(colorManager).getColor("aquamarine");
 
         // when
-        final Border border = provider.getBorder("single air-force-blue aquamarine");
+        final Border border = provider.getBorder("single confetti aquamarine");
 
         // then
         final CellDescriptor template = CellDescriptor.of(BACKGROUND, FOREGROUND);
