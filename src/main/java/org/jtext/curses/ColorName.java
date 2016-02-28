@@ -265,7 +265,7 @@ public enum ColorName {
     GRAY_09(239, 0x4e4e4e),
     GRAY_10(240, 0x585858),
     GRAY_11(241, 0x626262),
-    DOVE_12(242, 0x6c6c6c),
+    GRAY_12(242, 0x6c6c6c),
     GRAY_13(243, 0x767676),
     GRAY_14(244, 0x808080),
     GRAY_15(245, 0x8a8a8a),
@@ -280,11 +280,19 @@ public enum ColorName {
     GRAY_24(254, 0xe4e4e4),
     GRAY_25(255, 0xeeeeee);
 
-    final int code;
-    final int colorValue;
+    private final int code;
+    private final int colorValue;
 
     ColorName(int code, int colorValue) {
         this.code = code;
         this.colorValue = colorValue;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public int getColorValue() {
+        return colorValue;
     }
 }

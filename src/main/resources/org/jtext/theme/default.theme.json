@@ -32,7 +32,7 @@
     }
   },
   "colors": {
-     "gray": "DIM_GRAY"
+     "gray": "GRAY_02"
   },
   "widgets": {
     "org.jtext.ui.widget.TextField": {
