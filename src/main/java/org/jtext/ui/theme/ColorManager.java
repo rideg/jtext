@@ -14,27 +14,20 @@ public class ColorManager {
     private final Map<String, ColorName> nameToColor;
     private final int[][] colorPairs;
     private final Driver driver;
+    private int colorPairId = 1;
 
     public ColorManager(final Driver driver, final JsonObject colorDefinitions) {
         this.driver = driver;
         nameToColor = new HashMap<>();
         colorPairs = new int[MAXIMUM_NUMBER_OF_COLORS][MAXIMUM_NUMBER_OF_COLORS];
+        colorPairId = 0;
+        for (int[] row : colorPairs) {
+            Arrays.fill(row, -1);
+        }
         initialise(colorDefinitions);
     }
 
-    public void initColorPairs() {
-        for (int i = 0; i < colorPairs.length; i++) {
-            for (int j = 0; j < colorPairs.length; j++) {
-                if (colorPairs[i][j] != -1) {
-                    driver.initColorPair(colorPairs[i][j], i, j);
-                }
-            }
-        }
-
-    }
-
     private void initialise(final JsonObject colorDefinitions) {
-        defineColorPairs();
         Arrays.stream(ColorName.values()).forEach(v -> nameToColor.put(v.name(), v));
         for (final JsonObject.Member member : colorDefinitions) {
             if (member.getValue().isNumber()) {
@@ -52,15 +45,6 @@ public class ColorManager {
         }
     }
 
-    private void defineColorPairs() {
-        int i = 0;
-        for (final ColorName foreground : ColorName.values()) {
-            for (final ColorName background : ColorName.values()) {
-                colorPairs[foreground.ordinal()][background.ordinal()] = i++;
-            }
-        }
-    }
-
     public ColorName getColor(final String colorName) {
         if (nameToColor.containsKey(colorName)) {
             return nameToColor.get(colorName);
@@ -69,6 +53,18 @@ public class ColorManager {
     }
 
     public int getPairId(final ColorName foreground, final ColorName background) {
-        return colorPairs[foreground.ordinal()][background.ordinal()];
+        int fgId = foreground.ordinal();
+        int bgId = background.ordinal();
+        int pairId = colorPairs[fgId][bgId];
+        if (pairId == -1) {
+            registerPair(fgId, bgId);
+        }
+        return colorPairs[fgId][bgId];
+    }
+
+    private void registerPair(int foreground, int background) {
+        driver.initColorPair(colorPairId, foreground, background);
+        colorPairs[foreground][background] = colorPairId;
+        colorPairId++;
     }
 }

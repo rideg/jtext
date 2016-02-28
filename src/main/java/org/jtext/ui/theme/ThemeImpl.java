@@ -76,8 +76,4 @@ public class ThemeImpl implements Theme {
     public ColorManager getColorManager() {
         return colorManager;
     }
-
-    public void initialise() {
-        colorManager.initColorPairs();
-    }
 }

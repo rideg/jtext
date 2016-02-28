@@ -32,12 +32,12 @@
     }
   },
   "colors": {
-     "gray": "GRAY_02"
+     "gray": "GRAY_18"
   },
   "widgets": {
     "org.jtext.ui.widget.TextField": {
       "focused.border": "single black white",
-      "unfocused.border": "single black dark-gray",
+      "unfocused.border": "single black gray",
       "padding": "0 1 0 1",
       "focused.background": "dark-gray",
       "focused.foreground": "white",

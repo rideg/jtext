@@ -106,7 +106,6 @@ public class Scene implements Component {
 
     @Override
     public void start() {
-        theme.initialise();
         executorService.submit(this::mainLoop);
         eventBus.subscribe(KeyboardHandler.KEY_EVENT_TOPIC, this::onKeyBoardEvent);
         eventBus.subscribe(FOCUS_MOVED_EVENT_TOPIC, this::onFocusMoved);
