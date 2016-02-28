@@ -37,7 +37,7 @@
   "widgets": {
     "org.jtext.ui.widget.TextField": {
       "focused.border": "single black white",
-      "unfocused.border": "single black gray",
+      "unfocused.border": "single black dark-gray",
       "padding": "0 1 0 1",
       "focused.background": "dark-gray",
       "focused.foreground": "white",
@@ -45,7 +45,7 @@
       "unfocused.foreground": "white",
       "focused.highlight.background": "green",
       "focused.highlight.foreground": "black",
-      "unfocused.highlight.background": "gray",
+      "unfocused.highlight.background": "white",
       "unfocused.highlight.foreground": "black"
     }
   }
