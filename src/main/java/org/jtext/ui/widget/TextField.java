@@ -161,6 +161,9 @@ public class TextField extends Widget {
             if (model.length() > 0 && cursor > 0) {
                 model.deleteCharAt(cursor - 1);
                 moveCursor(cursor - 1);
+                if (clip > 0) {
+                    clip--;
+                }
             }
         }
     }
