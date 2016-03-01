@@ -5,6 +5,10 @@ apply plugin: 'distribution'
 apply plugin: 'checkstyle'
 if (project.hasProperty('findbugs')) {
     apply plugin: 'findbugs'
+
+    findbugs {
+        sourceSets = [sourceSets.main]
+    }
 }
 
 repositories {
@@ -117,10 +121,6 @@ distributions {
 
 distZip.dependsOn(jar)
 distTar.dependsOn(jar)
-
-findbugs {
-    sourceSets = [sourceSets.main]
-}
 
 tasks.withType(FindBugs) {
     reports {
