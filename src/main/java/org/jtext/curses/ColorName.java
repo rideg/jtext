@@ -1,6 +1,13 @@
 package org.jtext.curses;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Arrays.stream;
+
 public enum ColorName {
+
+    NO_COLOR(-1, 0),
 
     // default colors
     BLACK(0, 0x000000),
@@ -280,6 +287,12 @@ public enum ColorName {
     GRAY_24(254, 0xe4e4e4),
     GRAY_25(255, 0xeeeeee);
 
+    private static final Map<Integer, ColorName> ID_MAP = new HashMap<>();
+
+    static {
+        stream(values()).forEach(v -> ID_MAP.put(v.getCode(), v));
+    }
+
     private final int code;
     private final int colorValue;
 
@@ -294,5 +307,9 @@ public enum ColorName {
 
     public int getColorValue() {
         return colorValue;
+    }
+
+    public static ColorName getById(int colorId) {
+        return ID_MAP.get(colorId);
     }
 }

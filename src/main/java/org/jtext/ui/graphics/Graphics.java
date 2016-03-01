@@ -38,12 +38,12 @@ public class Graphics {
     }
 
     public void setBackgroundColor(final ColorName color) {
-        final ColorName fg = ColorName.values()[Math.max(driver.getForegroundColor(), 0)];
+        final ColorName fg = ColorName.getById(driver.getForegroundColor());
         driver.setColor(colorManager.getPairId(fg, color));
     }
 
     public void setForegroundColor(final ColorName color) {
-        final ColorName bg = ColorName.values()[Math.max(driver.getBackgroundColor(), 0)];
+        final ColorName bg = ColorName.getById(driver.getBackgroundColor());
         driver.setColor(colorManager.getPairId(color, bg));
     }
 
@@ -115,8 +115,8 @@ public class Graphics {
         if (inside.length > 0) {
             final Point p = toReal(point);
             driver.changeAttributeAt(p.x, p.y, inside.length,
-                                     colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
-                                     descriptor.attributes);
+                    colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
+                    descriptor.attributes);
         }
     }
 
