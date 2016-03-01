@@ -46,9 +46,7 @@ public class Panel extends Container implements WidgetWithBackground {
 
     @Override
     public void draw(Graphics graphics) {
-        if (background.isPresent()) {
-            graphics.fillBackground(background.get());
-        }
+        background.ifPresent(graphics::fillBackground);
         graphics.drawBorder(border);
         super.draw(graphics.restrict(padding.consider(border).apply(graphics.getArea().dimension())));
     }

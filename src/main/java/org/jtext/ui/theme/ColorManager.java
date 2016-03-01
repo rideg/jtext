@@ -20,7 +20,6 @@ public class ColorManager {
         this.driver = driver;
         nameToColor = new HashMap<>();
         colorPairs = new int[MAXIMUM_NUMBER_OF_COLORS][MAXIMUM_NUMBER_OF_COLORS];
-        colorPairId = 0;
         for (int[] row : colorPairs) {
             Arrays.fill(row, -1);
         }
@@ -64,7 +63,6 @@ public class ColorManager {
 
     private void registerPair(int foreground, int background) {
         driver.initColorPair(colorPairId, foreground, background);
-        colorPairs[foreground][background] = colorPairId;
-        colorPairId++;
+        colorPairs[foreground][background] = colorPairId++;
     }
 }
