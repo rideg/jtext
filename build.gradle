@@ -118,6 +118,10 @@ distributions {
 distZip.dependsOn(jar)
 distTar.dependsOn(jar)
 
+findbugs {
+    sourceSets = [sourceSets.main]
+}
+
 tasks.withType(FindBugs) {
     reports {
         xml.enabled = false
