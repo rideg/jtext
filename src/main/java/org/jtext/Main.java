@@ -49,13 +49,13 @@ public final class Main {
 
             final Container mainContainer =
                     new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
-                              ColorName.BLUE);
+                            ColorName.BLUE);
 
 
             TextModel model = new TextModel("Hello");
             final TextField textField = new TextField(model, 25);
             mainContainer.add(textField);
-            mainContainer.add(new Label(CellDescriptor.of(null, ColorName.WHITE), model));
+            mainContainer.add(new Label(CellDescriptor.foreground(ColorName.WHITE), model));
 
             scene.add(mainContainer);
 
@@ -103,28 +103,28 @@ public final class Main {
         if (Boolean.parseBoolean(System.getProperty("test.mode", "false"))) {
             final AtomicInteger closed = new AtomicInteger();
             return (Driver) Proxy.newProxyInstance(Main.class.getClassLoader(), new Class[]{Driver.class},
-                                                   (proxy, method, args) -> {
-                                                       if (method.getName().equals("getScreenHeight")) {
-                                                           return 25;
-                                                       }
-                                                       if (method.getName().equals("getScreenWidth")) {
-                                                           return 80;
-                                                       }
-                                                       if (method.getName().equals("getCh")) {
-                                                           if (closed.get() > 2) {
-                                                               return new ReadKey(ControlKey.ERR, 0);
-                                                           }
-                                                           closed.incrementAndGet();
-                                                           return new ReadKey(ControlKey.NORMAL, 'a');
-                                                       }
-                                                       if (method.getName().equals("getBackgroundColor")) {
-                                                           return 0;
-                                                       }
-                                                       if (method.getName().equals("getForegroundColor")) {
-                                                           return 0;
-                                                       }
-                                                       return null;
-                                                   });
+                    (proxy, method, args) -> {
+                        if (method.getName().equals("getScreenHeight")) {
+                            return 25;
+                        }
+                        if (method.getName().equals("getScreenWidth")) {
+                            return 80;
+                        }
+                        if (method.getName().equals("getCh")) {
+                            if (closed.get() > 2) {
+                                return new ReadKey(ControlKey.ERR, 0);
+                            }
+                            closed.incrementAndGet();
+                            return new ReadKey(ControlKey.NORMAL, 'a');
+                        }
+                        if (method.getName().equals("getBackgroundColor")) {
+                            return 0;
+                        }
+                        if (method.getName().equals("getForegroundColor")) {
+                            return 0;
+                        }
+                        return null;
+                    });
         }
         return new CursesDriver();
     }

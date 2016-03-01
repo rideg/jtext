@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
-import static org.jtext.curses.CellDescriptor.empty;
 
 public class BorderProvider {
 
@@ -29,20 +28,22 @@ public class BorderProvider {
     }
 
     private Border parseBorder(final JsonObject borderJson) {
-        final Optional<CellDescriptor> topLeft = parseElement(borderJson, "topLeft");
-        final Optional<CellDescriptor> top = parseElement(borderJson, "top");
-        final Optional<CellDescriptor> topRight = parseElement(borderJson, "topRight");
-        final Optional<CellDescriptor> right = parseElement(borderJson, "right");
-        final Optional<CellDescriptor> bottomRight = parseElement(borderJson, "bottomRight");
-        final Optional<CellDescriptor> bottom = parseElement(borderJson, "bottom");
-        final Optional<CellDescriptor> bottomLeft = parseElement(borderJson, "bottomLeft");
-        final Optional<CellDescriptor> left = parseElement(borderJson, "left");
+        final Optional<Character> topLeft = parseElement(borderJson, "topLeft");
+        final Optional<Character> top = parseElement(borderJson, "top");
+        final Optional<Character> topRight = parseElement(borderJson, "topRight");
+        final Optional<Character> right = parseElement(borderJson, "right");
+        final Optional<Character> bottomRight = parseElement(borderJson, "bottomRight");
+        final Optional<Character> bottom = parseElement(borderJson, "bottom");
+        final Optional<Character> bottomLeft = parseElement(borderJson, "bottomLeft");
+        final Optional<Character> left = parseElement(borderJson, "left");
 
-        return new Border(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
+        return new Border(CellDescriptor.empty(),
+                topLeft, top, topRight, right,
+                bottomRight, bottom, bottomLeft, left);
     }
 
-    private Optional<CellDescriptor> parseElement(final JsonObject borderJson, final String name) {
-        return ofNullable(borderJson.getString(name, null)).map(s -> empty().withCh(s.charAt(0)));
+    private Optional<Character> parseElement(final JsonObject borderJson, final String name) {
+        return ofNullable(borderJson.getString(name, null)).map(s -> s.charAt(0));
     }
 
     public Border getBorder(final String description) {

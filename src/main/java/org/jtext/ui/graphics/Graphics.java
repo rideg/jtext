@@ -100,14 +100,15 @@ public class Graphics {
     }
 
     public void drawBorder(final Border border) {
-        border.topLeft.ifPresent(d -> putCharReal(area.topLeft(), d));
-        border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d));
-        border.topRight.ifPresent(d -> putCharReal(area.topRight(), d));
-        border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.height - 2, d));
-        border.bottomRight.ifPresent(d -> putCharReal(area.bottomRight(), d));
-        border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d));
-        border.bottomLeft.ifPresent(d -> putCharReal(area.bottomLeft(), d));
-        border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d));
+        final CellDescriptor descriptor = border.getDescriptor();
+        border.topLeft.ifPresent(d -> putCharReal(area.topLeft(), d, descriptor));
+        border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d, descriptor));
+        border.topRight.ifPresent(d -> putCharReal(area.topRight(), d, descriptor));
+        border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.height - 2, d, descriptor));
+        border.bottomRight.ifPresent(d -> putCharReal(area.bottomRight(), d, descriptor));
+        border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d, descriptor));
+        border.bottomLeft.ifPresent(d -> putCharReal(area.bottomLeft(), d, descriptor));
+        border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d, descriptor));
     }
 
     public void changeAttributeAt(final Point point, final int length, CellDescriptor descriptor) {
@@ -115,44 +116,33 @@ public class Graphics {
         if (inside.length > 0) {
             final Point p = toReal(point);
             driver.changeAttributeAt(p.x, p.y, inside.length,
-                    colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()),
-                    descriptor.attributes);
+                    colorManager.getPairId(descriptor.getForeground(), descriptor.getBackground()),
+                    descriptor.getAttributes());
         }
     }
 
-    private void drawVerticalLine(Point point, int length, CellDescriptor descriptor) {
-        descriptor.character.ifPresent(ch -> {
-            setColorsAndAttributes(descriptor);
-            driver.drawVerticalLineAt(point.x, point.y, ch, length);
-        });
+    private void drawVerticalLine(Point point, int length, final char ch, CellDescriptor descriptor) {
+        setColorsAndAttributes(descriptor);
+        driver.drawVerticalLineAt(point.x, point.y, ch, length);
     }
 
-    private void drawHorizontalLine(Point point, int length, CellDescriptor descriptor) {
-        descriptor.character.ifPresent(ch -> {
-            setColorsAndAttributes(descriptor);
-            driver.drawHorizontalLineAt(point.x, point.y, ch, length);
-        });
+    private void drawHorizontalLine(Point point, int length, final char ch, CellDescriptor descriptor) {
+        setColorsAndAttributes(descriptor);
+        driver.drawHorizontalLineAt(point.x, point.y, ch, length);
     }
 
-    private void putCharReal(final Point point, final CellDescriptor descriptor) {
-        descriptor.character.ifPresent(ch -> {
-            setColorsAndAttributes(descriptor);
-            driver.putCharAt(point.x, point.y, ch);
-        });
+    private void putCharReal(final Point point, final char ch, final CellDescriptor descriptor) {
+        setColorsAndAttributes(descriptor);
+        driver.putCharAt(point.x, point.y, ch);
     }
 
-    public void putCharAt(final Point point, final CellDescriptor descriptor) {
-        putCharReal(toReal(point), descriptor);
+    public void putCharAt(final Point point, final char ch, final CellDescriptor descriptor) {
+        putCharReal(toReal(point), ch, descriptor);
     }
 
     private void setColorsAndAttributes(CellDescriptor descriptor) {
-        if (descriptor.background.isPresent() && descriptor.foreground.isPresent()) {
-            driver.setColor(colorManager.getPairId(descriptor.foreground.get(), descriptor.background.get()));
-        } else {
-            descriptor.background.ifPresent(this::setBackgroundColor);
-            descriptor.foreground.ifPresent(this::setForegroundColor);
-        }
-        driver.onAttributes(descriptor.attributes);
+        driver.setColor(colorManager.getPairId(descriptor.getForeground(), descriptor.getBackground()));
+        driver.onAttributes(descriptor.getAttributes());
     }
 
     public Rectangle getArea() {

@@ -26,14 +26,18 @@ public class Label extends Widget {
     @Override
     public void draw(final Graphics graphics) {
         determineBackground(graphics);
-        descriptor.foreground.ifPresent(graphics::setForegroundColor);
-        graphics.setAttributes(descriptor.attributes);
+        if (descriptor.hasForeground()) {
+            graphics.setForegroundColor(descriptor.getForeground());
+        }
+        graphics.setAttributes(descriptor.getAttributes());
         graphics.printString(Point.at(0, 0), model.getChars());
     }
 
     private void determineBackground(final Graphics graphics) {
-        if (descriptor.background.isPresent()) {
-            graphics.setBackgroundColor(descriptor.background.get());
+
+
+        if (descriptor.hasBackground()) {
+            graphics.setBackgroundColor(descriptor.getBackground());
         } else {
             getParent().ifPresent(parent -> {
                 if (parent instanceof WidgetWithBackground) {
