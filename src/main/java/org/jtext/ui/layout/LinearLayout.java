@@ -19,7 +19,7 @@ import static java.util.Collections.sort;
 import static org.jtext.ui.graphics.Occupation.isFilling;
 import static org.jtext.ui.util.Util.divHalfUp;
 
-public class LinearLayout extends Layout {
+public class LinearLayout extends Layout<Widget> {
 
     private final Direction direction;
     private final Alignment primaryAlignment;

@@ -7,11 +7,12 @@ import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Graphics;
 import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Rectangle;
+import org.jtext.ui.graphics.Widget;
 import org.jtext.ui.layout.Layout;
 
 import java.util.Optional;
 
-public class Panel extends Container implements WidgetWithBackground {
+public class Panel extends Container<Widget> implements WidgetWithBackground {
 
     private final Optional<ColorName> background;
     private final Border border;
@@ -19,12 +20,12 @@ public class Panel extends Container implements WidgetWithBackground {
     private final Occupation preferredWith;
     private final Occupation preferredHeight;
 
-    public Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight) {
+    public Panel(final Layout<Widget> layout, final Occupation preferredWith, final Occupation preferredHeight) {
         this(layout, preferredWith, preferredHeight, Border.no(), Padding.no(), Optional.empty());
 
     }
 
-    private Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight,
+    private Panel(final Layout<Widget> layout, final Occupation preferredWith, final Occupation preferredHeight,
                   final Border border, final Padding padding, final Optional<ColorName> backgroundColor) {
         super(layout);
         this.preferredWith = preferredWith;
@@ -34,12 +35,12 @@ public class Panel extends Container implements WidgetWithBackground {
         this.background = backgroundColor;
     }
 
-    public Panel(final Layout layout, final Occupation preferredWith, final Occupation preferredHeight,
+    public Panel(final Layout<Widget> layout, final Occupation preferredWith, final Occupation preferredHeight,
                  final Border border, final Padding padding, final ColorName backgroundColor) {
         this(layout, preferredWith, preferredHeight, border, padding, Optional.of(backgroundColor));
     }
 
-    public Panel(final Layout layout, final Occupation preferredWidth, final Occupation preferredHeight,
+    public Panel(final Layout<Widget> layout, final Occupation preferredWidth, final Occupation preferredHeight,
                  final Border border, final Padding padding) {
         this(layout, preferredWidth, preferredHeight, border, padding, Optional.empty());
     }

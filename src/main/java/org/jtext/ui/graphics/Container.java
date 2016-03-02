@@ -3,31 +3,24 @@ package org.jtext.ui.graphics;
 import org.jtext.ui.layout.Layout;
 import org.jtext.ui.theme.Theme;
 
-import java.util.HashSet;
-import java.util.Set;
+public class Container<T extends Widget> extends Widget {
 
-public class Container extends Widget {
+    private Layout<T> layout;
 
-    private Set<Widget> widgets = new HashSet<>();
-    private Layout layout;
-
-    public Container(final Layout layout) {
+    public Container(final Layout<T> layout) {
         this.layout = layout;
     }
 
     @Override
     public void draw(Graphics graphics) {
-        for (final Widget widget : widgets) {
-            if (widget.isVisible()) {
-                widget.draw(graphics.restrict(layout.getAreaFor(widget)));
-            }
-        }
+        layout.getWidgets().stream().filter(Widget::isVisible)
+                .forEach(widget -> widget.draw(graphics.restrict(layout.getAreaFor(widget))));
     }
 
     @Override
     public void setTheme(final Theme theme) {
         super.setTheme(theme);
-        for (final Widget widget : widgets) {
+        for (final Widget widget : layout.getWidgets()) {
             widget.setTheme(theme.useFor(widget.getClass()));
         }
     }
@@ -35,9 +28,13 @@ public class Container extends Widget {
     @Override
     public void setRepaintRequester(final Runnable repaintRequester) {
         super.setRepaintRequester(repaintRequester);
-        for (final Widget widget : widgets) {
+        for (final Widget widget : layout.getWidgets()) {
             widget.setRepaintRequester(repaintRequester);
         }
+    }
+
+    public Layout<T> getLayout() {
+        return layout;
     }
 
     @Override
@@ -67,25 +64,20 @@ public class Container extends Widget {
 
     public void setArea(final Rectangle area) {
         layout.setDimension(area.dimension());
-        for (Widget w : widgets) {
-            if (w instanceof Container && w.isVisible()) {
-                ((Container) w).setArea(layout.getAreaFor(w));
-            }
-        }
+        layout.getWidgets().stream().filter(w -> w instanceof Container && w.isVisible())
+                .forEach(w -> ((Container) w).setArea(layout.getAreaFor(w)));
 
     }
 
-    public Container add(final Widget widget) {
+    public Container add(final T widget) {
         layout.addWidget(widget);
-        widgets.add(widget);
         widget.setParent(this);
         widget.setRepaintRequester(getRepaintRequester());
         return this;
     }
 
-    public void remove(final Widget widget) {
-        layout.addWidget(widget);
-        widgets.remove(widget);
+    public void remove(final T widget) {
+        layout.removeWidget(widget);
         widget.clearParent();
         widget.clearRepaintRequester();
     }

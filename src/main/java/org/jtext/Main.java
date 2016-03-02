@@ -16,6 +16,7 @@ import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Scene;
+import org.jtext.ui.graphics.Widget;
 import org.jtext.ui.layout.Layouts;
 import org.jtext.ui.model.TextModel;
 import org.jtext.ui.theme.ThemeImpl;
@@ -47,9 +48,9 @@ public final class Main {
         final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor(), theme);
         try {
 
-            final Container mainContainer =
+            final Container<Widget> mainContainer =
                     new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
-                            ColorName.BLUE);
+                              ColorName.BLUE);
 
 
             TextModel model = new TextModel("Hello");
@@ -72,7 +73,7 @@ public final class Main {
             processor.register(ControlKey.DATA_LINK_ESCAPE, e -> {
                 if (textField.isVisible()) {
                     textField.hide();
-                    scene.onFocusMoved(new FocusMovedEvent(new Container(Layouts.horizontal())));
+                    scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
                 } else {
                     textField.show();
                     scene.onFocusMoved(new FocusMovedEvent(textField));
@@ -82,7 +83,7 @@ public final class Main {
             processor.register(ControlKey.NULL, e -> {
                 if (textField.isVisible()) {
                     if (textField.isFocused()) {
-                        scene.onFocusMoved(new FocusMovedEvent(new Container(Layouts.horizontal())));
+                        scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
                     } else {
                         scene.onFocusMoved(new FocusMovedEvent(textField));
                     }
@@ -103,28 +104,28 @@ public final class Main {
         if (Boolean.parseBoolean(System.getProperty("test.mode", "false"))) {
             final AtomicInteger closed = new AtomicInteger();
             return (Driver) Proxy.newProxyInstance(Main.class.getClassLoader(), new Class[]{Driver.class},
-                    (proxy, method, args) -> {
-                        if (method.getName().equals("getScreenHeight")) {
-                            return 25;
-                        }
-                        if (method.getName().equals("getScreenWidth")) {
-                            return 80;
-                        }
-                        if (method.getName().equals("getCh")) {
-                            if (closed.get() > 2) {
-                                return new ReadKey(ControlKey.ERR, 0);
-                            }
-                            closed.incrementAndGet();
-                            return new ReadKey(ControlKey.NORMAL, 'a');
-                        }
-                        if (method.getName().equals("getBackgroundColor")) {
-                            return 0;
-                        }
-                        if (method.getName().equals("getForegroundColor")) {
-                            return 0;
-                        }
-                        return null;
-                    });
+                                                   (proxy, method, args) -> {
+                                                       if (method.getName().equals("getScreenHeight")) {
+                                                           return 25;
+                                                       }
+                                                       if (method.getName().equals("getScreenWidth")) {
+                                                           return 80;
+                                                       }
+                                                       if (method.getName().equals("getCh")) {
+                                                           if (closed.get() > 2) {
+                                                               return new ReadKey(ControlKey.ERR, 0);
+                                                           }
+                                                           closed.incrementAndGet();
+                                                           return new ReadKey(ControlKey.NORMAL, 'a');
+                                                       }
+                                                       if (method.getName().equals("getBackgroundColor")) {
+                                                           return 0;
+                                                       }
+                                                       if (method.getName().equals("getForegroundColor")) {
+                                                           return 0;
+                                                       }
+                                                       return null;
+                                                   });
         }
         return new CursesDriver();
     }
