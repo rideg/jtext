@@ -32,7 +32,7 @@ public class Scene implements Component {
     private final ExecutorService executorService;
     private final BlockingDeque<Runnable> taskQueue = new LinkedBlockingDeque<>();
     private final ThemeImpl theme;
-    private final Container mainContainer = new Container(Layouts.vertical());
+    private final Container<Widget> mainContainer = new Container<>(Layouts.vertical());
     private Widget activeWidget;
     private volatile boolean isRunning = true;
 
