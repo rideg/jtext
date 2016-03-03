@@ -99,17 +99,19 @@ public final class Rectangle {
     }
 
     public Line cropRelative(final Line line) {
-        if (line.length > 0) {
+        if (line.getLength() > 0) {
             if (hasRelative(line.end()) || hasRelative(line.start()) || hasCommonPoints(line)) {
-                return Line.line(closestInner(line.start()), closestInner(line.end()), line.direction);
+                return Line.line(closestInner(line.start()), closestInner(line.end()), line.getDirection());
             }
         }
-        return new Line(0, 0, 0, line.direction);
+        return new Line(0, 0, 0, line.getDirection());
     }
 
     private boolean hasCommonPoints(final Line line) {
-        return line.isHorizontal() ? 0 <= line.y && line.y < getHeight() && line.x < 0
-                : 0 <= line.x && line.x < getWidth() && line.y < 0;
+        final Point point = line.start();
+        return line.isHorizontal() ?
+                0 <= point.getY() && point.getY() < getHeight() && point.getX() < 0 :
+                0 <= point.getY() && point.getX() < getWidth() && point.getY() < 0;
     }
 
     private Point closestInner(final Point start) {

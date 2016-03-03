@@ -49,25 +49,25 @@ public class Graphics {
 
     public void drawVerticalLine(final Point point, final char ch, final int length) {
         final Line line = area.cropRelative(Line.vertical(point, length));
-        if (line.length > 0) {
+        if (line.getLength() > 0) {
             final Point p = toReal(point);
-            driver.drawVerticalLineAt(p.getX(), p.getY(), ch, line.length);
+            driver.drawVerticalLineAt(p.getX(), p.getY(), ch, line.getLength());
         }
     }
 
     public void drawHorizontalLine(final Point point, final char ch, final int length) {
         final Line inside = area.cropRelative(Line.horizontal(point, length));
-        if (inside.length > 0) {
+        if (inside.getLength() > 0) {
             final Point p = toReal(point);
-            driver.drawHorizontalLineAt(p.getX(), p.getY(), ch, inside.length);
+            driver.drawHorizontalLineAt(p.getX(), p.getY(), ch, inside.getLength());
         }
     }
 
     public void printString(final Point point, final String string) {
         final Line inside = area.cropRelative(Line.horizontal(point, string.length()));
-        if (inside.length > 0) {
+        if (inside.getLength() > 0) {
             final Point p = toReal(point);
-            driver.printStringAt(p.getX(), p.getY(), string.substring(0, inside.length));
+            driver.printStringAt(p.getX(), p.getY(), string.substring(0, inside.getLength()));
         }
     }
 
@@ -113,9 +113,9 @@ public class Graphics {
 
     public void changeAttributeAt(final Point point, final int length, CellDescriptor descriptor) {
         final Line inside = area.cropRelative(Line.horizontal(point, length));
-        if (inside.length > 0) {
+        if (inside.getLength() > 0) {
             final Point p = toReal(point);
-            driver.changeAttributeAt(p.getX(), p.getY(), inside.length,
+            driver.changeAttributeAt(p.getX(), p.getY(), inside.getLength(),
                     colorManager.getPairId(descriptor.getForeground(), descriptor.getBackground()),
                     descriptor.getAttributes());
         }

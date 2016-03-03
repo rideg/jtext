@@ -3,29 +3,34 @@ package org.jtext.ui.graphics;
 import org.jtext.curses.Point;
 import org.jtext.ui.attribute.Direction;
 
-@SuppressWarnings("checkstyle:visibilitymodifier")
+import java.util.Objects;
+
 public final class Line {
 
-    public final int x;
-    public final int y;
-    public final int length;
-    public final Direction direction;
+    private final Point start;
+    private final int length;
+    private final Direction direction;
 
     public Line(final int x, final int y, final int length, final Direction direction) {
+        this(Point.at(x, y), length, direction);
+    }
+
+    private Line(final Point start, final int length, final Direction direction) {
         if (length < 0) {
             throw new IllegalArgumentException("Length cannot be negative!");
         }
-        this.x = x;
-        this.y = y;
+        this.start = start;
         this.length = length;
         this.direction = direction;
     }
 
-
-    private Line(final Point start, final int length, final Direction direction) {
-        this(start.getX(), start.getY(), length, direction);
+    public int getLength() {
+        return length;
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
 
     public static Line horizontal(final Point a, final Point b) {
         if (a.getY() != b.getY()) {
@@ -70,11 +75,11 @@ public final class Line {
     }
 
     public Point end() {
-        return isHorizontal() ? Point.at(x + length - 1, y) : Point.at(x, y + length - 1);
+        return isHorizontal() ? start.shiftX(length - 1) : start.shiftY(length - 1);
     }
 
     public Point start() {
-        return Point.at(x, y);
+        return start;
     }
 
     public boolean isHorizontal() {
@@ -82,34 +87,28 @@ public final class Line {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Line)) {
             return false;
         }
-
         final Line line = (Line) o;
-
-        return x == line.x && y == line.y && length == line.length && direction == line.direction;
-
+        return length == line.length &&
+                Objects.equals(start, line.start) &&
+                direction == line.direction;
     }
 
     @Override
     public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        result = 31 * result + length;
-        result = 31 * result + (direction != null ? direction.hashCode() : 0);
-        return result;
+        return Objects.hash(start, length, direction);
     }
 
     @Override
     public String toString() {
         return "Line{" +
-                "x=" + x +
-                ", y=" + y +
+                "start=" + start +
                 ", length=" + length +
                 ", direction=" + direction +
                 '}';
