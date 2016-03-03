@@ -34,7 +34,7 @@ public class GridSelector extends Container<MenuElement> {
 
     @Override
     public Occupation getPreferredHeight() {
-        if (layout.getPreferredHeight().toReal(layout.getDimension().height) > maxHeight) {
+        if (layout.getPreferredHeight().toReal(layout.getDimension().getHeight()) > maxHeight) {
             return Occupation.fixed(maxHeight);
         }
         return layout.getPreferredHeight();

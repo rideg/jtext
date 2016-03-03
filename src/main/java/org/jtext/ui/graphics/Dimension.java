@@ -1,10 +1,11 @@
 package org.jtext.ui.graphics;
 
-@SuppressWarnings("checkstyle:visibilitymodifier")
+import java.util.Objects;
+
 public final class Dimension {
 
-    public final int width;
-    public final int height;
+    private final int width;
+    private final int height;
 
     private Dimension(int width, int height) {
         if (width < 0 || height < 0) {
@@ -16,6 +17,14 @@ public final class Dimension {
 
     public static Dimension of(final int width, final int height) {
         return new Dimension(width, height);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public Dimension incWidth() {
@@ -41,6 +50,24 @@ public final class Dimension {
 
     public Dimension shrink(int horizontal, int vertical) {
         return Dimension.of(Math.max(width - horizontal, 0), Math.max(height - vertical, 0));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Dimension)) {
+            return false;
+        }
+        final Dimension dimension = (Dimension) o;
+        return width == dimension.width &&
+                height == dimension.height;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(width, height);
     }
 
     @Override

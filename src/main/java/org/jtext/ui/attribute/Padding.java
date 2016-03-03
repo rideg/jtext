@@ -1,5 +1,6 @@
 package org.jtext.ui.attribute;
 
+import org.jtext.curses.Point;
 import org.jtext.ui.graphics.Dimension;
 import org.jtext.ui.graphics.Rectangle;
 
@@ -78,8 +79,7 @@ public final class Padding {
     }
 
     public Rectangle apply(final Dimension dimension) {
-        return Rectangle.of(left, top, Math.max(dimension.width - left - right, 0),
-                Math.max(dimension.height - top - bottom, 0));
+        return Rectangle.of(Point.at(left, top), dimension.shrink(left + right, top + bottom));
     }
 
     public Rectangle apply(final Rectangle area) {

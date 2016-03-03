@@ -62,11 +62,11 @@ public class LinearLayout extends Layout<Widget> {
     }
 
     private int getAvailableSpace() {
-        return isHorizontal() ? dimension.width : dimension.height;
+        return isHorizontal() ? dimension.getWidth() : dimension.getHeight();
     }
 
     private int getAvailableSecondarySpace() {
-        return isHorizontal() ? dimension.height : dimension.width;
+        return isHorizontal() ? dimension.getHeight() : dimension.getWidth();
     }
 
     private PreProcessingResults preProcessWidgets() {
@@ -96,7 +96,7 @@ public class LinearLayout extends Layout<Widget> {
 
     private boolean shouldFillRemainingSpace(final PreProcessingResults preProcessingResults) {
         return getAvailableSpace() > preProcessingResults.requiredSpace &&
-               preProcessingResults.numberOfFillingWidgets > 0;
+                preProcessingResults.numberOfFillingWidgets > 0;
     }
 
     private void fillRemainingSpace(final PreProcessingResults preProcessingResults) {
@@ -144,7 +144,7 @@ public class LinearLayout extends Layout<Widget> {
             if (target != 0) {
                 final WidgetDescriptor d = processedWidgets.get(w);
                 int reduction = min(max(divHalfUp(target * d.optional, preProcessingResults.optionalSpace), 1),
-                                    min(target, d.optional));
+                        min(target, d.optional));
                 d.toUse = d.preferred - reduction;
                 d.optional = d.toUse - d.minimum;
                 preProcessingResults.requiredSpace -= reduction;
@@ -166,8 +166,8 @@ public class LinearLayout extends Layout<Widget> {
             final int secondarySize = getRealSecondarySize(widget);
             final int primarySize = d.toUse == -1 ? sizeFun.apply(d) : d.toUse;
             final Rectangle area = Rectangle.of(startPosition + max(slice.begin, shift),
-                                                getStartSecondary(secondarySize, margin.getSlice(direction.opposite())),
-                                                primarySize, secondarySize);
+                    getStartSecondary(secondarySize, margin.getSlice(direction.opposite())),
+                    primarySize, secondarySize);
             widgets.put(widget, isHorizontal() ? area : area.flip());
             startPosition += max(slice.begin, shift) + primarySize + slice.end;
             shift = 0;
@@ -226,14 +226,14 @@ public class LinearLayout extends Layout<Widget> {
         final int availableSpace = getAvailableSpace();
         if (isHorizontal()) {
             int pref = (isFilling(widget.getPreferredWidth()) ? widget.getMinWidth() : widget.getPreferredWidth())
-                               .toReal(availableSpace);
+                    .toReal(availableSpace);
             return new WidgetDescriptor(pref, widget.getMinWidth().toReal(availableSpace),
-                                        widget.getMaxWidth().toReal(availableSpace));
+                    widget.getMaxWidth().toReal(availableSpace));
         } else {
             int pref = (isFilling(widget.getPreferredHeight()) ? widget.getMinHeight() : widget.getPreferredHeight())
-                               .toReal(availableSpace);
+                    .toReal(availableSpace);
             return new WidgetDescriptor(pref, widget.getMinHeight().toReal(availableSpace),
-                                        widget.getMaxHeight().toReal(availableSpace));
+                    widget.getMaxHeight().toReal(availableSpace));
         }
     }
 
@@ -330,7 +330,7 @@ public class LinearLayout extends Layout<Widget> {
             final WidgetDescriptor that = (WidgetDescriptor) o;
 
             return toUse == that.toUse && preferred == that.preferred && minimum == that.minimum &&
-                   optional == that.optional && maximum == that.maximum;
+                    optional == that.optional && maximum == that.maximum;
 
         }
 

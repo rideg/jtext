@@ -12,6 +12,8 @@ public final class Rectangle {
     private final Dimension dimension;
 
     private Rectangle(final Point topLeft, final Dimension dimension) {
+        Objects.requireNonNull(topLeft);
+        Objects.requireNonNull(dimension);
         this.topLeft = topLeft;
         this.dimension = dimension;
     }
@@ -33,11 +35,11 @@ public final class Rectangle {
     }
 
     public int getWidth() {
-        return dimension.width;
+        return dimension.getWidth();
     }
 
     public int getHeight() {
-        return dimension.height;
+        return dimension.getHeight();
     }
 
     public Point topLeft() {
@@ -45,15 +47,15 @@ public final class Rectangle {
     }
 
     public Point topRight() {
-        return topLeft.shiftX(dimension.width - 1);
+        return topLeft.shiftX(dimension.getWidth() - 1);
     }
 
     public Point bottomLeft() {
-        return topLeft.shiftY(dimension.height - 1);
+        return topLeft.shiftY(dimension.getHeight() - 1);
     }
 
     public Point bottomRight() {
-        return topLeft.shift(dimension.width - 1, dimension.height - 1);
+        return topLeft.shift(dimension.getWidth() - 1, dimension.getHeight() - 1);
     }
 
     public Rectangle relativeTo(final Point p) {
@@ -121,11 +123,23 @@ public final class Rectangle {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Rectangle)) return false;
-        Rectangle rectangle = (Rectangle) o;
-        return Objects.equals(topLeft, rectangle.topLeft) &&
-                Objects.equals(dimension, rectangle.dimension);
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Rectangle)) {
+            return false;
+        }
+        final Rectangle rectangle = (Rectangle) o;
+        return topLeft.equals(rectangle.topLeft) &&
+                dimension.equals(rectangle.dimension);
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle{" +
+                "topLeft=" + topLeft +
+                ", dimension=" + dimension +
+                '}';
     }
 
     @Override
