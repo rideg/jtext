@@ -1,10 +1,9 @@
 package org.jtext.curses;
 
-@SuppressWarnings("checkstyle:visibilitymodifier")
 public final class Point {
 
-    public final int x;
-    public final int y;
+    private final int x;
+    private final int y;
 
     private Point(final int x, final int y) {
         this.x = x;
@@ -35,6 +34,10 @@ public final class Point {
         return Point.at(x + value, y);
     }
 
+    public Point shiftY(final int value) {
+        return Point.at(x, y + value);
+    }
+
     public Point shift(final int shiftX, final int shiftY) {
         return Point.at(x + shiftX, y + shiftY);
     }
@@ -52,6 +55,30 @@ public final class Point {
 
     }
 
+    public Point shift(Point point) {
+        return Point.at(x + point.x, y + point.y);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Point flip() {
+        return Point.at(y, x);
+    }
+
+    public boolean isRightDownFrom(final Point point) {
+        return x >= point.x && y >= point.y;
+    }
+
+    public boolean isUpLeftFrom(Point point) {
+        return x <= point.x && y <= point.y;
+    }
+
     @Override
     public int hashCode() {
         int result = x;
@@ -62,12 +89,8 @@ public final class Point {
     @Override
     public String toString() {
         return "Point{" +
-               "x=" + x +
-               ", y=" + y +
-               '}';
-    }
-
-    public Point shift(Point point) {
-        return Point.at(x + point.x, y + point.y);
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

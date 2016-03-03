@@ -51,7 +51,7 @@ public class Graphics {
         final Line line = area.cropRelative(Line.vertical(point, length));
         if (line.length > 0) {
             final Point p = toReal(point);
-            driver.drawVerticalLineAt(p.x, p.y, ch, line.length);
+            driver.drawVerticalLineAt(p.getX(), p.getY(), ch, line.length);
         }
     }
 
@@ -59,7 +59,7 @@ public class Graphics {
         final Line inside = area.cropRelative(Line.horizontal(point, length));
         if (inside.length > 0) {
             final Point p = toReal(point);
-            driver.drawHorizontalLineAt(p.x, p.y, ch, inside.length);
+            driver.drawHorizontalLineAt(p.getX(), p.getY(), ch, inside.length);
         }
     }
 
@@ -67,14 +67,14 @@ public class Graphics {
         final Line inside = area.cropRelative(Line.horizontal(point, string.length()));
         if (inside.length > 0) {
             final Point p = toReal(point);
-            driver.printStringAt(p.x, p.y, string.substring(0, inside.length));
+            driver.printStringAt(p.getX(), p.getY(), string.substring(0, inside.length));
         }
     }
 
     public void putChar(final Point point, final char ch) {
         if (area.hasRelative(point)) {
             final Point p = toReal(point);
-            driver.putCharAt(p.x, p.y, ch);
+            driver.putCharAt(p.getX(), p.getY(), ch);
         }
     }
 
@@ -94,7 +94,7 @@ public class Graphics {
         setBackgroundColor(color);
         Point point = area.topLeft();
         for (int i = 0; i < area.getHeight(); i++) {
-            driver.drawHorizontalLineAt(point.x, point.y, ' ', area.getWidth());
+            driver.drawHorizontalLineAt(point.getX(), point.getY(), ' ', area.getWidth());
             point = point.incY();
         }
     }
@@ -115,7 +115,7 @@ public class Graphics {
         final Line inside = area.cropRelative(Line.horizontal(point, length));
         if (inside.length > 0) {
             final Point p = toReal(point);
-            driver.changeAttributeAt(p.x, p.y, inside.length,
+            driver.changeAttributeAt(p.getX(), p.getY(), inside.length,
                     colorManager.getPairId(descriptor.getForeground(), descriptor.getBackground()),
                     descriptor.getAttributes());
         }
@@ -123,17 +123,17 @@ public class Graphics {
 
     private void drawVerticalLine(Point point, int length, final char ch, CellDescriptor descriptor) {
         setColorsAndAttributes(descriptor);
-        driver.drawVerticalLineAt(point.x, point.y, ch, length);
+        driver.drawVerticalLineAt(point.getX(), point.getY(), ch, length);
     }
 
     private void drawHorizontalLine(Point point, int length, final char ch, CellDescriptor descriptor) {
         setColorsAndAttributes(descriptor);
-        driver.drawHorizontalLineAt(point.x, point.y, ch, length);
+        driver.drawHorizontalLineAt(point.getX(), point.getY(), ch, length);
     }
 
     private void putCharReal(final Point point, final char ch, final CellDescriptor descriptor) {
         setColorsAndAttributes(descriptor);
-        driver.putCharAt(point.x, point.y, ch);
+        driver.putCharAt(point.getX(), point.getY(), ch);
     }
 
     public void putCharAt(final Point point, final char ch, final CellDescriptor descriptor) {

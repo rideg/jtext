@@ -23,29 +23,29 @@ public final class Line {
 
 
     private Line(final Point start, final int length, final Direction direction) {
-        this(start.x, start.y, length, direction);
+        this(start.getX(), start.getY(), length, direction);
     }
 
 
     public static Line horizontal(final Point a, final Point b) {
-        if (a.y != b.y) {
+        if (a.getY() != b.getY()) {
             throw new IllegalArgumentException("Cannot create a straight horizontal line between the two points");
         }
-        if (a.x < b.x) {
-            return horizontal(a.x, a.y, b.x - a.x + 1);
+        if (a.getX() < b.getX()) {
+            return horizontal(a.getX(), a.getY(), b.getX() - a.getX() + 1);
         } else {
-            return horizontal(b.x, b.y, a.x - b.x + 1);
+            return horizontal(b.getX(), b.getY(), a.getX() - b.getX() + 1);
         }
     }
 
     public static Line vertical(final Point a, final Point b) {
-        if (a.x != b.x) {
+        if (a.getX() != b.getX()) {
             throw new IllegalArgumentException("Cannot create a straight vertical line between the two points");
         }
-        if (a.y < b.y) {
-            return vertical(a.x, a.y, b.y - a.y + 1);
+        if (a.getY() < b.getY()) {
+            return vertical(a.getX(), a.getY(), b.getY() - a.getY() + 1);
         } else {
-            return vertical(b.x, b.y, a.y - b.y + 1);
+            return vertical(b.getX(), b.getY(), a.getY() - b.getY() + 1);
         }
     }
 
@@ -108,10 +108,10 @@ public final class Line {
     @Override
     public String toString() {
         return "Line{" +
-               "x=" + x +
-               ", y=" + y +
-               ", length=" + length +
-               ", direction=" + direction +
-               '}';
+                "x=" + x +
+                ", y=" + y +
+                ", length=" + length +
+                ", direction=" + direction +
+                '}';
     }
 }

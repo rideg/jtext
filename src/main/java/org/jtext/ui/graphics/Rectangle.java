@@ -2,23 +2,18 @@ package org.jtext.ui.graphics;
 
 import org.jtext.curses.Point;
 
+import java.util.Objects;
+
 public final class Rectangle {
 
     private static final Rectangle EMPTY = Rectangle.of(0, 0, 0, 0);
 
-    private final int x;
-    private final int y;
-    private final int width;
-    private final int height;
+    private final Point topLeft;
+    private final Dimension dimension;
 
-    private Rectangle(final int x, final int y, final int width, final int height) {
-        if (width < 0 || height < 0) {
-            throw new IllegalArgumentException("Dimension cannot be negative!");
-        }
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    private Rectangle(final Point topLeft, final Dimension dimension) {
+        this.topLeft = topLeft;
+        this.dimension = dimension;
     }
 
     public static Rectangle empty() {
@@ -26,79 +21,79 @@ public final class Rectangle {
     }
 
     public static Rectangle of(final int x, final int y, final int width, final int height) {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(Point.at(x, y), Dimension.of(width, height));
     }
 
     public static Rectangle of(final Point point, final Dimension dimension) {
-        return new Rectangle(point.x, point.y, dimension.width, dimension.height);
+        return new Rectangle(point, dimension);
     }
 
     public Dimension getDimension() {
-        return Dimension.of(width, height);
+        return dimension;
     }
 
     public int getWidth() {
-        return width;
+        return dimension.width;
     }
 
     public int getHeight() {
-        return height;
+        return dimension.height;
     }
 
     public Point topLeft() {
-        return Point.at(x, y);
+        return topLeft;
     }
 
     public Point topRight() {
-        return Point.at(x + width - 1, y);
+        return topLeft.shiftX(dimension.width - 1);
     }
 
     public Point bottomLeft() {
-        return Point.at(x, y + height - 1);
+        return topLeft.shiftY(dimension.height - 1);
     }
 
     public Point bottomRight() {
-        return Point.at(x + width - 1, y + height - 1);
+        return topLeft.shift(dimension.width - 1, dimension.height - 1);
     }
 
     public Rectangle relativeTo(final Point p) {
-        return Rectangle.of(p.x + x, p.y + y, width, height);
+        return Rectangle.of(topLeft.shift(p), dimension);
     }
 
     public Rectangle shiftX(final int shift) {
-        return Rectangle.of(x + shift, y, width, height);
+        return Rectangle.of(topLeft.shiftX(shift), dimension);
     }
 
     public Rectangle shiftY(final int shift) {
-        return Rectangle.of(x, y + shift, width, height);
+        return Rectangle.of(topLeft.shiftY(shift), dimension);
     }
 
     public Rectangle move(final Point point) {
-        return Rectangle.of(point.x, point.y, width, height);
+        return Rectangle.of(point, dimension);
     }
 
     public Rectangle resize(final int width, final int height) {
-        return Rectangle.of(topLeft(), Dimension.of(width, height));
+        return Rectangle.of(topLeft, Dimension.of(width, height));
     }
 
     public Rectangle resize(final Dimension dimension) {
-        return Rectangle.of(topLeft(), dimension);
+        return Rectangle.of(topLeft, dimension);
     }
 
     public Rectangle copy() {
-        return Rectangle.of(x, y, width, height);
+        return Rectangle.of(topLeft, dimension);
     }
 
     public Rectangle flip() {
-        return Rectangle.of(y, x, height, width);
+        return Rectangle.of(topLeft.flip(), dimension.flip());
     }
 
-    public boolean has(final Point p) {
-        return p.x >= x && p.y >= y && p.x < x + width && p.y < x + height;
+    public boolean has(final Point point) {
+        return point.isRightDownFrom(topLeft()) && point.isUpLeftFrom(bottomRight());
     }
 
     public boolean hasRelative(final Point p) {
-        return p.x >= 0 && p.y >= 0 && p.x < width && p.y < height;
+        return p.isRightDownFrom(Point.at(0, 0)) && p.isUpLeftFrom(Point.at(getWidth(), getHeight()));
     }
 
     public Line cropRelative(final Line line) {
@@ -111,49 +106,30 @@ public final class Rectangle {
     }
 
     private boolean hasCommonPoints(final Line line) {
-        return line.isHorizontal() ? 0 <= line.y && line.y < height && line.x < 0
-                : 0 <= line.x && line.x < width && line.y < 0;
+        return line.isHorizontal() ? 0 <= line.y && line.y < getHeight() && line.x < 0
+                : 0 <= line.x && line.x < getWidth() && line.y < 0;
     }
 
     private Point closestInner(final Point start) {
-        return Point.at(Math.min(Math.max(start.x, 0), width - 1), Math.min(Math.max(start.y, 0), height - 1));
+        return Point.at(Math.min(Math.max(start.getX(), 0), getWidth() - 1),
+                Math.min(Math.max(start.getY(), 0), getHeight() - 1));
+    }
+
+    public Dimension shrink(int horizontal, int vertical) {
+        return dimension.shrink(horizontal, vertical);
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        final Rectangle rectangle = (Rectangle) o;
-
-        return x == rectangle.x && y == rectangle.y && width == rectangle.width && height == rectangle.height;
-
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Rectangle)) return false;
+        Rectangle rectangle = (Rectangle) o;
+        return Objects.equals(topLeft, rectangle.topLeft) &&
+                Objects.equals(dimension, rectangle.dimension);
     }
 
     @Override
     public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        result = 31 * result + width;
-        result = 31 * result + height;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Rectangle{" +
-                "x=" + x +
-                ", y=" + y +
-                ", width=" + width +
-                ", height=" + height +
-                '}';
-    }
-
-    public Dimension shrink(int horizontal, int vertical) {
-        return Dimension.of(Math.max(width - horizontal, 0), Math.max(height - vertical, 0));
+        return Objects.hash(topLeft, dimension);
     }
 }
