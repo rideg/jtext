@@ -2,15 +2,14 @@ package org.jtext.ui.graphics;
 
 import org.jtext.curses.Point;
 
-@SuppressWarnings("checkstyle:visibilitymodifier")
 public final class Rectangle {
 
     private static final Rectangle EMPTY = Rectangle.of(0, 0, 0, 0);
 
-    public final int x;
-    public final int y;
-    public final int width;
-    public final int height;
+    private final int x;
+    private final int y;
+    private final int width;
+    private final int height;
 
     private Rectangle(final int x, final int y, final int width, final int height) {
         if (width < 0 || height < 0) {
@@ -34,8 +33,16 @@ public final class Rectangle {
         return new Rectangle(point.x, point.y, dimension.width, dimension.height);
     }
 
-    public Dimension dimension() {
+    public Dimension getDimension() {
         return Dimension.of(width, height);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public Point topLeft() {
@@ -105,7 +112,7 @@ public final class Rectangle {
 
     private boolean hasCommonPoints(final Line line) {
         return line.isHorizontal() ? 0 <= line.y && line.y < height && line.x < 0
-                                   : 0 <= line.x && line.x < width && line.y < 0;
+                : 0 <= line.x && line.x < width && line.y < 0;
     }
 
     private Point closestInner(final Point start) {
@@ -139,10 +146,14 @@ public final class Rectangle {
     @Override
     public String toString() {
         return "Rectangle{" +
-               "x=" + x +
-               ", y=" + y +
-               ", width=" + width +
-               ", height=" + height +
-               '}';
+                "x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
+    }
+
+    public Dimension shrink(int horizontal, int vertical) {
+        return Dimension.of(Math.max(width - horizontal, 0), Math.max(height - vertical, 0));
     }
 }

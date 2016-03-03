@@ -79,7 +79,7 @@ public class Graphics {
     }
 
     private Point toReal(final Point point) {
-        return Point.at(point.x + area.x, point.y + area.y);
+        return area.topLeft().shift(point);
     }
 
     public Point getTopLeft() {
@@ -93,8 +93,8 @@ public class Graphics {
     public void fillBackground(final ColorName color) {
         setBackgroundColor(color);
         Point point = area.topLeft();
-        for (int i = 0; i < area.height; i++) {
-            driver.drawHorizontalLineAt(point.x, point.y, ' ', area.width);
+        for (int i = 0; i < area.getHeight(); i++) {
+            driver.drawHorizontalLineAt(point.x, point.y, ' ', area.getWidth());
             point = point.incY();
         }
     }
@@ -102,13 +102,13 @@ public class Graphics {
     public void drawBorder(final Border border) {
         final CellDescriptor descriptor = border.getDescriptor();
         border.topLeft.ifPresent(d -> putCharReal(area.topLeft(), d, descriptor));
-        border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.width - 2, d, descriptor));
+        border.top.ifPresent(d -> drawHorizontalLine(area.topLeft().incX(), area.getWidth() - 2, d, descriptor));
         border.topRight.ifPresent(d -> putCharReal(area.topRight(), d, descriptor));
-        border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.height - 2, d, descriptor));
+        border.right.ifPresent(d -> drawVerticalLine(area.topRight().incY(), area.getHeight() - 2, d, descriptor));
         border.bottomRight.ifPresent(d -> putCharReal(area.bottomRight(), d, descriptor));
-        border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.width - 2, d, descriptor));
+        border.bottom.ifPresent(d -> drawHorizontalLine(area.bottomLeft().incX(), area.getWidth() - 2, d, descriptor));
         border.bottomLeft.ifPresent(d -> putCharReal(area.bottomLeft(), d, descriptor));
-        border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.height - 2, d, descriptor));
+        border.left.ifPresent(d -> drawVerticalLine(area.topLeft().incY(), area.getHeight() - 2, d, descriptor));
     }
 
     public void changeAttributeAt(final Point point, final int length, CellDescriptor descriptor) {

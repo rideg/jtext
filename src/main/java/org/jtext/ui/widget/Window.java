@@ -26,11 +26,11 @@ public class Window {
     }
 
     public int getWidth() {
-        return area.width;
+        return area.getWidth();
     }
 
     public int getHeight() {
-        return area.height;
+        return area.getHeight();
     }
 
     public void setBackgroundColor(final BaseColor color) {

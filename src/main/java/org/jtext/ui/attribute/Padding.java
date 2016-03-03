@@ -68,9 +68,9 @@ public final class Padding {
         }
         final String[] pads = string.trim().split(" ");
         return Padding.of(Integer.parseInt(pads[0]),
-                          Integer.parseInt(pads[1]),
-                          Integer.parseInt(pads[2]),
-                          Integer.parseInt(pads[3]));
+                Integer.parseInt(pads[1]),
+                Integer.parseInt(pads[2]),
+                Integer.parseInt(pads[3]));
     }
 
     public Padding inc() {
@@ -79,26 +79,25 @@ public final class Padding {
 
     public Rectangle apply(final Dimension dimension) {
         return Rectangle.of(left, top, Math.max(dimension.width - left - right, 0),
-                            Math.max(dimension.height - top - bottom, 0));
+                Math.max(dimension.height - top - bottom, 0));
     }
 
     public Rectangle apply(final Rectangle area) {
-        return Rectangle.of(area.x + left, area.y + top, Math.max(area.width - left - right, 0),
-                            Math.max(area.height - top - bottom, 0));
+        return Rectangle.of(area.topLeft().shift(left, top), area.shrink(left + right, top + bottom));
     }
 
     public Padding consider(final Border border) {
         return Padding.of(top + border.getTopThickness(), right + border.getRightThickness(),
-                          bottom + border.getBottomThickness(), left + border.getLeftThickness());
+                bottom + border.getBottomThickness(), left + border.getLeftThickness());
     }
 
     @Override
     public String toString() {
         return "Padding{" +
-               "top=" + top +
-               ", right=" + right +
-               ", bottom=" + bottom +
-               ", left=" + left +
-               '}';
+                "top=" + top +
+                ", right=" + right +
+                ", bottom=" + bottom +
+                ", left=" + left +
+                '}';
     }
 }

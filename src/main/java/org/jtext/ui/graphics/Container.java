@@ -63,7 +63,7 @@ public class Container<T extends Widget> extends Widget {
     }
 
     public void setArea(final Rectangle area) {
-        layout.setDimension(area.dimension());
+        layout.setDimension(area.getDimension());
         layout.getWidgets().stream().filter(w -> w instanceof Container && w.isVisible())
                 .forEach(w -> ((Container) w).setArea(layout.getAreaFor(w)));
 
