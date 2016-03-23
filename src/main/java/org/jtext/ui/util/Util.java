@@ -10,4 +10,8 @@ public final class Util {
         return (dividend + (divisor >> 1)) / divisor;
     }
 
+    public static int divUp(final int dividend, final int divisor) {
+        return dividend / divisor + Math.min(1, dividend % divisor);
+    }
+
 }

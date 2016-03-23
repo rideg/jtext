@@ -32,7 +32,7 @@
     }
   },
   "colors": {
-     "gray": "GRAY_18"
+    "gray": "GRAY_18"
   },
   "widgets": {
     "org.jtext.ui.widget.TextField": {
@@ -47,6 +47,11 @@
       "focused.highlight.foreground": "black",
       "unfocused.highlight.background": "white",
       "unfocused.highlight.foreground": "black"
+    },
+    "org.jtext.ui.widget.MenuElement": {
+      "focused.background": "dark-gray",
+      "unfocused.foreground": "green",
+      "focused.foreground": "black"
     }
   }
 }

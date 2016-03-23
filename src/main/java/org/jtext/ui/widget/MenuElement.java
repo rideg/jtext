@@ -20,13 +20,13 @@ public class MenuElement extends Widget {
         if (focused) {
             graphics.fillBackground(getTheme().getColor("focused.background"));
         }
-        graphics.setForegroundColor(getTheme().getColor(getPrefix() + "foreground"));
+        graphics.setForegroundColor(getTheme().getColor(getPrefix() + ".foreground"));
         graphics.printString(Point.at(0, 0), text);
     }
 
     @Override
     public Occupation getPreferredWidth() {
-        return Occupation.fill();
+        return Occupation.fixed(text.length());
     }
 
     @Override

@@ -21,11 +21,14 @@ import org.jtext.ui.layout.Layouts;
 import org.jtext.ui.model.TextModel;
 import org.jtext.ui.theme.ThemeImpl;
 import org.jtext.ui.util.KeyEventProcessor;
+import org.jtext.ui.widget.GridSelector;
 import org.jtext.ui.widget.Label;
+import org.jtext.ui.widget.MenuElement;
 import org.jtext.ui.widget.Panel;
 import org.jtext.ui.widget.TextField;
 
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -50,13 +53,28 @@ public final class Main {
 
             final Container<Widget> mainContainer =
                     new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
-                              ColorName.BLUE);
+                            ColorName.BLUE);
 
 
             TextModel model = new TextModel("Hello");
             final TextField textField = new TextField(model, 25);
             mainContainer.add(textField);
             mainContainer.add(new Label(CellDescriptor.foreground(ColorName.WHITE), model));
+
+            mainContainer.add(new GridSelector(100, 100, Arrays.asList(
+                    new MenuElement("elso"),
+                    new MenuElement("masodik"),
+                    new MenuElement("harmadik"),
+                    new MenuElement("negyedik_elem"),
+                    new MenuElement("otodik"),
+                    new MenuElement("hatodik"),
+                    new MenuElement("hetedik"),
+                    new MenuElement("nyolcadik"),
+                    new MenuElement("kilencedik"),
+                    new MenuElement("tizedik"),
+                    new MenuElement("huszadik"),
+                    new MenuElement("szazezredik")
+            )));
 
             scene.add(mainContainer);
 
@@ -104,28 +122,28 @@ public final class Main {
         if (Boolean.parseBoolean(System.getProperty("test.mode", "false"))) {
             final AtomicInteger closed = new AtomicInteger();
             return (Driver) Proxy.newProxyInstance(Main.class.getClassLoader(), new Class[]{Driver.class},
-                                                   (proxy, method, args) -> {
-                                                       if (method.getName().equals("getScreenHeight")) {
-                                                           return 25;
-                                                       }
-                                                       if (method.getName().equals("getScreenWidth")) {
-                                                           return 80;
-                                                       }
-                                                       if (method.getName().equals("getCh")) {
-                                                           if (closed.get() > 2) {
-                                                               return new ReadKey(ControlKey.ERR, 0);
-                                                           }
-                                                           closed.incrementAndGet();
-                                                           return new ReadKey(ControlKey.NORMAL, 'a');
-                                                       }
-                                                       if (method.getName().equals("getBackgroundColor")) {
-                                                           return 0;
-                                                       }
-                                                       if (method.getName().equals("getForegroundColor")) {
-                                                           return 0;
-                                                       }
-                                                       return null;
-                                                   });
+                    (proxy, method, args) -> {
+                        if (method.getName().equals("getScreenHeight")) {
+                            return 25;
+                        }
+                        if (method.getName().equals("getScreenWidth")) {
+                            return 80;
+                        }
+                        if (method.getName().equals("getCh")) {
+                            if (closed.get() > 2) {
+                                return new ReadKey(ControlKey.ERR, 0);
+                            }
+                            closed.incrementAndGet();
+                            return new ReadKey(ControlKey.NORMAL, 'a');
+                        }
+                        if (method.getName().equals("getBackgroundColor")) {
+                            return 0;
+                        }
+                        if (method.getName().equals("getForegroundColor")) {
+                            return 0;
+                        }
+                        return null;
+                    });
         }
         return new CursesDriver();
     }
