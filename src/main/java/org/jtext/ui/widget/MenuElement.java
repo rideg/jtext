@@ -8,13 +8,19 @@ import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
 
+import java.util.Arrays;
+
 public class MenuElement extends Widget {
 
     private final String text;
+    private int focusedWidth;
     private boolean focused;
 
     public MenuElement(final String text) {
         this.text = text;
+        focusedWidth = text.length();
+        addHandler(GainFocusEvent.class, this::gainFocus);
+        addHandler(LostFocusEvent.class, this::lostFocus);
     }
 
     @Override
@@ -23,9 +29,7 @@ public class MenuElement extends Widget {
             graphics.fillBackground(getTheme().getColor("focused.background"));
         }
         graphics.setForegroundColor(getTheme().getColor(getPrefix() + ".foreground"));
-        graphics.printString(Point.at(0, 0), text);
-        addHandler(GainFocusEvent.class, this::gainFocus);
-        addHandler(LostFocusEvent.class, this::lostFocus);
+        graphics.printString(Point.at(0, 0), text + getSpaces());
     }
 
     private void gainFocus(final GainFocusEvent event) {
@@ -42,7 +46,7 @@ public class MenuElement extends Widget {
 
     @Override
     public Occupation getPreferredWidth() {
-        return Occupation.fixed(text.length());
+        return Occupation.fixed(focused ? focusedWidth : text.length());
     }
 
     @Override
@@ -67,4 +71,16 @@ public class MenuElement extends Widget {
         return focused ? "focused" : "unfocused";
     }
 
+    public void setFocusedWidth(int width) {
+        focusedWidth = width > text.length() ? width : text.length();
+    }
+
+    public String getSpaces() {
+        if (focused && focusedWidth > text.length()) {
+            char[] chars = new char[focusedWidth - text.length()];
+            Arrays.fill(chars, ' ');
+            return new String(chars);
+        }
+        return "";
+    }
 }

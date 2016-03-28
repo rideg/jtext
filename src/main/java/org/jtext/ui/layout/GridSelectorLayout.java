@@ -24,6 +24,7 @@ public class GridSelectorLayout extends Layout<MenuElement> {
             widgets.put(menuElement, Rectangle.of(x, y,
                     menuElement.getPreferredWidth().toReal(maximalWidgetWidth + 1),
                     menuElement.getPreferredHeight().toReal(1)));
+            menuElement.setFocusedWidth(maximalWidgetWidth);
             y++;
             if (y == rows) {
                 y = 0;
