@@ -1,5 +1,6 @@
 package org.jtext.ui.widget;
 
+import org.jtext.curses.ColorName;
 import org.jtext.curses.Point;
 import org.jtext.ui.event.GainFocusEvent;
 import org.jtext.ui.event.LostFocusEvent;
@@ -9,6 +10,7 @@ import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class MenuElement extends Widget {
 
@@ -27,9 +29,21 @@ public class MenuElement extends Widget {
     public void draw(final Graphics graphics) {
         if (focused) {
             graphics.fillBackground(getTheme().getColor("focused.background"));
+        } else {
+            determineBackground().ifPresent(graphics::fillBackground);
         }
         graphics.setForegroundColor(getTheme().getColor(getPrefix() + ".foreground"));
         graphics.printString(Point.at(0, 0), text + getSpaces());
+    }
+
+    private Optional<ColorName> determineBackground() {
+        if (getParent().isPresent()) {
+            final Widget parent = getParent().get();
+            if (parent instanceof WidgetWithBackground) {
+                return ((WidgetWithBackground) parent).backgroundColor();
+            }
+        }
+        return Optional.empty();
     }
 
     private void gainFocus(final GainFocusEvent event) {

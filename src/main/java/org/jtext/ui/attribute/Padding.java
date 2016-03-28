@@ -86,7 +86,7 @@ public final class Padding {
         return Rectangle.of(area.topLeft().shift(left, top), area.shrink(left + right, top + bottom));
     }
 
-    public Padding consider(final Border border) {
+    public Padding include(final Border border) {
         return Padding.of(top + border.getTopThickness(), right + border.getRightThickness(),
                 bottom + border.getBottomThickness(), left + border.getLeftThickness());
     }

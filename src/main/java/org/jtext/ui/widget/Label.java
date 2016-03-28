@@ -34,8 +34,6 @@ public class Label extends Widget {
     }
 
     private void determineBackground(final Graphics graphics) {
-
-
         if (descriptor.hasBackground()) {
             graphics.setBackgroundColor(descriptor.getBackground());
         } else {

@@ -49,7 +49,7 @@ public class Panel extends Container<Widget> implements WidgetWithBackground {
     public void draw(Graphics graphics) {
         background.ifPresent(graphics::fillBackground);
         graphics.drawBorder(border);
-        super.draw(graphics.restrict(padding.consider(border).apply(graphics.getArea().getDimension())));
+        super.draw(graphics.restrict(padding.include(border).apply(graphics.getArea().getDimension())));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Panel extends Container<Widget> implements WidgetWithBackground {
 
     @Override
     public void setArea(Rectangle area) {
-        super.setArea(padding.consider(border).apply(area));
+        super.setArea(padding.include(border).apply(area));
     }
 
     @Override

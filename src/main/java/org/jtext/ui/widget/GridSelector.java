@@ -1,5 +1,6 @@
 package org.jtext.ui.widget;
 
+import org.jtext.curses.ColorName;
 import org.jtext.curses.ControlKey;
 import org.jtext.ui.event.FocusMovedEvent;
 import org.jtext.ui.event.KeyPressedEvent;
@@ -11,8 +12,9 @@ import org.jtext.ui.layout.GridSelectorLayout;
 import org.jtext.ui.util.KeyEventProcessor;
 
 import java.util.List;
+import java.util.Optional;
 
-public class GridSelector extends Container<MenuElement> {
+public class GridSelector extends Container<MenuElement> implements WidgetWithBackground {
 
     private final int maxWidth;
     private final int maxHeight;
@@ -90,5 +92,10 @@ public class GridSelector extends Container<MenuElement> {
             throw new IndexOutOfBoundsException();
         }
         emit(Scene.FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(layout.getWidgets().get(index)));
+    }
+
+    @Override
+    public Optional<ColorName> backgroundColor() {
+        return Optional.of(getTheme().getColor("background"));
     }
 }

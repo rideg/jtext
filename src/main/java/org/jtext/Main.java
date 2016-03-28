@@ -50,17 +50,19 @@ public final class Main {
         final Scene scene = new Scene(driver, eventBus, newSingleThreadExecutor(), theme);
         try {
 
-            final Container<Widget> mainContainer =
-                    new Panel(Layouts.vertical(), Occupation.fill(), Occupation.fill(), Border.no(), Padding.full(1),
-                            ColorName.BLUE);
+            final Container<Widget> mainContainer = new Panel(Layouts.vertical(),
+                    Occupation.fill(),
+                    Occupation.fill(),
+                    Border.no(),
+                    Padding.full(1),
+                    ColorName.BLUE);
 
 
             final TextModel model = new TextModel("Hello");
             final TextField textField = new TextField(model, 25);
+
             mainContainer.add(textField);
             mainContainer.add(new Label(CellDescriptor.foreground(ColorName.WHITE), model));
-
-            final MenuElement lastMenuElement = new MenuElement("szazezredik");
 
             final GridSelector gridSelector = new GridSelector(100, 100, Arrays.asList(
                     new MenuElement("elso"),
@@ -74,7 +76,7 @@ public final class Main {
                     new MenuElement("kilencedik"),
                     new MenuElement("tizedik"),
                     new MenuElement("huszadik"),
-                    lastMenuElement
+                    new MenuElement("szazezredik")
             ));
 
 

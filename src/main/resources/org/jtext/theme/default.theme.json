@@ -52,6 +52,9 @@
       "focused.background": "dark-gray",
       "unfocused.foreground": "green",
       "focused.foreground": "black"
+    },
+    "org.jtext.ui.widget.GridSelector": {
+      "background": "blue"
     }
   }
 }
