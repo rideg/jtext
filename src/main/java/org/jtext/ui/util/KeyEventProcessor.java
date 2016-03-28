@@ -30,7 +30,7 @@ public class KeyEventProcessor {
         handlers.put(key, e -> runnable.run());
     }
 
-    public boolean handle(KeyPressedEvent event) {
+    public boolean handle(final KeyPressedEvent event) {
         boolean isHandled = false;
         Optional<Consumer<ReadKey>> handler = Optional.ofNullable(handlers.get(event.getKey().controlKey));
         if (handler.isPresent()) {

@@ -32,7 +32,7 @@ public class Scene implements Component {
     private final ExecutorService executorService;
     private final BlockingDeque<Runnable> taskQueue = new LinkedBlockingDeque<>();
     private final ThemeImpl theme;
-    private final Container<Widget> mainContainer = new Container<>(Layouts.vertical());
+    private final RootContainer rootContainer;
     private Widget activeWidget;
     private volatile boolean isRunning = true;
 
@@ -41,7 +41,8 @@ public class Scene implements Component {
         this.eventBus = eventBus;
         this.executorService = executorService;
         this.theme = theme;
-        mainContainer.setRepaintRequester(this::onRepaint);
+        rootContainer = new RootContainer(Layouts.vertical(), eventBus);
+        rootContainer.setRepaintRequester(this::onRepaint);
         eventBus.registerTopic(REPAINT_EVENT_TOPIC);
         eventBus.registerTopic(FOCUS_MOVED_EVENT_TOPIC);
     }
@@ -51,9 +52,9 @@ public class Scene implements Component {
             driver.clearScreen();
             driver.clearStyle();
             final Rectangle area = calculateArea();
-            mainContainer.setTheme(theme);
-            mainContainer.setArea(area);
-            mainContainer.draw(new Graphics(area, driver, theme.getColorManager()));
+            rootContainer.setTheme(theme);
+            rootContainer.setArea(area);
+            rootContainer.draw(new Graphics(area, driver, theme.getColorManager()));
             driver.refresh();
         });
     }
@@ -70,7 +71,7 @@ public class Scene implements Component {
         return Rectangle.of(0, 0, driver.getScreenWidth(), driver.getScreenHeight());
     }
 
-    public void onKeyBoardEvent(final KeyEvent event) {
+    private void onKeyBoardEvent(final KeyEvent event) {
         enqueueTask(() -> {
             if (activeWidget != null) {
                 activeWidget.onEvent(new KeyPressedEvent(event.key));
@@ -78,17 +79,16 @@ public class Scene implements Component {
         });
     }
 
-    public void onFocusMoved(final FocusMovedEvent event) {
+    private void onFocusMoved(final FocusMovedEvent event) {
         enqueueTask(() -> {
-            if (activeWidget != event.current) {
+            if (activeWidget != event.getCurrent()) {
                 if (activeWidget != null) {
                     activeWidget.onEvent(new LostFocusEvent());
                 }
-                activeWidget = event.current;
+                activeWidget = event.getCurrent();
                 activeWidget.onEvent(new GainFocusEvent());
             }
         });
-
     }
 
     @SuppressWarnings("checkstyle:illegalcatch")
@@ -116,7 +116,6 @@ public class Scene implements Component {
     @Override
     public void stop() {
         // todo unsubscribe from topics
-
         executorService.shutdownNow();
         try {
             executorService.awaitTermination(3, TimeUnit.SECONDS);
@@ -126,6 +125,6 @@ public class Scene implements Component {
     }
 
     public Container add(final Widget widget) {
-        return mainContainer.add(widget);
+        return rootContainer.add(widget);
     }
 }

@@ -4,7 +4,6 @@ import org.jtext.ui.graphics.Dimension;
 import org.jtext.ui.graphics.Rectangle;
 import org.jtext.ui.graphics.Widget;
 
-import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +32,7 @@ public abstract class Layout<T extends Widget> {
         return widgets.get(widget);
     }
 
-    public Collection<T> getWidgets() {
+    public List<T> getWidgets() {
         return widgetsInOrder;
     }
 

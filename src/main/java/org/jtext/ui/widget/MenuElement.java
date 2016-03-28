@@ -1,6 +1,8 @@
 package org.jtext.ui.widget;
 
 import org.jtext.curses.Point;
+import org.jtext.ui.event.GainFocusEvent;
+import org.jtext.ui.event.LostFocusEvent;
 import org.jtext.ui.graphics.Graphics;
 import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Position;
@@ -22,6 +24,20 @@ public class MenuElement extends Widget {
         }
         graphics.setForegroundColor(getTheme().getColor(getPrefix() + ".foreground"));
         graphics.printString(Point.at(0, 0), text);
+        addHandler(GainFocusEvent.class, this::gainFocus);
+        addHandler(LostFocusEvent.class, this::lostFocus);
+    }
+
+    private void gainFocus(final GainFocusEvent event) {
+        this.focused = true;
+        event.stopPropagating();
+        requestRepaint();
+    }
+
+    private void lostFocus(final LostFocusEvent event) {
+        this.focused = false;
+        event.stopPropagating();
+        requestRepaint();
     }
 
     @Override
@@ -50,4 +66,5 @@ public class MenuElement extends Widget {
     public String getPrefix() {
         return focused ? "focused" : "unfocused";
     }
+
 }

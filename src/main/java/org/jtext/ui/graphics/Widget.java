@@ -1,5 +1,7 @@
 package org.jtext.ui.graphics;
 
+import org.jtext.event.Event;
+import org.jtext.event.Topic;
 import org.jtext.ui.attribute.Margin;
 import org.jtext.ui.event.UIEvent;
 import org.jtext.ui.theme.Theme;
@@ -134,5 +136,9 @@ public abstract class Widget {
 
     protected void handleEvent(final UIEvent event) {
 
+    }
+
+    protected <T extends Event> void emit(final Topic<T> topic, final T event) {
+        parent.ifPresent(w -> w.emit(topic, event));
     }
 }

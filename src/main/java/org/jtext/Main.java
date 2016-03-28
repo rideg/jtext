@@ -11,7 +11,6 @@ import org.jtext.event.EventBus;
 import org.jtext.keyboard.KeyboardHandler;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.Padding;
-import org.jtext.ui.event.FocusMovedEvent;
 import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Occupation;
@@ -41,7 +40,7 @@ public final class Main {
     private Main() {
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(final String[] args) throws InterruptedException {
         LibraryLoader.load();
         final Driver driver = getDriver();
         driver.init();
@@ -56,12 +55,14 @@ public final class Main {
                             ColorName.BLUE);
 
 
-            TextModel model = new TextModel("Hello");
+            final TextModel model = new TextModel("Hello");
             final TextField textField = new TextField(model, 25);
             mainContainer.add(textField);
             mainContainer.add(new Label(CellDescriptor.foreground(ColorName.WHITE), model));
 
-            mainContainer.add(new GridSelector(100, 100, Arrays.asList(
+            final MenuElement lastMenuElement = new MenuElement("szazezredik");
+
+            final GridSelector gridSelector = new GridSelector(100, 100, Arrays.asList(
                     new MenuElement("elso"),
                     new MenuElement("masodik"),
                     new MenuElement("harmadik"),
@@ -73,8 +74,11 @@ public final class Main {
                     new MenuElement("kilencedik"),
                     new MenuElement("tizedik"),
                     new MenuElement("huszadik"),
-                    new MenuElement("szazezredik")
-            )));
+                    lastMenuElement
+            ));
+
+
+            mainContainer.add(gridSelector);
 
             scene.add(mainContainer);
 
@@ -88,25 +92,27 @@ public final class Main {
 
             processor.register(ControlKey.ESCAPE, latch::countDown);
 
-            processor.register(ControlKey.DATA_LINK_ESCAPE, e -> {
-                if (textField.isVisible()) {
-                    textField.hide();
-                    scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
-                } else {
-                    textField.show();
-                    scene.onFocusMoved(new FocusMovedEvent(textField));
-                }
-            });
+            gridSelector.select(0);
 
-            processor.register(ControlKey.NULL, e -> {
-                if (textField.isVisible()) {
-                    if (textField.isFocused()) {
-                        scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
-                    } else {
-                        scene.onFocusMoved(new FocusMovedEvent(textField));
-                    }
-                }
-            });
+//            processor.register(ControlKey.DATA_LINK_ESCAPE, e -> {
+//                if (textField.isVisible()) {
+//                    textField.hide();
+//                    scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
+//                } else {
+//                    textField.show();
+//                    scene.onFocusMoved(new FocusMovedEvent(textField));
+//                }
+//            });
+//
+//            processor.register(ControlKey.NULL, e -> {
+//                if (textField.isVisible()) {
+//                    if (textField.isFocused()) {
+//                        scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
+//                    } else {
+//                        scene.onFocusMoved(new FocusMovedEvent(textField));
+//                    }
+//                }
+//            });
 
             eventBus.subscribe(KEY_EVENT_TOPIC, event -> processor.handle(new KeyPressedEvent(event.key)));
             latch.await();
