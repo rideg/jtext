@@ -3,6 +3,7 @@ package org.jtext.ui.widget;
 import org.jtext.curses.ColorName;
 import org.jtext.curses.ControlKey;
 import org.jtext.ui.event.FocusMovedEvent;
+import org.jtext.ui.event.GainFocusEvent;
 import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Occupation;
@@ -37,6 +38,11 @@ public class GridSelector extends Container<MenuElement> implements WidgetWithBa
         items.stream().forEach(this::add);
         setUpEventHandling();
         addHandler(KeyPressedEvent.class, keyEventProcessor::handle);
+        addHandler(GainFocusEvent.class, this::onFocusGained);
+    }
+
+    private void onFocusGained(final GainFocusEvent event) {
+        select(activeIndex);
     }
 
     private void setUpEventHandling() {

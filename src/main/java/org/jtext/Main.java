@@ -11,6 +11,7 @@ import org.jtext.event.EventBus;
 import org.jtext.keyboard.KeyboardHandler;
 import org.jtext.ui.attribute.Border;
 import org.jtext.ui.attribute.Padding;
+import org.jtext.ui.event.FocusMovedEvent;
 import org.jtext.ui.event.KeyPressedEvent;
 import org.jtext.ui.graphics.Container;
 import org.jtext.ui.graphics.Occupation;
@@ -33,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static org.jtext.keyboard.KeyboardHandler.KEY_EVENT_TOPIC;
+import static org.jtext.ui.graphics.Scene.FOCUS_MOVED_EVENT_TOPIC;
 
 public final class Main {
 
@@ -94,27 +96,18 @@ public final class Main {
 
             processor.register(ControlKey.ESCAPE, latch::countDown);
 
-            gridSelector.select(0);
+//            gridSelector.select(0);
 
-//            processor.register(ControlKey.DATA_LINK_ESCAPE, e -> {
-//                if (textField.isVisible()) {
-//                    textField.hide();
-//                    scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
-//                } else {
-//                    textField.show();
-//                    scene.onFocusMoved(new FocusMovedEvent(textField));
-//                }
-//            });
-//
-//            processor.register(ControlKey.NULL, e -> {
-//                if (textField.isVisible()) {
-//                    if (textField.isFocused()) {
-//                        scene.onFocusMoved(new FocusMovedEvent(new Container<>(Layouts.horizontal())));
-//                    } else {
-//                        scene.onFocusMoved(new FocusMovedEvent(textField));
-//                    }
-//                }
-//            });
+
+            processor.register(ControlKey.NULL, e -> {
+                if (textField.isVisible()) {
+                    if (textField.isFocused()) {
+                        eventBus.publish(FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(gridSelector));
+                    } else {
+                        eventBus.publish(FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(textField));
+                    }
+                }
+            });
 
             eventBus.subscribe(KEY_EVENT_TOPIC, event -> processor.handle(new KeyPressedEvent(event.key)));
             latch.await();
