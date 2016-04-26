@@ -52,27 +52,60 @@ public class GridSelector extends Container<MenuElement> implements WidgetWithBa
         keyEventProcessor.register(ControlKey.UP, this::movePrev);
         keyEventProcessor.register(ControlKey.RIGHT, this::moveRight);
         keyEventProcessor.register(ControlKey.LEFT, this::moveLeft);
+        keyEventProcessor.register(ControlKey.HOME, this::moveHome);
+        keyEventProcessor.register(ControlKey.END, this::moveEnd);
     }
 
     private void moveNext() {
-        activeIndex = (activeIndex + 1) % layout.getWidgets().size();
-        select(activeIndex);
+        select((activeIndex + 1) % layout.getWidgets().size());
     }
 
     private void movePrev() {
-        activeIndex--;
-        if (activeIndex < 0) {
-            activeIndex = layout.getWidgets().size() - 1;
-        }
-        select(activeIndex);
+        select(activeIndex == 0 ? layout.getWidgets().size() - 1 : activeIndex - 1);
     }
 
     private void moveRight() {
+        final int numberOfRows = layout.getPreferredHeight().toReal(0);
+        final int numberOfColumns = layout.getWidgets().size() / numberOfRows;
 
+        int row = activeIndex % numberOfRows;
+        int column = activeIndex / numberOfRows;
+
+        if (column == numberOfColumns - 1) {
+            row = Math.min(row + 1, numberOfRows - 1);
+            column = 0;
+        } else {
+            column++;
+        }
+        select(row + column * numberOfRows);
     }
 
     private void moveLeft() {
+        final int numberOfRows = layout.getPreferredHeight().toReal(0);
+        final int numberOfColumns = layout.getWidgets().size() / numberOfRows;
 
+        int row = activeIndex % numberOfRows;
+        int column = activeIndex / numberOfRows;
+
+        if (column == 0) {
+            row = Math.max(row - 1, 0);
+            column = numberOfColumns - 1;
+        } else {
+            column--;
+        }
+        select(row + column * numberOfRows);
+    }
+
+    private void moveEnd() {
+        final int numberOfRows = layout.getPreferredHeight().toReal(0);
+        int row = activeIndex % numberOfRows;
+        final int numberOfColumns = layout.getWidgets().size() / numberOfRows;
+        select(row + (numberOfColumns - 1) * numberOfRows);
+    }
+
+    private void moveHome() {
+        final int numberOfRows = layout.getPreferredHeight().toReal(0);
+        select(activeIndex % numberOfRows);
     }
 
     @Override
@@ -97,6 +130,7 @@ public class GridSelector extends Container<MenuElement> implements WidgetWithBa
         if (index > layout.getWidgets().size()) {
             throw new IndexOutOfBoundsException();
         }
+        activeIndex = index;
         emit(Scene.FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(layout.getWidgets().get(index)));
     }
 
