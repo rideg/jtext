@@ -68,7 +68,6 @@ public class CursesDriver implements Driver {
     @Override
     public native void clearScreen();
 
-
     @Override
     public native void clearStyle();
 

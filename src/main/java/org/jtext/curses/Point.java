@@ -2,6 +2,8 @@ package org.jtext.curses;
 
 public final class Point {
 
+    private static final Point ZERO = at(0, 0);
+
     private final int x;
     private final int y;
 
@@ -14,32 +16,36 @@ public final class Point {
         return new Point(x, y);
     }
 
+    public static Point zero() {
+        return ZERO;
+    }
+
     public Point decY() {
-        return Point.at(x, y - 1);
+        return at(x, y - 1);
     }
 
     public Point decX() {
-        return Point.at(x - 1, y);
+        return at(x - 1, y);
     }
 
     public Point incY() {
-        return Point.at(x, y + 1);
+        return at(x, y + 1);
     }
 
     public Point incX() {
-        return Point.at(x + 1, y);
+        return at(x + 1, y);
     }
 
     public Point shiftX(final int value) {
-        return Point.at(x + value, y);
+        return at(x + value, y);
     }
 
     public Point shiftY(final int value) {
-        return Point.at(x, y + value);
+        return at(x, y + value);
     }
 
     public Point shift(final int shiftX, final int shiftY) {
-        return Point.at(x + shiftX, y + shiftY);
+        return at(x + shiftX, y + shiftY);
     }
 
     @Override
@@ -56,7 +62,7 @@ public final class Point {
     }
 
     public Point shift(Point point) {
-        return Point.at(x + point.x, y + point.y);
+        return at(x + point.x, y + point.y);
     }
 
     public int getX() {
@@ -68,7 +74,7 @@ public final class Point {
     }
 
     public Point flip() {
-        return Point.at(y, x);
+        return at(y, x);
     }
 
     public boolean isRightDownFrom(final Point point) {

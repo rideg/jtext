@@ -95,7 +95,7 @@ public final class Rectangle {
     }
 
     public boolean hasRelative(final Point p) {
-        return p.isRightDownFrom(Point.at(0, 0)) && p.isUpLeftFrom(Point.at(getWidth(), getHeight()));
+        return p.isRightDownFrom(Point.zero()) && p.isUpLeftFrom(Point.at(getWidth(), getHeight()));
     }
 
     public Line cropRelative(final Line line) {

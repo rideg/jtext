@@ -30,7 +30,7 @@ public class Label extends Widget {
             graphics.setForegroundColor(descriptor.getForeground());
         }
         graphics.setAttributes(descriptor.getAttributes());
-        graphics.printString(Point.at(0, 0), model.getChars());
+        graphics.printString(Point.zero(), model.getChars());
     }
 
     private void determineBackground(final Graphics graphics) {

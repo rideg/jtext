@@ -33,12 +33,12 @@ public class MenuElement extends Widget {
             determineBackground().ifPresent(graphics::fillBackground);
         }
         graphics.setForegroundColor(getTheme().getColor(getPrefix() + ".foreground"));
-        graphics.printString(Point.at(0, 0), text + getSpaces());
+        graphics.printString(Point.zero(), text + getSpaces());
     }
 
     private Optional<ColorName> determineBackground() {
         if (getParent().isPresent()) {
-            final Widget parent = getParent().get();
+            final Widget parent = getParent().orElse(null);
             if (parent instanceof WidgetWithBackground) {
                 return ((WidgetWithBackground) parent).backgroundColor();
             }
