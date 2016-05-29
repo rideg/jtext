@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 public abstract class Widget {
 
     private final Map<Class<? extends UIEvent>, Set<Consumer<? extends UIEvent>>> eventHandlers = new HashMap<>();
-    private Optional<Widget> parent;
+    private Widget parent;
     private Margin margin = Margin.no();
     private boolean visible = true;
     private Theme theme;
@@ -24,11 +24,10 @@ public abstract class Widget {
     };
 
     public Widget() {
-        this.parent = Optional.empty();
     }
 
     public Widget(final Widget widget) {
-        this.parent = Optional.of(widget);
+        this.parent = widget;
     }
 
     public Theme getTheme() {
@@ -90,7 +89,7 @@ public abstract class Widget {
 
 
     public void clearParent() {
-        parent = Optional.empty();
+        parent = null;
     }
 
     public <T extends UIEvent> void addHandler(final Class<T> type, final Consumer<T> handler) {
@@ -109,17 +108,17 @@ public abstract class Widget {
         if (event.isPropagating()) {
             handleEvent(event);
             if (event.isBubbling()) {
-                parent.ifPresent(p -> p.onEvent(event));
+               getParent().ifPresent(p -> p.onEvent(event));
             }
         }
     }
 
     public Optional<Widget> getParent() {
-        return parent;
+        return Optional.ofNullable(parent);
     }
 
     public void setParent(final Widget widget) {
-        parent = Optional.of(widget);
+        parent = widget;
     }
 
     public void hide() {
@@ -139,6 +138,6 @@ public abstract class Widget {
     }
 
     protected <T extends Event> void emit(final Topic<T> topic, final T event) {
-        parent.ifPresent(w -> w.emit(topic, event));
+        getParent().ifPresent(w -> w.emit(topic, event));
     }
 }

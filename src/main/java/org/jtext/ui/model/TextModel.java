@@ -51,4 +51,8 @@ public class TextModel extends ModelBase implements DocumentModel {
         notifyListeners();
     }
 
+    public void setText(final String text) {
+        this.text.setLength(0);
+        this.text.append(text);
+    }
 }

@@ -8,19 +8,24 @@ import org.jtext.ui.graphics.Graphics;
 import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Position;
 import org.jtext.ui.graphics.Widget;
+import org.jtext.ui.model.TextModel;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 public class MenuElement extends Widget {
 
-    private final String text;
+    private final TextModel model;
     private int focusedWidth;
     private boolean focused;
 
     public MenuElement(final String text) {
-        this.text = text;
-        focusedWidth = text.length();
+        this(new TextModel(text));
+    }
+
+    public MenuElement(final TextModel model) {
+        this.model = model;
+        focusedWidth = model.length();
         addHandler(GainFocusEvent.class, this::gainFocus);
         addHandler(LostFocusEvent.class, this::lostFocus);
     }
@@ -33,7 +38,7 @@ public class MenuElement extends Widget {
             determineBackground().ifPresent(graphics::fillBackground);
         }
         graphics.setForegroundColor(getTheme().getColor(getPrefix() + ".foreground"));
-        graphics.printString(Point.zero(), text + getSpaces());
+        graphics.printString(Point.zero(), model.getChars() + getSpaces());
     }
 
     private Optional<ColorName> determineBackground() {
@@ -60,7 +65,7 @@ public class MenuElement extends Widget {
 
     @Override
     public Occupation getPreferredWidth() {
-        return Occupation.fixed(focused ? focusedWidth : text.length());
+        return Occupation.fixed(focused ? focusedWidth : model.length());
     }
 
     @Override
@@ -81,17 +86,21 @@ public class MenuElement extends Widget {
         focused = false;
     }
 
-    public String getPrefix() {
+    private String getPrefix() {
         return focused ? "focused" : "unfocused";
     }
 
     public void setFocusedWidth(int width) {
-        focusedWidth = width > text.length() ? width : text.length();
+        focusedWidth = width > model.length() ? width : model.length();
     }
 
-    public String getSpaces() {
-        if (focused && focusedWidth > text.length()) {
-            char[] chars = new char[focusedWidth - text.length()];
+    public TextModel getModel() {
+        return model;
+    }
+
+    private String getSpaces() {
+        if (focused && focusedWidth > model.length()) {
+            char[] chars = new char[focusedWidth - model.length()];
             Arrays.fill(chars, ' ');
             return new String(chars);
         }

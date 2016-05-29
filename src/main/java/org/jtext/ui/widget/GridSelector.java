@@ -2,6 +2,8 @@ package org.jtext.ui.widget;
 
 import org.jtext.curses.ColorName;
 import org.jtext.curses.ControlKey;
+import org.jtext.event.Notifier;
+import org.jtext.event.Observable;
 import org.jtext.ui.event.FocusMovedEvent;
 import org.jtext.ui.event.GainFocusEvent;
 import org.jtext.ui.event.KeyPressedEvent;
@@ -14,15 +16,16 @@ import org.jtext.ui.util.KeyEventProcessor;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
-public class GridSelector extends Container<MenuElement> implements WidgetWithBackground {
-
+public class GridSelector extends Container<MenuElement> implements WidgetWithBackground, Observable<MenuElement> {
     private final int maxWidth;
     private final int maxHeight;
 
     private final GridSelectorLayout layout;
     private final KeyEventProcessor keyEventProcessor;
     private int activeIndex;
+    private final Notifier<MenuElement> notifier;
 
     public GridSelector(final int maxWidth, final int maxHeight, final List<MenuElement> items) {
         this(new GridSelectorLayout(maxWidth), maxWidth, maxHeight, items);
@@ -31,6 +34,7 @@ public class GridSelector extends Container<MenuElement> implements WidgetWithBa
     private GridSelector(final GridSelectorLayout layout, final int maxWidth, final int maxHeight,
                          final List<MenuElement> items) {
         super(layout);
+        this.notifier = new Notifier<>();
         this.layout = layout;
         this.maxHeight = maxHeight;
         this.maxWidth = maxWidth;
@@ -126,16 +130,24 @@ public class GridSelector extends Container<MenuElement> implements WidgetWithBa
         return Position.RELATIVE;
     }
 
-    public void select(final int index) {
+    private void select(final int index) {
         if (index > layout.getWidgets().size()) {
             throw new IndexOutOfBoundsException();
         }
         activeIndex = index;
-        emit(Scene.FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(layout.getWidgets().get(index)));
+        MenuElement current = layout.getWidgets().get(index);
+        notifier.notifyObservers(current);
+        emit(Scene.FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(current));
     }
 
     @Override
     public Optional<ColorName> backgroundColor() {
         return Optional.of(getTheme().getColor("background"));
     }
+
+    @Override
+    public void subscribe(final Consumer<MenuElement> observer) {
+        notifier.subscribe(observer);
+    }
+
 }

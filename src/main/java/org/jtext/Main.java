@@ -81,6 +81,11 @@ public final class Main {
                     new MenuElement("szazezredik")
             ));
 
+            gridSelector.subscribe(m -> {
+                String text = m.getModel().getChars();
+                model.setText(text);
+            });
+
 
             mainContainer.add(gridSelector);
 
