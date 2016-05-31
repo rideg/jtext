@@ -13,6 +13,7 @@ import org.jtext.ui.event.LostFocusEvent;
 import org.jtext.ui.graphics.Graphics;
 import org.jtext.ui.graphics.Occupation;
 import org.jtext.ui.graphics.Position;
+import org.jtext.ui.graphics.Selection;
 import org.jtext.ui.graphics.Widget;
 import org.jtext.ui.model.DocumentModel;
 import org.jtext.ui.model.TextModel;
@@ -82,7 +83,7 @@ public class TextField extends Widget {
         keyEventProcessor.register(ControlKey.SHIFT_RIGHT, this::rightSelect);
     }
 
-    public void leftSelect() {
+    private void leftSelect() {
         if (cursor > 0) {
             if (selection != Selection.NONE) {
                 selection = selection.decrement();
@@ -93,7 +94,7 @@ public class TextField extends Widget {
         }
     }
 
-    public void rightSelect() {
+    private void rightSelect() {
         if (cursor < model.length()) {
             if (cursor < model.length() - 1) {
                 if (selection != Selection.NONE) {
@@ -194,6 +195,8 @@ public class TextField extends Widget {
 
     @Override
     public void draw(final Graphics graphics) {
+        updateState();
+
         final Border border = getBorder();
         final ColorName background = getBackgroundColor();
         final ColorName foreground = getForegroundColor();
@@ -220,16 +223,49 @@ public class TextField extends Widget {
 
         if (selection != Selection.NONE) {
             graphics.changeAttributeAt(startPoint.shiftX(max(selection.getStart() - clip, 0)),
-                                       min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
-                                       highlightColor);
+                    min(selection.length() + 1 - max(clip - selection.getStart(), 0), width),
+                    highlightColor);
         } else {
             graphics.changeAttributeAt(startPoint.shiftX(cursor - clip), 1, highlightColor);
         }
     }
 
+    private void updateState() {
+        updateCursor();
+        updateClip();
+        updateSelection();
+    }
+
+    private void updateClip() {
+        if (model.length() < clip) {
+            clip = (model.length() / width) * width;
+        }
+    }
+
+    private void updateSelection() {
+        if (selection.getStart() >= model.length()) {
+            selection = Selection.NONE;
+            return;
+        }
+
+        if (selection.getEnd() >= model.length()) {
+            int start = selection.getStart();
+            int end = model.length() - 1;
+            if (selection.isLeftToRight()) {
+                selection = Selection.of(start, end);
+            } else {
+                selection = Selection.of(end, start);
+            }
+        }
+    }
+
+    private void updateCursor() {
+        cursor = Math.min(cursor, model.length());
+    }
+
     private CellDescriptor getHighlightDescriptor() {
         return CellDescriptor.of(getTheme().getColor(getPrefix() + ".highlight.background"),
-                                 getTheme().getColor(getPrefix() + ".highlight.foreground"));
+                getTheme().getColor(getPrefix() + ".highlight.foreground"));
     }
 
     private Border getBorder() {
@@ -241,10 +277,10 @@ public class TextField extends Widget {
         final Border border = getBorder();
         final Padding padding = getTheme().getPadding("padding");
         return Occupation.fixed(width +
-                                border.getLeftThickness() +
-                                border.getRightThickness() +
-                                padding.left +
-                                padding.right);
+                border.getLeftThickness() +
+                border.getRightThickness() +
+                padding.left +
+                padding.right);
     }
 
     @Override
@@ -262,15 +298,24 @@ public class TextField extends Widget {
         return focused;
     }
 
-    public String getPrefix() {
+    private String getPrefix() {
         return isFocused() ? "focused" : "unfocused";
     }
 
-    public ColorName getBackgroundColor() {
+    private ColorName getBackgroundColor() {
         return getTheme().getColor(getPrefix() + ".background");
     }
 
-    public ColorName getForegroundColor() {
+    private ColorName getForegroundColor() {
         return getTheme().getColor(getPrefix() + ".foreground");
     }
+
+    public int getCursor() {
+        return cursor;
+    }
+
+    public Selection getSelection() {
+        return selection;
+    }
+
 }

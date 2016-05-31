@@ -1,6 +1,9 @@
 package org.jtext.ui.model;
 
-public interface DocumentModel {
+import org.jtext.event.Observable;
+import org.jtext.ui.event.ModelChangedEvent;
+
+public interface DocumentModel extends Observable<ModelChangedEvent> {
 
     int length();
 
@@ -15,6 +18,5 @@ public interface DocumentModel {
     void insertCharAt(int position, char value);
 
     void insertStringAt(int position, String string);
-
 
 }

@@ -1,6 +1,5 @@
 package org.jtext;
 
-import org.jtext.curses.CellDescriptor;
 import org.jtext.curses.ColorName;
 import org.jtext.curses.ControlKey;
 import org.jtext.curses.CursesDriver;
@@ -21,14 +20,10 @@ import org.jtext.ui.layout.Layouts;
 import org.jtext.ui.model.TextModel;
 import org.jtext.ui.theme.ThemeImpl;
 import org.jtext.ui.util.KeyEventProcessor;
-import org.jtext.ui.widget.GridSelector;
-import org.jtext.ui.widget.Label;
-import org.jtext.ui.widget.MenuElement;
 import org.jtext.ui.widget.Panel;
 import org.jtext.ui.widget.TextField;
 
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -60,34 +55,36 @@ public final class Main {
                     ColorName.BLUE);
 
 
-            final TextModel model = new TextModel("Hello");
+            final TextModel model = new TextModel();
             final TextField textField = new TextField(model, 25);
+            final TextField textField1 = new TextField(model, 25);
 
             mainContainer.add(textField);
-            mainContainer.add(new Label(CellDescriptor.foreground(ColorName.WHITE), model));
+            mainContainer.add(textField1);
+//            mainContainer.add(new Label(CellDescriptor.foreground(ColorName.WHITE), model));
 
-            final GridSelector gridSelector = new GridSelector(100, 100, Arrays.asList(
-                    new MenuElement("elso"),
-                    new MenuElement("masodik"),
-                    new MenuElement("harmadik"),
-                    new MenuElement("negyedik_elem"),
-                    new MenuElement("otodik"),
-                    new MenuElement("hatodik"),
-                    new MenuElement("hetedik"),
-                    new MenuElement("nyolcadik"),
-                    new MenuElement("kilencedik"),
-                    new MenuElement("tizedik"),
-                    new MenuElement("huszadik"),
-                    new MenuElement("szazezredik")
-            ));
-
-            gridSelector.subscribe(m -> {
-                String text = m.getModel().getChars();
-                model.setText(text);
-            });
-
-
-            mainContainer.add(gridSelector);
+//            final GridSelector gridSelector = new GridSelector(100, 100, Arrays.asList(
+//                    new MenuElement("elso"),
+//                    new MenuElement("masodik"),
+//                    new MenuElement("harmadik"),
+//                    new MenuElement("negyedik_elem"),
+//                    new MenuElement("otodik"),
+//                    new MenuElement("hatodik"),
+//                    new MenuElement("hetedik"),
+//                    new MenuElement("nyolcadik"),
+//                    new MenuElement("kilencedik"),
+//                    new MenuElement("tizedik"),
+//                    new MenuElement("huszadik"),
+//                    new MenuElement("szazezredik")
+//            ));
+//
+//            gridSelector.subscribe(m -> {
+//                String text = m.getModel().getChars();
+//                model.setText(text);
+//            });
+//
+//
+//            mainContainer.add(gridSelector);
 
             scene.add(mainContainer);
 
@@ -107,7 +104,7 @@ public final class Main {
             processor.register(ControlKey.NULL, e -> {
                 if (textField.isVisible()) {
                     if (textField.isFocused()) {
-                        eventBus.publish(FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(gridSelector));
+                        eventBus.publish(FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(textField1));
                     } else {
                         eventBus.publish(FOCUS_MOVED_EVENT_TOPIC, new FocusMovedEvent(textField));
                     }

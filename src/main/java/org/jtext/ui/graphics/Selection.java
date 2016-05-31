@@ -1,4 +1,4 @@
-package org.jtext.ui.widget;
+package org.jtext.ui.graphics;
 
 public final class Selection {
 
