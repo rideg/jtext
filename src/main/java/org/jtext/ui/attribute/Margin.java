@@ -1,56 +1,35 @@
 package org.jtext.ui.attribute;
 
-@SuppressWarnings("checkstyle:visibilitymodifier")
-public final class Margin {
+public final class Margin extends BoxSpacing {
 
-    private static final Margin NO_MARGIN = Margin.of(0, 0, 0, 0);
+    private Margin(BoxSpacing spacing) {
+        super(spacing);
+    }
 
-    public final int top;
-    public final int right;
-    public final int bottom;
-    public final int left;
-
-    private Margin(final int top, final int right, final int bottom, final int left) {
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-        this.left = left;
+    private static Margin from(BoxSpacing reference) {
+        return new Margin(reference);
     }
 
     public static Margin no() {
-        return NO_MARGIN;
+        return from(BoxSpacing.no());
     }
 
     public static Margin of(final int top, final int right, final int bottom, final int left) {
-        return new Margin(top, right, bottom, left);
-    }
-
-    public int horizontalSpacing() {
-        return right + left;
-    }
-
-    public int verticalSpacing() {
-        return top + bottom;
+        return from(BoxSpacing.of(top, right, bottom, left));
     }
 
     @Override
     public String toString() {
-        return "Margin{" +
-               "top=" + top +
-               ", right=" + right +
-               ", bottom=" + bottom +
-               ", left=" + left +
-               '}';
+        return "Margin" + super.toString();
     }
 
     public Slice getSlice(final Direction direction) {
-        return direction == Direction.HORIZONTAL ? new Slice(left, right) : new Slice(top, bottom);
+        return direction == Direction.HORIZONTAL ? new Slice(getLeft(), getRight()) : new Slice(getTop(), getBottom());
     }
 
-    @SuppressWarnings("checkstyle:visibilitymodifier")
     public static final class Slice {
-        public final int begin;
-        public final int end;
+        private final int begin;
+        private final int end;
 
         private Slice(final int begin, final int end) {
             this.begin = begin;
@@ -59,6 +38,14 @@ public final class Margin {
 
         public int getSpacing() {
             return begin + end;
+        }
+
+        public int getBegin() {
+            return begin;
+        }
+
+        public int getEnd() {
+            return end;
         }
     }
 }

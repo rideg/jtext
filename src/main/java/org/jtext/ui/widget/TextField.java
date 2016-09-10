@@ -208,7 +208,7 @@ public class TextField extends Widget {
 
         final Padding padding = getTheme().getPadding("padding");
 
-        final Point startPoint = Point.at(padding.left + border.getLeftThickness(), border.getTopThickness());
+        final Point startPoint = Point.at(padding.getLeft() + border.getLeftThickness(), border.getTopThickness());
         if (clip > 0) {
             graphics.putChar(startPoint.decX(), '…');
         }
@@ -279,8 +279,7 @@ public class TextField extends Widget {
         return Occupation.fixed(width +
                 border.getLeftThickness() +
                 border.getRightThickness() +
-                padding.left +
-                padding.right);
+                padding.horizontalSpacing());
     }
 
     @Override

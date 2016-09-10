@@ -200,8 +200,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET_MARGIN);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
         final Margin margin = FIXED_WIDGET_MARGIN.getMargin();
-        assertThat(area1, is(Rectangle.of(margin.left, 19 - margin.bottom, 6, 6)));
-        assertThat(area2, is(Rectangle.of(6 + margin.left + margin.right, 21, 4, 4)));
+        assertThat(area1, is(Rectangle.of(margin.getLeft(), 19 - margin.getBottom(), 6, 6)));
+        assertThat(area2, is(Rectangle.of(6 + margin.horizontalSpacing(), 21, 4, 4)));
     }
 
     @Test
@@ -262,8 +262,8 @@ public class LinearLayoutTest {
         final Rectangle area1 = layout.getAreaFor(FIXED_WIDGET_MARGIN);
         final Rectangle area2 = layout.getAreaFor(FIXED_WIDGET_2);
         final Margin margin = FIXED_WIDGET_MARGIN.getMargin();
-        assertThat(area1, is(Rectangle.of(margin.left, margin.top, 6, 6)));
-        assertThat(area2, is(Rectangle.of(6 + margin.left + margin.right, 0, 4, 4)));
+        assertThat(area1, is(Rectangle.of(margin.getLeft(), margin.getTop(), 6, 6)));
+        assertThat(area2, is(Rectangle.of(6 + margin.horizontalSpacing(), 0, 4, 4)));
     }
 
     @Test

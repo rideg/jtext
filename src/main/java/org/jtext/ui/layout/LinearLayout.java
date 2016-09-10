@@ -19,7 +19,7 @@ import static java.util.Collections.sort;
 import static org.jtext.ui.graphics.Occupation.isFilling;
 import static org.jtext.ui.util.Util.divHalfUp;
 
-public class LinearLayout extends Layout<Widget> {
+class LinearLayout extends Layout<Widget> {
 
     private final Direction direction;
     private final Alignment primaryAlignment;
@@ -30,8 +30,8 @@ public class LinearLayout extends Layout<Widget> {
     private final List<Widget> widgetsWithOptionalSpace = new ArrayList<>();
     private final List<Widget> fillingWidgets = new ArrayList<>();
 
-    public LinearLayout(final Direction direction, final HorizontalAlign horizontalAlign,
-                        final VerticalAlign verticalAlign) {
+    LinearLayout(final Direction direction, final HorizontalAlign horizontalAlign,
+                 final VerticalAlign verticalAlign) {
         this.direction = direction;
         if (isHorizontal()) {
             this.primaryAlignment = Alignment.map(horizontalAlign);
@@ -165,11 +165,11 @@ public class LinearLayout extends Layout<Widget> {
             final Margin.Slice slice = widget.getMargin().getSlice(direction);
             final int secondarySize = getRealSecondarySize(widget);
             final int primarySize = d.toUse == -1 ? sizeFun.apply(d) : d.toUse;
-            final Rectangle area = Rectangle.of(startPosition + max(slice.begin, shift),
+            final Rectangle area = Rectangle.of(startPosition + max(slice.getBegin(), shift),
                     getStartSecondary(secondarySize, margin.getSlice(direction.opposite())),
                     primarySize, secondarySize);
             widgets.put(widget, isHorizontal() ? area : area.flip());
-            startPosition += max(slice.begin, shift) + primarySize + slice.end;
+            startPosition += max(slice.getBegin(), shift) + primarySize + slice.getEnd();
             shift = 0;
         }
     }
@@ -183,8 +183,8 @@ public class LinearLayout extends Layout<Widget> {
             if (primaryAlignment == Alignment.CENTER) {
                 final Widget firstWidget = visibleWidgets.get(0);
                 final Widget lastWidget = visibleWidgets.get(visibleWidgets.size() - 1);
-                int begin = firstWidget.getMargin().getSlice(direction).begin;
-                int end = lastWidget.getMargin().getSlice(direction).end;
+                int begin = firstWidget.getMargin().getSlice(direction).getBegin();
+                int end = lastWidget.getMargin().getSlice(direction).getEnd();
                 int withoutMargin = getAvailableSpace() - results.requiredSpace + begin + end;
                 shift = withoutMargin / 2;
                 int reminder = withoutMargin % 2;
@@ -207,16 +207,16 @@ public class LinearLayout extends Layout<Widget> {
     }
 
     private int getStartSecondary(final int size, final Margin.Slice slice) {
-        int ret = slice.begin;
+        int ret = slice.getBegin();
         if (secondaryAlignment != Alignment.BEGIN) {
             int remaining = getAvailableSecondarySpace() - size;
             ret = secondaryAlignment == Alignment.CENTER ? remaining / 2 : remaining;
 
-            if (ret < slice.begin && secondaryAlignment == Alignment.CENTER) {
-                ret = slice.begin;
+            if (ret < slice.getBegin() && secondaryAlignment == Alignment.CENTER) {
+                ret = slice.getBegin();
             }
             if (secondaryAlignment == Alignment.END) {
-                ret -= slice.end;
+                ret -= slice.getEnd();
             }
         }
         return ret;
@@ -298,15 +298,15 @@ public class LinearLayout extends Layout<Widget> {
     }
 
     @SuppressWarnings("checkstyle:visibilitymodifier")
-    public static class WidgetDescriptor implements Comparable<WidgetDescriptor> {
+    static class WidgetDescriptor implements Comparable<WidgetDescriptor> {
 
-        public int toUse = -1;
-        public int preferred;
-        public int minimum;
-        public int optional;
-        public int maximum;
+        int toUse = -1;
+        int preferred;
+        int minimum;
+        int optional;
+        int maximum;
 
-        public WidgetDescriptor(final int preferred, final int minimum, final int maximum) {
+        WidgetDescriptor(final int preferred, final int minimum, final int maximum) {
             this.preferred = preferred;
             this.minimum = minimum;
             this.optional = preferred - minimum;

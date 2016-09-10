@@ -9,7 +9,7 @@ public enum Direction {
         if (this == HORIZONTAL) {
             return VERTICAL;
         } else {
-            return VERTICAL;
+            return HORIZONTAL;
         }
     }
 }
